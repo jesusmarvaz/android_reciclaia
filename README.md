@@ -13,7 +13,7 @@ En este documento se explicará la implementación del proyecto, detallando en l
 | AGP (Android Gradle Plugin)       | `8.7.3`                                                                  |
 | **Lenguaje configuración Gradle** | Kotlin (Groovy está en vías de desaparecer), ficheros `build.gradle.kts` |
 | **Lenguaje código fuente**        | Kotlin `2.0.0`                                                           |
-| **Plugins**                       | viewBinding, Jetpack Compose                                             |
+| **Plugins**                       | Jetpack View Binding, Jetpack Compose                                             |
 | Dependencias adicionales          | Jetpack-lifecycle-viewmodel, jetpack-navigation, jetpack-room, dagger-hilt            |
 | Gestor de dependencias            | Version catalog (archivo toml)                                           |
 | Procesador de anotaciones         | ksp (en lugar de kapt)                                                   |
@@ -154,7 +154,63 @@ La navegación principal entre pantallas de la aplicación se hará utilizando e
 
 #### Configuración de la actividad principal
 
-Al crear un nuevo proyecto, el IDE Android Studio ya configura por defecto una composición de las vistas con el framework **Jetpack Compose**, y si bien en nuestro proyecto diseñaremos algunas vistas así, el diseño principal seguirá siendo con `View`. En este caso vamos a cambiar la clase principal generada para ser utilizada con Compose, para ello debemos hacer que la actividad principll
+Al crear un nuevo proyecto, el IDE Android Studio ya configura por defecto una composición de las vistas con el framework **Jetpack Compose**, y si bien en nuestro proyecto diseñaremos algunas vistas así, el diseño principal seguirá siendo con `View`. En este caso vamos a cambiar la clase principal generada para ser utilizada con Compose, para ello debemos hacer que la actividad principal herede de la clase `AppCompatActivity` en lugar de `ComponentActivity`:
+
+Fichero `build.gradle.kts`:
+```kotlin
+dependencies {
+    ...
+    //custom
+    implementation(libs.androidx.appcompat)
+}
+```
+
+Fichero `libs.versions.toml`:
+```toml
+[versions]
+...
+appcompat = "1.7.0"
+navigationUiKtx = "2.8.5"
+
+[libraries]
+...
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-navigation-dynamic-features-fragment = { module = "androidx.navigation:navigation-dynamic-features-fragment", version.ref = "navigationUiKtx" }
+androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationUiKtx" }
+androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationUiKtx" }
+```
+
+Actividad configurada para **Compose**:
+```kotlin
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        //enableEdgeToEdge()
+        setContent {
+            ReciclaIATheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    Greeting(
+                        name = "Android",
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
+            }
+        }
+    }
+}
+```
+Actividad configurada con **View** y **View Binding**:
+```kotlin
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+    }
+}
+```
+
 
 
 ### 1.7 Inyección de dependencias con Hilt
