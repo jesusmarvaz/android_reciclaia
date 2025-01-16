@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.safeargs)
 }
 
 android {
@@ -60,9 +61,11 @@ dependencies {
 
     //custom
     implementation(libs.androidx.appcompat)
-    // Kotlin
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
-    // Feature module Support
     implementation(libs.androidx.navigation.dynamic.features.fragment)
+    implementation(libs.gson)
+    implementation(libs.converter.gson)
+    implementation(libs.adapter.rxjava2)
+    implementation(libs.logging.interceptor)
 }

@@ -28,6 +28,14 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonElement
+import com.google.gson.JsonParseException
+import com.google.gson.JsonParser
+import com.ingencode.reciclaia.entities.dto.DTO
+import com.ingencode.reciclaia.entities.dto.ErrorDTO
+import retrofit2.HttpException
 import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -38,7 +46,7 @@ import kotlin.math.roundToInt
 /**
 Created with ❤ by jesusmarvaz on 2025-01-12.
  */
-
+/*
 fun View.fadeOutScaling() {
     val animationSet = AnimationSet(false)
     val scaleOut = ScaleAnimation(1f, 0.6f, 1f, 0.6f, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5f)
@@ -296,6 +304,9 @@ fun AppCompatActivity.setFullScreenOff() {
     WindowInsetsControllerCompat(window, window.decorView).show(WindowInsetsCompat.Type.systemBars())
 }
 
+
+*/
+
 fun AppCompatImageView.setTint(@ColorRes color: Int) {
     this.setColorFilter(ContextCompat.getColor(context, color), PorterDuff.Mode.SRC_IN);
 }
@@ -309,3 +320,54 @@ val Any.nameClass: String
 
 val java.io.Serializable.mock: String
     get() = "mock"
+
+fun Context.isAnyNetworkActive(): Boolean {
+    val connectivityManager =
+        this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val networkCapabilities = connectivityManager.activeNetwork ?: return false
+    val actNw =
+        connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+    val result = when {
+        actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+        actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+        actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+        else -> false
+    }
+    return result
+}
+
+fun Throwable.classifyError(c: Context): ISealedError {
+    return if (this is ISealedError) return this
+    else if (!c.isAnyNetworkActive()) SealedError.ConnectivityError()
+    else if (this is HttpException) {
+        val stringDTO: String? = this.response()?.errorBody()?.string()
+        try {
+            val errorDto: ErrorDTO? = stringDTO?.let {
+                Gson().fromJson(JsonParser.parseString(stringDTO), ErrorDTO::class.java)
+            }
+
+            val code = errorDto?.code
+            when (errorDto?.type) {
+                "SERVER_ERROR" -> SealedApiError.ServerError(this, code)
+                "UNABLE_GET_TOKEN" -> SealedApiError.UnableToGetTokenError(this, code)
+                "TOKEN_ERROR", "498" -> SealedApiError.TokenError(this, code)
+                "NOT_AUTHORIZED" -> SealedApiError.NotAuthorizedError(this, code)
+                "REFRESH_ERROR" -> SealedApiError.RefreshTokenError(this, code)
+                "TIME_LIMIT_PASSED" -> SealedApiError.TimeLimitPassed(this, code)
+                else -> {
+                    when (this.code()) {
+                        498 -> SealedApiError.TokenError(this, this.code())
+                        else -> SealedApiError.HttpError(this, this.code())
+                    }
+                }
+            }
+        } catch (_: JsonParseException) {
+            when (this.code()) {
+                498 -> SealedApiError.TokenError(this, this.code())
+                else -> SealedApiError.HttpError(this, this.code())
+            }
+        }
+    } else {
+        SealedError.DefaultError()
+    }
+}

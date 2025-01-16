@@ -171,6 +171,8 @@ Fichero `libs.versions.toml`:
 ...
 appcompat = "1.7.0"
 navigationUiKtx = "2.8.5"
+safeArgs = "2.8.5"
+
 
 [libraries]
 ...
@@ -178,6 +180,10 @@ androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "a
 androidx-navigation-dynamic-features-fragment = { module = "androidx.navigation:navigation-dynamic-features-fragment", version.ref = "navigationUiKtx" }
 androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationUiKtx" }
 androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationUiKtx" }
+
+[plugins]
+...
+safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "safeArgs"}
 ```
 
 Actividad configurada para **Compose**:
