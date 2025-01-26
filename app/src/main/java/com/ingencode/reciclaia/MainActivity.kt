@@ -1,12 +1,18 @@
 package com.ingencode.reciclaia
 
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import androidx.appcompat.app.AppCompatActivity
+import com.ingencode.reciclaia.common.nameClass
 import com.ingencode.reciclaia.databinding.ActivityMainBinding
+import com.ingencode.reciclaia.routing.BackPressedListener
+import com.ingencode.reciclaia.routing.IBackPressedListener
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private val backPressedListener: IBackPressedListener = BackPressedListener
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -15,7 +21,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if(keyCode == KeyEvent.KEYCODE_BACK) {
-            BackPressedListener.handleBackPressed(this)
+            val idHost = binding.hostNavFragment.id
+            backPressedListener.handleBackPressed(this, idHost)
+            Log.d(this.nameClass, idHost.toString())
             return true
         }
         return false

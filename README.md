@@ -328,7 +328,7 @@ La edición del gráfico de navegación, al igual que las vistas usando View, se
 
 ![alt text](media/11_navitation_graph.png)
 
-### 2.4 Realización de una navegación sencilla
+### 2.4 Realización de una navegación sencilla | **Conceptos tratados**: *[herencia](https://es.wikipedia.org/wiki/Herencia_(inform%C3%A1tica))*
 
 Llegados a este punto, vamos a navegar desde un fragmento hacia el otro y viceversa. Voy a crear una clase abstracta de la que heredarán la mayoría de nuestras vistas, así podemos agregar funcionalidad común, se llamará `FragmentBase`:
 
@@ -374,7 +374,7 @@ class FragmentInitial2 : FragmentBase() {
 
 Funcionamiento correcto.
 
-### 2.5 Configuración avanzada del botón atrás
+### 2.5 Configuración avanzada del botón atrás | **Conceptos tratados**: *[recursión](https://es.wikipedia.org/wiki/Recursi%C3%B3n), [herencia](https://es.wikipedia.org/wiki/Herencia_(inform%C3%A1tica)), [Principio de inversión de la dependencia (S.O.L.I.**D.**)](https://es.wikipedia.org/wiki/SOLID)*
 
 Con el siguiente desarrollo se predende interceptar la acción del botón atrás del dispositivo, para realizar la navegación que convenga en cada pantalla de la aplicación. De manera general con el gráfico de navegación es suficiente, pero en algunas pantallas es posible que queramos capturar esa acción para por ejemplo solicitar una confirmación del usuario o realizar otras acciones antes de volver atrás. Esto **lo capturaremos en la actividad principal, MainActivity**, que sabemos que dada nuestra configuración de navegación siempre o casi siempre (puede que se abran algunas otras actividades, ya se verá más adelante):
 
@@ -392,6 +392,35 @@ Con el siguiente desarrollo se predende interceptar la acción del botón atrás
 Ahora debemos diseñar un mecanismo para que se llame al método `goBack()` que hemos creado antes en la clase abstracta de la que heredarán todos los fragmentos, `FragmentBase`. Analizando el funcionamiento general de los fragmentos en Android, nos damos cuenta de que puede darse una estructura tipo árbol, con fragmentos hijos dentro de un padre. Además, debemos hallar el fragmento "activo" y entonces llamar a su método `goBack()` (Nótese que se tendrá que comprobar que el fragmento sea del tipo `FragmentBase`).
 
 ![nested fragments](/media/12_nested_fragments.png)
+
+Vamos a crear una interfaz (más adelante desarrollaremos la implementación) que contenga el método que necesitamos, de la siguiente manera:
+
+```kotlin
+interface IBackPressedListener {
+    fun handleBackPressed(a: AppCompatActivity, idHostFragment: Int)
+}
+object BackPressedListener : IBackPressedListener {
+    override fun handleBackPressed(a: AppCompatActivity, idHostFragment: Int) {
+        TODO("Not yet implemented")
+    }
+}
+...
+// En MainActivity
+    private val backPressedListener: IBackPressedListener = BackPressedListener
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            backPressedListener.handleBackPressed(this, binding.hostNavFragment.id)
+            return true
+        }
+        return false
+    }
+
+```
+
+#### Recorriendo el árbol de fragmentos anidados | **Conceptos tratados:** *[recursión](https://es.wikipedia.org/wiki/Recursi%C3%B3n)*
+
+
 
 
 
