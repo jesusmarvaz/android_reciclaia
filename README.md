@@ -391,7 +391,9 @@ Con el siguiente desarrollo se predende interceptar la acción del botón atrás
 
 Ahora debemos diseñar un mecanismo para que se llame al método `goBack()` que hemos creado antes en la clase abstracta de la que heredarán todos los fragmentos, `FragmentBase`. Analizando el funcionamiento general de los fragmentos en Android, nos damos cuenta de que puede darse una estructura tipo árbol, con fragmentos hijos dentro de un padre. Además, debemos hallar el fragmento "activo" y entonces llamar a su método `goBack()` (Nótese que se tendrá que comprobar que el fragmento sea del tipo `FragmentBase`).
 
-![nested fragments](/media/12_nested_fragment.png)
+![nested fragments](/media/12_nested_fragments.png)
+
+
 
 ## 3 Inyección de dependencias con Hilt
 
