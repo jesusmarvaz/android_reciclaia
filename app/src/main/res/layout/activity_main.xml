@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="#eeeeee">
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/hostNavFragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
@@ -14,5 +16,4 @@
         app:navGraph="@navigation/host"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="1dp" />
-
 </LinearLayout>

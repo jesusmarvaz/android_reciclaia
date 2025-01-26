@@ -2,11 +2,13 @@ package com.ingencode.reciclaia.ui.screens.initial
 
 import android.view.View
 import android.widget.ProgressBar
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.ingencode.reciclaia.common.nameClass
-import com.ingencode.reciclaia.databinding.FragmentInitialBinding
+import com.ingencode.reciclaia.databinding.FragmentInitial2Binding
 import com.ingencode.reciclaia.ui.common.FragmentBase
 import com.ingencode.reciclaia.ui.common.ViewModelBase
 
@@ -14,19 +16,25 @@ import com.ingencode.reciclaia.ui.common.ViewModelBase
  * Created with ❤ by Jesús Martín on 2025-01-12
  */
 
-class FragmentInitial : FragmentBase() {
+class FragmentInitial2 : FragmentBase() {
+    private lateinit var binding: FragmentInitial2Binding
+
+    override fun goBack() {
+        logDebug("TODO, goBack")
+        findNavController().popBackStack()
+    }
+
     override fun getFragmentTag(): String = this.nameClass
 
     override fun getViewLifeCycleOwner(): LifecycleOwner = viewLifecycleOwner
 
     override fun getViewModelBase(): ViewModelBase? = null
-    private lateinit var binding: FragmentInitialBinding
+
 
     override fun initProperties() {
         logDebug("TODO, iniciar propiedades")
-        binding.textViewOrigen.setOnClickListener {
-            findNavController()
-                .navigate(FragmentInitialDirections.actionFragmentInitialToFragmentInitial2())
+        binding.textViewDestino.setOnClickListener {
+            goBack()
         }
     }
 
@@ -35,7 +43,7 @@ class FragmentInitial : FragmentBase() {
     }
 
     override fun getInflatedViewBinding(): ViewBinding {
-        binding = FragmentInitialBinding.inflate(layoutInflater)
+        binding = FragmentInitial2Binding.inflate(layoutInflater)
         return binding
     }
 
@@ -47,9 +55,5 @@ class FragmentInitial : FragmentBase() {
     override fun getShaderLoading(): View? {
         logDebug("TODO, getPb")
         return null
-    }
-
-    override fun goBack() {
-        logDebug("TODO, goBack")
     }
 }

@@ -336,6 +336,14 @@ fun Context.isAnyNetworkActive(): Boolean {
     return result
 }
 
+fun AppCompatActivity.setLightModeInStatusBar(light: Boolean) {
+    val window = this.window
+    //window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+    //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+    //getWindow().decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+    WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = light
+}
+
 fun Throwable.classifyError(c: Context): ISealedError {
     return if (this is ISealedError) return this
     else if (!c.isAnyNetworkActive()) SealedError.ConnectivityError()

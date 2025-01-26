@@ -1,6 +1,7 @@
 package com.ingencode.reciclaia
 
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.appcompat.app.AppCompatActivity
 import com.ingencode.reciclaia.databinding.ActivityMainBinding
 
@@ -10,6 +11,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            BackPressedListener.handleBackPressed(this)
+            return true
+        }
+        return false
     }
 }
 

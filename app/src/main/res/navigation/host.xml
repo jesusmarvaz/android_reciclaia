@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/host">
+    android:id="@+id/host"
+    app:startDestination="@id/fragmentInitial">
 
+    <fragment
+        android:id="@+id/fragmentInitial"
+        android:name="com.ingencode.reciclaia.ui.screens.initial.FragmentInitial"
+        android:label="FragmentInitial" >
+        <action
+            android:id="@+id/action_fragmentInitial_to_fragmentInitial2"
+            app:destination="@id/fragmentInitial2" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentInitial2"
+        android:name="com.ingencode.reciclaia.ui.screens.initial.FragmentInitial2"
+        android:label="FragmentInitial2" />
 </navigation>

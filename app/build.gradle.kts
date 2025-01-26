@@ -68,4 +68,5 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.adapter.rxjava2)
     implementation(libs.logging.interceptor)
+    implementation(libs.material)
 }

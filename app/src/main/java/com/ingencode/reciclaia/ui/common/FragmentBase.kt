@@ -18,6 +18,7 @@ Created with ❤ by jesusmarvaz on 2025-01-12.
 */
 
 abstract class FragmentBase : Fragment(), ILog {
+    abstract fun goBack()
     abstract fun getFragmentTag(): String
     abstract fun getViewLifeCycleOwner(): LifecycleOwner
     abstract fun getViewModelBase(): ViewModelBase?
@@ -26,7 +27,6 @@ abstract class FragmentBase : Fragment(), ILog {
     abstract fun getInflatedViewBinding(): ViewBinding
     abstract fun getPb(): ProgressBar?
     abstract fun getShaderLoading(): View?
-    abstract fun goBack()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = getInflatedViewBinding().root
 

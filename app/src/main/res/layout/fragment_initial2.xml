@@ -4,11 +4,11 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <TextView
-        android:id="@+id/text_view_origen"
+        android:id="@+id/text_view_destino"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="0dp"
-        android:text="Fragment origen"/>
+        android:text="Fragment destino"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
