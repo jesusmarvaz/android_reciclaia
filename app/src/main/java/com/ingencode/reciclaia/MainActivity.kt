@@ -8,10 +8,15 @@ import com.ingencode.reciclaia.common.nameClass
 import com.ingencode.reciclaia.databinding.ActivityMainBinding
 import com.ingencode.reciclaia.routing.BackPressedListener
 import com.ingencode.reciclaia.routing.IBackPressedListener
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val backPressedListener: IBackPressedListener = BackPressedListener
+
+    @Inject
+    lateinit var backPressedListener: IBackPressedListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

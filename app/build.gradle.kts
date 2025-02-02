@@ -3,6 +3,10 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.safeargs)
+    //id("com.google.devtools.ksp")
+    //id("com.google.dagger.hilt.android")
+    alias(libs.plugins.kotlinAndroidKsp)
+    alias(libs.plugins.hiltAndroid)
 }
 
 android {
@@ -34,6 +38,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
+        freeCompilerArgs += "-Werror"
     }
     buildFeatures {
         compose = true
@@ -69,4 +74,6 @@ dependencies {
     implementation(libs.adapter.rxjava2)
     implementation(libs.logging.interceptor)
     implementation(libs.material)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 }

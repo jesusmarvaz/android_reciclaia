@@ -420,9 +420,40 @@ object BackPressedListener : IBackPressedListener {
 
 #### Recorriendo el árbol de fragmentos anidados | **Conceptos tratados:** *[recursión](https://es.wikipedia.org/wiki/Recursi%C3%B3n)*
 
+Voy a crear una función recursiva que recorra el posible árbol de fragmentos, y así conseguir que funcione en todos los posibles casos. Recorreré el árbol en busca de "hojas", es decir aquellos fragmentos que no tienen hijos:
 
+```kotlin
+private fun getLeaves(childFragmentManager: FragmentManager?): List<Fragment> {
+        val childFragments = childFragmentManager?.fragments
+        if (childFragments.isNullOrEmpty()) return listOf()
+        val leaves = arrayListOf<Fragment>()
+        for(fragment in childFragments) {
+            val innerFragments = fragment.childFragmentManager.fragments
+            if (innerFragments.isEmpty()) {
+                leaves.add(fragment)
+            } else {
+                leaves.addAll(getLeaves(fragment.childFragmentManager))
+            }
+        }
+        return leaves
+    }
+```
 
+Ahora ya puedo definir la función que gestiona la acción de ir atrás:
 
+```kotlin
+object BackPressedListener : IBackPressedListener {
+    override fun handleBackPressed(a: AppCompatActivity, idHostFragment: Int) {
+        val fm = a.supportFragmentManager.findFragmentById(idHostFragment)?.childFragmentManager
+        
+        getLeaves(fm).forEach {
+            if (it is FragmentBase) {
+                if(it.isAdded) it.goBack()
+            }
+        }
+    }
+}
+```
 
 ## 3 Inyección de dependencias con Hilt
 
@@ -430,9 +461,122 @@ object BackPressedListener : IBackPressedListener {
 
 Se trata de la librería oficial para la inyección de dependencias de Android.
 
-
 ### 3.1 Agregar las dependencias al proyecto Android
 
+Edición del fichero `libs.versions.toml`
+
+```toml
+[versions]
+kspVersion = "2.0.0-1.0.23"
+hiltVersion = "2.51.1"
+
+[libraries]
+hilt-android = { group = "com.google.dagger", name = "hilt-android" , version.ref = "hiltVersion"}
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler" , version.ref = "hiltVersion"}
+
+[plugins]
+kotlinAndroidKsp = { id = "com.google.devtools.ksp", version.ref ="kspVersion" }
+hiltAndroid = { id = "com.google.dagger.hilt.android", version.ref ="hiltVersion" }
+```
+
+Configuración en `build.gradle.kts` a nivel de proyecto:
+
+```kotlin
+    plugins {
+        alias(libs.plugins.hiltAndroid) apply false
+        alias(libs.plugins.kotlinAndroidKsp) apply false
+    }
+```
+
+Edición del fichero `build.gradle.kts` a nivel de aplicación o módulo:
+
+```kotlin
+    plugins {
+        alias(libs.plugins.kotlinAndroidKsp) //Habilita el plugin KSP que proporciona mayor rendimiento que KAPT
+        alias(libs.plugins.hiltAndroid)
+    }
+
+    dependencies {
+        implementation(libs.hilt.android)
+        ksp(libs.hilt.compiler)
+    }
+```
+
+### 3.2 Configuración Hilt inicial básica
+
+Es necesario realizar una serie de pasos que son comunes en la inyección de dependencias con Dagger Hilt:
+
+#### Creación de clase que herede de Application
+
+Marcamos la clase con la etiqueta `@HiltAndroidApp`, quedando de esta manera:
+
+```kotlin
+package com.ingencode.reciclaia.di
+import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
+@HiltAndroidApp
+class ReciclaIAApp: Application()
+```
+
+Ahora debemos indicar en el fichero de configuración `AndroidManifest.xml` esta clase en el parámetro `name`:
+```xml
+<application
+    ...
+    android:name=".di.ReciclaIAApp"
+    ...
+</application>
+```
+
+#### Marcar la actividad principal como punto de entrada en Android
+
+Para indicarle a Hilt que el punto de entrada de nuestra aplicación es la actividad principal, lo haremos marcando con la etiqueta `@AndroidEntryPoint`:
+
+```kotlin
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity()
+```
+
+### 3.3 Inyección de dependencias propias | **Conceptos tratados**: *POO: composición y acoplamiento, inversión del control con inyección de depencencias*
+
+Vamos a refactorizar ya algo del código que hemos hecho hasta ahora haciendo un uso correcto de la inyección de dependencias con Dagger Hilt. Si empezamos analizando la actividad principal, nos damos cuenta de que hemos realizado un acoplamiento con la implementación concreta para la interfaz `IBackPressedListener` creando una relación de "Composición":
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    private val backPressedListener: IBackPressedListener = BackPressedListener
+    ...
+}
+```
+
+Usando Dagger Hilt a nivel de inyección de propiedades o atributos de una clase:
+```kotlin
+class MainActivity : AppCompatActivity() {
+    @Inject
+    lateinit var backPressedListener: IBackPressedListener
+    ...
+}
+```
+
+Sin embargo, esto no es suficiente, debemos proporcionar información a Dagger Hilt para que sepa con qué tipo concreto o clase implementar la interfaz. Esto lo haremos en lo que se denominan "módulos":
+
+```kotlin
+@Module
+@InstallIn(SingletonComponent::class)
+object CommonModule {
+    @Singleton
+    @Provides
+    fun provideBackPressedListener(): IBackPressedListener {
+        return BackPressedListener
+    }
+}
+```
+
+#### Aspectos clave
+
+* Uso de `@Module` para indicar que es un módulo de Dagger Hilt
+* Uso de `@Provides` en la función que devuelve una implementación concreta de la dependencia, indicando y configurando todo lo necesario
+
+#### Aspectos más profundos
+- 
 
 # TO DO
 
