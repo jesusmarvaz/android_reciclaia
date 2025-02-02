@@ -548,6 +548,7 @@ class MainActivity : AppCompatActivity() {
 ```
 
 Usando Dagger Hilt a nivel de inyección de propiedades o atributos de una clase:
+
 ```kotlin
 class MainActivity : AppCompatActivity() {
     @Inject
@@ -576,7 +577,11 @@ object CommonModule {
 * Uso de `@Provides` en la función que devuelve una implementación concreta de la dependencia, indicando y configurando todo lo necesario
 
 #### Aspectos más profundos
-- 
+
+* Uso de `@InstallIn({Generated Component}.class)`
+  * Donde {Generated Component} se refiere al alcance de las instancias de las dependencias creadas con Hilt, es la configuración de la vida útil, por así decirlo, y hay varias configuraciones. En este caso hemos utilizado `SingletonComponent.class` (por cierto, no tiene nada que ver con el patrón de diseño Singleton), que se refiere a que tiene un alcance global, o de aplicación. Aquí hay una tabla con todas las posibles opciones disponibles:
+  * ![scopes hilt](/media/13_scopes_hilt.png)
+
 
 # TO DO
 
