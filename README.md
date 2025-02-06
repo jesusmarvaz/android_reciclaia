@@ -8,7 +8,7 @@ En este documento se explicará la implementación del proyecto, detallando en l
 
 | **Característica**                | Valor                                                                    |
 | --------------------------------- | ------------------------------------------------------------------------ |
-| **Versión de Android Studio**     | Android Studio Ladybug - 2024.2.1 Patch 1                                |
+| **Versión de Android Studio**     | Android Studio Ladybug Feature Drop - 2024.2.11                                |
 | **Gradle**                        | 8.10.2 ( `gradle-wrapper.properties` )                                        |
 | AGP (Android Gradle Plugin)       | `8.8.0` |
 | **Lenguaje configuración Gradle** | Kotlin (Groovy está en vías de desaparecer), ficheros `build.gradle.kts` |
@@ -536,7 +536,7 @@ Para indicarle a Hilt que el punto de entrada de nuestra aplicación es la activ
 class MainActivity : AppCompatActivity()
 ```
 
-### 3.3 Inyección de dependencias propias | **Conceptos tratados**: *POO: composición y acoplamiento, inversión del control con inyección de depencencias*
+### 3.3 Inyección de dependencias propias | **Conceptos tratados**: *POO: composición y acoplamiento, inversión del control con inyección de dependencias*
 
 Vamos a refactorizar ya algo del código que hemos hecho hasta ahora haciendo un uso correcto de la inyección de dependencias con Dagger Hilt. Si empezamos analizando la actividad principal, nos damos cuenta de que hemos realizado un acoplamiento con la implementación concreta para la interfaz `IBackPressedListener` creando una relación de "Composición":
 
@@ -547,7 +547,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-Usando Dagger Hilt a nivel de inyección de propiedades o atributos de una clase:
+Usando Dagger Hilt a nivel de inyección de propiedades o atributos de una clase, realizamos el desacomplamiento:
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -582,6 +582,121 @@ object CommonModule {
   * Donde {Generated Component} se refiere al alcance de las instancias de las dependencias creadas con Hilt, es la configuración de la vida útil, por así decirlo, y hay varias configuraciones. En este caso hemos utilizado `SingletonComponent.class` (por cierto, no tiene nada que ver con el patrón de diseño Singleton), que se refiere a que tiene un alcance global, o de aplicación. Aquí hay una tabla con todas las posibles opciones disponibles:
   * ![scopes hilt](/media/13_scopes_hilt.png)
 
+Puede que para nuestro ejemplo no fuera necesario el uso de Hilt, pero sirve perfectamente para ilustrar su funcionamiento y no está mal dejarlo así. Se intentará usar todo lo posible Hilt en el proyecto para un código más modular, testeable y limpio.
+
+
+### 3.4 Inyección de dependencias de terceros - Retrofit (comunicación con servidor)
+
+Voy a incluir este apartado ya, para hacer uso de la inyección de dependencias de terceros. Vamos a incluir algunas herramientas útiles para la comunicación con el servidor: Gson, Retrofit y el adapter para retrofit de Gson y un interceptor, Okhttp3 que analizaremos más adelante, pero básicamente nos permitirá centralizar la gestión de errores de servidor, refresco de token de acceso, autorizaciones y generación de encabezados desde un único sitio.
+
+#### Dependencias
+
+`libs.versions.toml` :
+
+```toml
+[versions]
+gson = "2.10.1"
+retrofitVersion = "2.9.0"
+
+[libraries]
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }
+retrofit-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofitVersion" }
+retrofit-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
+```
+
+`build.gradle.kts` :
+
+```kotlin
+dependencies {
+    implementation(libs.retrofit)
+    implementation(libs.gson)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.retrofit.logging.interceptor)
+}
+```
+
+Declaración del módulo:
+
+```kotlin
+@Module
+@InstallIn(SingletonComponent::class)
+class NetworkModule {
+
+    @Singleton
+    @Provides
+    fun provideRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(Routes.BASE_URL)
+            .addConverterFactory(StringConverterFactory())
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(buildOkHttpClient())
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideTest(retrofit: Retrofit): Apis.TestApi = retrofit.create(Apis.TestApi::class.java)
+
+    private fun buildOkHttpClient(): OkHttpClient {
+        val logging = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
+        val okHttpClient = OkHttpClient.Builder().addInterceptor(logging).build()
+        return okHttpClient
+    }
+}
+
+class StringConverterFactory : Converter.Factory() {
+    override fun responseBodyConverter(
+        type: Type,
+        annotations: Array<Annotation>,
+        retrofit: Retrofit
+    ): Converter<ResponseBody, *>? {
+        return if (type == String::class.java) {
+            Converter<ResponseBody, String> { it.string() }
+        } else {
+            null
+        }
+    }
+}
+
+---
+
+interface Apis {
+    interface TestApi {
+        @GET(Routes.ApisEndpoints.TestApi.TEST)
+        suspend fun getTest(): Response<String>
+
+        @GET(Routes.ApisEndpoints.TestApi.TESTDB)
+        suspend fun getTestDb(): Response<List<TestResponseDb>>
+    }
+}
+
+---
+object Routes {
+    const val BASE_URL = "https://jesusmarvaz.hopto.org/apis/reciclaia/"
+
+    object PathParams {
+        const val ID = "id"
+    }
+
+    object Headers {
+        const val TOKEN_HEADER = "authorization"
+    }
+
+    object ApisEndpoints {
+        object TestApi {
+            const val TEST = "test"
+            const val TESTDB = "testdb"
+        }
+    }
+}
+
+```
+
+NOTA: la creación de la API alojada en "https://jesusmarvaz.hopto.org/apis/reciclaia/" se explicará en el README.md del proyecto de backend correspondiente.
+
+
+---
 
 # TO DO
 
