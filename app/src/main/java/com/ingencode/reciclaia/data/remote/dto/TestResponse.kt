@@ -1,4 +1,4 @@
-package com.ingencode.reciclaia.entities.dto
+package com.ingencode.reciclaia.data.remote.dto
 
 import com.google.gson.annotations.SerializedName
 

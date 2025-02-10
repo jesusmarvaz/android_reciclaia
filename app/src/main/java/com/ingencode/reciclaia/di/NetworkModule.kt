@@ -1,9 +1,7 @@
 package com.ingencode.reciclaia.di
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.ingencode.reciclaia.api.Apis
-import com.ingencode.reciclaia.api.Routes
+import com.ingencode.reciclaia.data.remote.api.Apis
+import com.ingencode.reciclaia.data.remote.api.Routes
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,7 +13,6 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.reflect.Type
-import javax.inject.Inject
 import javax.inject.Singleton
 
 /**

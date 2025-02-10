@@ -1,47 +1,22 @@
-package com.ingencode.reciclaia.common
+package com.ingencode.reciclaia.utils
 
 import android.content.Context
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
 import android.graphics.PorterDuff
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
-import android.util.Log
-import android.util.TypedValue
-import android.view.View
-import android.view.animation.AccelerateInterpolator
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
-import android.view.animation.AnimationSet
-import android.view.animation.DecelerateInterpolator
-import android.view.animation.ScaleAnimation
-import androidx.annotation.AttrRes
-import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
 import com.google.gson.JsonParseException
 import com.google.gson.JsonParser
-import com.ingencode.reciclaia.entities.dto.DTO
-import com.ingencode.reciclaia.entities.dto.ErrorDTO
+import com.ingencode.reciclaia.data.remote.dto.DTO
+import com.ingencode.reciclaia.data.remote.dto.ErrorDTO
 import retrofit2.HttpException
-import java.io.Serializable
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.TimeZone
-import kotlin.math.roundToInt
 
 /**
 Created with ❤ by jesusmarvaz on 2025-01-12.

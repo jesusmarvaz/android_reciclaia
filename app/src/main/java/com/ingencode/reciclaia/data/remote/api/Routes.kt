@@ -1,4 +1,4 @@
-package com.ingencode.reciclaia.api
+package com.ingencode.reciclaia.data.remote.api
 
 /**
 Created with ❤ by Jesús Martín (jesusmarvaz@gmail.com) on 2025-02-03.

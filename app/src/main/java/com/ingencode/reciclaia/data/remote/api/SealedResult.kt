@@ -1,6 +1,6 @@
-package com.ingencode.reciclaia.api
+package com.ingencode.reciclaia.data.remote.api
 
-import com.ingencode.reciclaia.common.SealedError
+import com.ingencode.reciclaia.utils.SealedError
 
 /**
 Created with ❤ by jesusmarvaz on 2025-01-13.

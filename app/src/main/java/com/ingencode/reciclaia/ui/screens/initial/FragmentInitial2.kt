@@ -2,23 +2,18 @@ package com.ingencode.reciclaia.ui.screens.initial
 
 import android.view.View
 import android.widget.ProgressBar
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
-import com.ingencode.reciclaia.api.Apis
-import com.ingencode.reciclaia.common.nameClass
+import com.ingencode.reciclaia.data.remote.api.Apis
+import com.ingencode.reciclaia.utils.nameClass
 import com.ingencode.reciclaia.databinding.FragmentInitial2Binding
-import com.ingencode.reciclaia.ui.common.FragmentBase
-import com.ingencode.reciclaia.ui.common.ViewModelBase
+import com.ingencode.reciclaia.ui.components.FragmentBase
+import com.ingencode.reciclaia.ui.components.ViewModelBase
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -29,13 +24,10 @@ class FragmentInitial2 : FragmentBase() {
     private lateinit var binding: FragmentInitial2Binding
     private val viewModel: FragmentInitialViewModel by viewModels()
 
-    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main.immediate)
-
     @Inject
     lateinit var apiTestApi: Apis.TestApi
 
     override fun goBack() {
-        logDebug("TODO, goBack")
         findNavController().popBackStack()
     }
 
@@ -43,7 +35,7 @@ class FragmentInitial2 : FragmentBase() {
 
     override fun getViewLifeCycleOwner(): LifecycleOwner = viewLifecycleOwner
 
-    override fun getViewModelBase(): ViewModelBase? = null
+    override fun getViewModelBase(): ViewModelBase? = viewModel
 
 
     override fun initProperties() {

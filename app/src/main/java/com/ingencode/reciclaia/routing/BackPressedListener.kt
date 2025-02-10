@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.ingencode.reciclaia.ui.common.FragmentBase
+import com.ingencode.reciclaia.ui.components.FragmentBase
 
 /**
 Created with ❤ by Jesús Martín (jesusmarvaz@gmail.com) on 2025-01-26.

@@ -1,11 +1,4 @@
-package com.ingencode.reciclaia.common
-
-import android.content.Context
-import com.google.gson.Gson
-import com.google.gson.JsonParseException
-import com.google.gson.JsonParser
-import com.ingencode.reciclaia.entities.dto.ErrorDTO
-import retrofit2.HttpException
+package com.ingencode.reciclaia.utils
 
 /**
 Created with ❤ by jesusmarvaz on 2025-01-12.

@@ -1,4 +1,4 @@
-package com.ingencode.reciclaia.common
+package com.ingencode.reciclaia.utils
 
 import android.util.Log
 

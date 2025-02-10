@@ -5,10 +5,10 @@ import android.widget.ProgressBar
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
-import com.ingencode.reciclaia.common.nameClass
+import com.ingencode.reciclaia.utils.nameClass
 import com.ingencode.reciclaia.databinding.FragmentInitialBinding
-import com.ingencode.reciclaia.ui.common.FragmentBase
-import com.ingencode.reciclaia.ui.common.ViewModelBase
+import com.ingencode.reciclaia.ui.components.FragmentBase
+import com.ingencode.reciclaia.ui.components.ViewModelBase
 
 /**
  * Created with ❤ by Jesús Martín on 2025-01-12

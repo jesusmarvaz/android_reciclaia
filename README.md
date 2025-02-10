@@ -690,7 +690,6 @@ object Routes {
         }
     }
 }
-
 ```
 
 NOTA: la creación de la API alojada en "https://jesusmarvaz.hopto.org/apis/reciclaia/" se explicará en el README.md del proyecto de backend correspondiente.

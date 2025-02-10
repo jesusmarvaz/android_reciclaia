@@ -1,7 +1,6 @@
-package com.ingencode.reciclaia.ui.common
+package com.ingencode.reciclaia.ui.components
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +8,7 @@ import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
-import com.ingencode.reciclaia.common.ILog
-import com.ingencode.reciclaia.common.ISealedError
-import com.ingencode.reciclaia.common.SealedError
+import com.ingencode.reciclaia.utils.ILog
 
 /**
 Created with ❤ by jesusmarvaz on 2025-01-12.

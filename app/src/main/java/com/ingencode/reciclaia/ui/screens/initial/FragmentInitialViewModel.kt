@@ -1,15 +1,14 @@
 package com.ingencode.reciclaia.ui.screens.initial
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ingencode.reciclaia.api.Apis
-import com.ingencode.reciclaia.common.ILog
-import com.ingencode.reciclaia.common.nameClass
-import com.ingencode.reciclaia.entities.dto.TestResponse
-import com.ingencode.reciclaia.entities.dto.TestResponseDb
+import com.ingencode.reciclaia.data.remote.api.Apis
+import com.ingencode.reciclaia.utils.ILog
+import com.ingencode.reciclaia.utils.nameClass
+import com.ingencode.reciclaia.data.remote.dto.TestResponseDb
+import com.ingencode.reciclaia.ui.components.ViewModelBase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,7 +17,7 @@ import javax.inject.Inject
 Created with ❤ by Jesús Martín (jesusmarvaz@gmail.com) on 2025-02-06.
  */
 @HiltViewModel
-class FragmentInitialViewModel @Inject constructor(private val testApiProvider: Apis.TestApi) : ViewModel(), ILog {
+class FragmentInitialViewModel @Inject constructor(private val testApiProvider: Apis.TestApi) : ViewModelBase(), ILog {
     private val textLiveData: MutableLiveData<String> = MutableLiveData<String>()
     val observableText: LiveData<String> = textLiveData
 
@@ -53,5 +52,4 @@ class FragmentInitialViewModel @Inject constructor(private val testApiProvider: 
         }
     }
     override fun theTag(): String = this.nameClass
-
 }

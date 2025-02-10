@@ -1,15 +1,14 @@
-package com.ingencode.reciclaia.ui.common
+package com.ingencode.reciclaia.ui.components
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.ingencode.reciclaia.common.ILog
-import com.ingencode.reciclaia.common.ISealedError
-import com.ingencode.reciclaia.common.SealedApiError
-import com.ingencode.reciclaia.common.SealedError
-import com.ingencode.reciclaia.common.nameClass
+import com.ingencode.reciclaia.utils.ILog
+import com.ingencode.reciclaia.utils.ISealedError
+import com.ingencode.reciclaia.utils.SealedApiError
+import com.ingencode.reciclaia.utils.SealedError
+import com.ingencode.reciclaia.utils.nameClass
 
 /**
 Created with ❤ by jesusmarvaz on 2025-01-12.
@@ -42,7 +41,4 @@ abstract class ViewModelBase: ViewModel(), ILog {
             is SealedApiError -> manageSealedApiError()
         }
     }
-
-    override fun theTag(): String = this.getViewModelImpl()
-    abstract fun getViewModelImpl(): String
 }

@@ -1,7 +1,6 @@
-package com.ingencode.reciclaia.api
+package com.ingencode.reciclaia.data.remote.api
 
-import com.ingencode.reciclaia.entities.dto.TestResponse
-import com.ingencode.reciclaia.entities.dto.TestResponseDb
+import com.ingencode.reciclaia.data.remote.dto.TestResponseDb
 import retrofit2.Response
 import retrofit2.http.GET
 
