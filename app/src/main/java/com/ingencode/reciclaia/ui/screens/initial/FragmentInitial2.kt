@@ -7,20 +7,18 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.ingencode.reciclaia.data.remote.api.Apis
-import com.ingencode.reciclaia.utils.nameClass
 import com.ingencode.reciclaia.databinding.FragmentInitial2Binding
-import com.ingencode.reciclaia.ui.components.FragmentBase
+import com.ingencode.reciclaia.ui.components.FragmentBaseForViewmodel
 import com.ingencode.reciclaia.ui.components.ViewModelBase
+import com.ingencode.reciclaia.utils.nameClass
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
 /**
  * Created with ❤ by Jesús Martín on 2025-01-12
  */
 @AndroidEntryPoint
-class FragmentInitial2 : FragmentBase() {
+class FragmentInitial2 : FragmentBaseForViewmodel() {
     private lateinit var binding: FragmentInitial2Binding
     private val viewModel: FragmentInitialViewModel by viewModels()
 
@@ -39,7 +37,6 @@ class FragmentInitial2 : FragmentBase() {
 
 
     override fun initProperties() {
-        logDebug("TODO, iniciar propiedades")
         binding.textViewDestino.setOnClickListener {
             goBack()
         }

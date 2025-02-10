@@ -3,9 +3,10 @@ package com.ingencode.reciclaia.ui.screens.start
 import android.view.View
 import android.widget.ProgressBar
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.ingencode.reciclaia.databinding.FragmentStartBinding
-import com.ingencode.reciclaia.ui.components.FragmentBase
+import com.ingencode.reciclaia.ui.components.FragmentBaseForViewmodel
 import com.ingencode.reciclaia.ui.components.ViewModelBase
 import com.ingencode.reciclaia.utils.nameClass
 
@@ -13,7 +14,7 @@ import com.ingencode.reciclaia.utils.nameClass
 Created with ❤ by Jesús Martín (jesusmarvaz@gmail.com) on 2025-02-07.
  */
 
-class FragmentStart: FragmentBase() {
+class FragmentStart: FragmentBaseForViewmodel() {
     private lateinit var binding: FragmentStartBinding
 
     override fun goBack() = requireActivity().finish()
@@ -22,22 +23,19 @@ class FragmentStart: FragmentBase() {
     override fun getViewModelBase(): ViewModelBase? = null
 
     override fun initProperties() {
-        TODO("Not yet implemented")
+        binding.tvTitle.setOnClickListener {
+            findNavController()
+                .navigate(FragmentStartDirections.actionFragmentStartToFragmentInitial())
+        }
     }
 
-    override fun observeVM() {
-        TODO("Not yet implemented")
-    }
+    override fun observeVM() {}
 
     override fun getInflatedViewBinding(): ViewBinding {
-        TODO("Not yet implemented")
+        binding = FragmentStartBinding.inflate(layoutInflater)
+        return binding
     }
 
-    override fun getPb(): ProgressBar? {
-        TODO("Not yet implemented")
-    }
-
-    override fun getShaderLoading(): View? {
-        TODO("Not yet implemented")
-    }
+    override fun getPb(): ProgressBar? = null
+    override fun getShaderLoading(): View? = null
 }

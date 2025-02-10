@@ -5,16 +5,16 @@ import android.widget.ProgressBar
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
-import com.ingencode.reciclaia.utils.nameClass
 import com.ingencode.reciclaia.databinding.FragmentInitialBinding
-import com.ingencode.reciclaia.ui.components.FragmentBase
+import com.ingencode.reciclaia.ui.components.FragmentBaseForViewmodel
 import com.ingencode.reciclaia.ui.components.ViewModelBase
+import com.ingencode.reciclaia.utils.nameClass
 
 /**
  * Created with ❤ by Jesús Martín on 2025-01-12
  */
 
-class FragmentInitial : FragmentBase() {
+class FragmentInitial : FragmentBaseForViewmodel() {
     override fun getFragmentTag(): String = this.nameClass
 
     override fun getViewLifeCycleOwner(): LifecycleOwner = viewLifecycleOwner
@@ -51,5 +51,6 @@ class FragmentInitial : FragmentBase() {
 
     override fun goBack() {
         logDebug("TODO, goBack")
+        findNavController().popBackStack()
     }
 }

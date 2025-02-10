@@ -694,6 +694,166 @@ object Routes {
 
 NOTA: la creación de la API alojada en "https://jesusmarvaz.hopto.org/apis/reciclaia/" se explicará en el README.md del proyecto de backend correspondiente.
 
+#### Pruebas de comunicación con la API
+
+Vamos a consumir el par de endpoints de prueba para comprobar que todo funciona correctamente hasta ahora.
+
+```kotlin
+override fun initProperties() {
+        binding.textViewDestino.setOnClickListener {
+            goBack()
+        }
+        binding.buttonTest.setOnClickListener {
+            viewModel.getTest()
+        }
+        binding.buttonTestDb.setOnClickListener {
+            viewModel.getTestDb()
+        }
+```
+
+`ViewModel`:
+
+```kotlin
+@HiltViewModel
+class FragmentInitialViewModel @Inject constructor(private val testApiProvider: Apis.TestApi) : ViewModelBase(), ILog {
+    private val textLiveData: MutableLiveData<String> = MutableLiveData<String>()
+    val observableText: LiveData<String> = textLiveData
+
+    private val dbTestLiveData: MutableLiveData<List<TestResponseDb>> = MutableLiveData<List<TestResponseDb>>()
+    val observableDbTestData: LiveData<List<TestResponseDb>> = dbTestLiveData
+
+    fun getTest() {
+        viewModelScope.launch {
+            try {
+                val response = testApiProvider.getTest()
+                response.body()?.toString()?.let {
+                    textLiveData.postValue(it)
+                }
+            } catch (e: Exception) {
+                logError(e.stackTrace.toString())
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun getTestDb() {
+        viewModelScope.launch {
+            try {
+                val response = testApiProvider.getTestDb()
+                response.body()?.let {
+                    dbTestLiveData.postValue(it)
+                }
+            } catch (e: Exception) {
+                logError(e.stackTrace.toString())
+                e.printStackTrace()
+            }
+        }
+    }
+```
+
+![test endpoint](/media/20_test_endpoint.png)
+
+![test endpoint db](/media/21_test_db_endpoint.png)
+
+## 4 Tema de la aplicación | **Conceptos tratados**: *Diseño de la interfaz de usuario, UI*
+
+En este capítulo se planteará un diseño de la interfaz de usuario a nivel de paleta de colores, fuentes y logo. Se explorarán los mecanismos que tiene Android para personalizar la aplicación con temas en Android, tanto en las vistas clásicas con View basadas en XML como en Compose. También se usará el estilo actual (2025) de Material3 usando la paleta de colores dinámica a partir del fondo de pantalla del dispositivo, disponible a partir de Android 12 (Api level 31).
+
+### 4.1 Elección del estilo
+
+Vamos a definir en este punto de manera general cómo va a ser el estilo de nuestra aplicación, a modo didáctico. Se irá detallando más adelante conforme la aplicación se vaya implementando.
+
+#### 4.1.0 Logo
+
+![logo](/media/18_logo.png)
+
+#### 4.1.1 Fuente
+
+Recursos
+
+[Material IO - Tipografía](https://m3.material.io/styles/typography/applying-type)
+
+[Google Fonts](https://fonts.google.com/specimen/Comfortaa?preview.text=iiI1L0oOjJlLiI)
+
+La fuente elegida de manera general será *Comfortaa*.
+
+![fuente Comfortaa](/media/19_comfortaa.png)
+
+
+#### 4.1.2 Paleta de colores
+
+Se hará un uso exclusivo de la paleta de colores del sistema, configurando algunos colores fijos. En aplicaciones con Android 11 o inferior sería necesario la creación de una paleta de colores fija alternativa, pero nuestra aplicación va destinada a Android 13 como mínimo, por lo que no será necesario esta adaptación.
+
+![Paleta colores](/media/22_paleta_dinamica.png)
+
+![Paleta ejemplos](/media/23_paleta_ejemplos.png)
+
+![Paleta ejemplos 2](/media/24_paleta_ejemplos2.png)
+
+### 4.2 Configuración de la fuente
+
+Descarga desde Google Fonts
+
+![fuente](/media/14_fuente.png)
+
+Tras ello vamos a renombrar los ficheros de la fuente para ser compatible con el sistema android: todo minúsculas y guiones bajos. Podemos usar la herramienta PowerRename para ello:
+
+![fuente renombrada](/media/15_fuente_renombrada.png)
+
+Ubicación en el proyecto Android:
+
+![fuente en proyecto](/media/16_fuente_en_proyecto.png)
+
+### 4.3 Configuración del tema para las vistas basadas en View
+
+Editaremos el fichero `themes.xml` y en `src/main/res/values-night/themes.xml`:
+
+día:
+```xml
+    <style name="Theme.ReciclaIA" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Habilitar colores dinámicos -->
+        <item name="android:theme">@style/ThemeOverlay.Material3.DynamicColors.DayNight</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+```
+noche:
+```xml
+    <style name="Theme.ReciclaIA" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Habilitar colores dinámicos -->
+        <item name="android:theme">@style/ThemeOverlay.Material3.DynamicColors.DayNight</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+```
+
+NOTA: si nuestra aplicación tuviera soporte para Android 11 o inferior, deberíamos añadir los colores estáticos:
+
+```xml
+<item name="colorPrimary">@color/my_static_color_primary_dark</item>
+<item name="colorSecondary">@color/my_static_color_secondary_dark</item>
+<item name="colorTertiary">@color/my_static_color_tertiary_dark</item>
+```
+
+En el fichero aplicación llamamos a la siguiente función para activar la paleta de colores dinámica:
+
+![activación paleta dinámica](/media/17_applyToActivitiesIfAvailable.png)
+
+#### Ejemplo
+
+Basado en este fondo, obtenemos los siguientes colores clave automáticamente:
+
+![background](/media/25_background.png)
+
+Modo nocturno off:
+
+![paleta día](/media/26_palette_day.png)
+
+Modo nocturno on:
+
+![paleta night](/media/27_palette_night.png)
+
+
+### 4.4 Configuración del tema para las vistas basadas en Jetpack Compose
+
 
 ---
 

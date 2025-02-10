@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/host"
-    app:startDestination="@id/fragmentInitial">
+    app:startDestination="@id/fragmentStart">
 
     <fragment
         android:id="@+id/fragmentInitial"
@@ -16,4 +16,12 @@
         android:id="@+id/fragmentInitial2"
         android:name="com.ingencode.reciclaia.ui.screens.initial.FragmentInitial2"
         android:label="FragmentInitial2" />
+    <fragment
+        android:id="@+id/fragmentStart"
+        android:name="com.ingencode.reciclaia.ui.screens.start.FragmentStart"
+        android:label="FragmentStart" >
+        <action
+            android:id="@+id/action_fragmentStart_to_fragmentInitial"
+            app:destination="@id/fragmentInitial" />
+    </fragment>
 </navigation>

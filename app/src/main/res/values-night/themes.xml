@@ -5,7 +5,7 @@
     <style name="Theme.ReciclaIA" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Habilitar colores dinámicos -->
         <item name="android:theme">@style/ThemeOverlay.Material3.DynamicColors.DayNight</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightStatusBar">false</item>
         <item name="fontFamily">@font/comfortaa_regular</item>
     </style>
     <!--<style name="Theme.ReciclaIA" parent="android:Theme.Material.Light.NoActionBar" />-->
