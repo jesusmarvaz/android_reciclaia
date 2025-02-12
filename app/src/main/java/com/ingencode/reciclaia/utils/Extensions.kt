@@ -4,9 +4,9 @@ import android.content.Context
 import android.graphics.PorterDuff
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.widget.ImageView
 import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.google.gson.Gson
@@ -282,7 +282,7 @@ fun AppCompatActivity.setFullScreenOff() {
 
 */
 
-fun AppCompatImageView.setTint(@ColorRes color: Int) {
+fun ImageView.setTint(@ColorRes color: Int) {
     this.setColorFilter(ContextCompat.getColor(context, color), PorterDuff.Mode.SRC_IN);
 }
 

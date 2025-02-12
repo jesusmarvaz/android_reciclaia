@@ -2,13 +2,16 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?attr/colorSurface">
     <TextView
         android:id="@+id/text_view_origen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="0dp"
-        android:text="Fragment origen"/>
+        android:padding="12dp"
+        android:background="?attr/colorSurfaceVariant"
+        android:text="Prueba de navegación, pulsta para ir a testeo de API"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

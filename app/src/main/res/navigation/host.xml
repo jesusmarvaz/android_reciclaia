@@ -23,5 +23,8 @@
         <action
             android:id="@+id/action_fragmentStart_to_fragmentInitial"
             app:destination="@id/fragmentInitial" />
+        <action
+            android:id="@+id/action_fragmentStart_to_fragmentInitial2"
+            app:destination="@id/fragmentInitial2" />
     </fragment>
 </navigation>

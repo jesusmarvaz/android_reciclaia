@@ -21,7 +21,7 @@ En este documento se explicará la implementación del proyecto, detallando en l
 
 ### 1.1 Versiones de Gradle y AGP
 
-![gradle](/media/02_gradle_versions.png)
+![gradle](media/02_gradle_versions.png)
 
 ### 1.2 Sistema de gestor de dependencias - Version catalog
 
@@ -30,9 +30,9 @@ En este documento se explicará la implementación del proyecto, detallando en l
 
 [Información oficial](https://developer.android.com/build/migrate-to-catalogs)
 
-![alt text](/media/04_toml.png)
+![alt text](media/04_toml.png)
 
-![alt text](/media/03_toml.png)
+![alt text](media/03_toml.png)
 
 ### 1.3 Procesado de anotaciones ksp
 
@@ -49,7 +49,7 @@ dependencies {
 
 ### 1.4 Versión del compilador K2 y Kotlin 2
 
-![alt text](/media/05_k2.png)
+![alt text](media/05_k2.png)
 
 Esta nueva versión del compilador está en fase beta, no obstante, lo probaré y documentaré posibles incompatibilidades, en ese caso se desactivará para este proyecto.
 
@@ -249,7 +249,7 @@ Al configurar las vistas con View partiendo de un proyecto preconfigurado para C
 1. Las vistas no evitan la zona de la cámara selfie, u otros elementos de de tipo borde o del sistema.
 1. Se configura en fullscreen o sin la barra de estado visible
 
-![caso1](/media/07_fitsystemwindows,false.png)
+![caso1](media/07_fitsystemwindows,false.png)
 
 Solución al caso 1: 
 Debemos configurar el atributo del sistema `fitsSystemWindows` a `true` en el layout principal de la aplicación, normalmente el layout padre de `activity_main.xml` :
@@ -269,7 +269,7 @@ Uso en el layout de la actividad principal `activity_main.xml`:
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">...</LinearLayout>
 ```
-![solucion1](/media/06_darkstatusbar.png)
+![solucion1](media/06_darkstatusbar.png)
 
 Solución al caso 2: 
 Aparentemente la barra de estado no aparece, nada más lejos de la realidad, es transparente con texto e iconos blancos, debemos ajustar el tema para que sea adecuado según el fondo de la vista, manteniendo el fondo transparente (tendendia de Material3) usaremos la propiedad `android:windowLightStatusBar`:
@@ -289,7 +289,7 @@ Tema utilizando Material 3 para utilización de colores dinámicos (se explicar�
 </resources>
 ```
 
-![solucion2](/media/08_fitsystemwindows,true%20and%20lightstatusbar.png)
+![solucion2](media/08_fitsystemwindows,true%20and%20lightstatusbar.png)
 
 - Nota: Puede resultar confuso que el estado `windowLightStatusBar:true` ofrezca el texto en oscuro y viceversa, pero es correcto, pues el color del texto es el de contraste con el fondo claro, que es lo que aplica en esta configuración.
 ___
@@ -322,7 +322,7 @@ Es necesario crear un fichero xml en la carpeta `navigation` que llamaremos `hos
 - Creación de la carpeta
 - Click derecho sobre carpeta y elegir *new Navigation File*
 
-![host](/media/09_host.png)
+![host](media/09_host.png)
 
 La edición del gráfico de navegación, al igual que las vistas usando View, se puede realizar gráficamente o editando el xml. Lo más comodo es usar la parte gráfica y editar alguna característica concreta usando el xml cuando sea necesario.
 
@@ -391,7 +391,7 @@ Con el siguiente desarrollo se predende interceptar la acción del botón atrás
 
 Ahora debemos diseñar un mecanismo para que se llame al método `goBack()` que hemos creado antes en la clase abstracta de la que heredarán todos los fragmentos, `FragmentBase`. Analizando el funcionamiento general de los fragmentos en Android, nos damos cuenta de que puede darse una estructura tipo árbol, con fragmentos hijos dentro de un padre. Además, debemos hallar el fragmento "activo" y entonces llamar a su método `goBack()` (Nótese que se tendrá que comprobar que el fragmento sea del tipo `FragmentBase`).
 
-![nested fragments](/media/12_nested_fragments.png)
+![nested fragments](media/12_nested_fragments.png)
 
 Vamos a crear una interfaz (más adelante desarrollaremos la implementación) que contenga el método que necesitamos, de la siguiente manera:
 
@@ -580,7 +580,7 @@ object CommonModule {
 
 * Uso de `@InstallIn({Generated Component}.class)`
   * Donde {Generated Component} se refiere al alcance de las instancias de las dependencias creadas con Hilt, es la configuración de la vida útil, por así decirlo, y hay varias configuraciones. En este caso hemos utilizado `SingletonComponent.class` (por cierto, no tiene nada que ver con el patrón de diseño Singleton), que se refiere a que tiene un alcance global, o de aplicación. Aquí hay una tabla con todas las posibles opciones disponibles:
-  * ![scopes hilt](/media/13_scopes_hilt.png)
+  * ![scopes hilt](media/13_scopes_hilt.png)
 
 Puede que para nuestro ejemplo no fuera necesario el uso de Hilt, pero sirve perfectamente para ilustrar su funcionamiento y no está mal dejarlo así. Se intentará usar todo lo posible Hilt en el proyecto para un código más modular, testeable y limpio.
 
@@ -751,9 +751,9 @@ class FragmentInitialViewModel @Inject constructor(private val testApiProvider: 
     }
 ```
 
-![test endpoint](/media/20_test_endpoint.png)
+![test endpoint](media/20_test_endpoint.png)
 
-![test endpoint db](/media/21_test_db_endpoint.png)
+![test endpoint db](media/21_test_db_endpoint.png)
 
 ## 4 Tema de la aplicación | **Conceptos tratados**: *Diseño de la interfaz de usuario, UI*
 
@@ -765,7 +765,7 @@ Vamos a definir en este punto de manera general cómo va a ser el estilo de nues
 
 #### 4.1.0 Logo
 
-![logo](/media/18_logo.png)
+![logo](media/18_logo.png)
 
 #### 4.1.1 Fuente
 
@@ -777,32 +777,32 @@ Recursos
 
 La fuente elegida de manera general será *Comfortaa*.
 
-![fuente Comfortaa](/media/19_comfortaa.png)
+![fuente Comfortaa](media/19_comfortaa.png)
 
 
 #### 4.1.2 Paleta de colores
 
 Se hará un uso exclusivo de la paleta de colores del sistema, configurando algunos colores fijos. En aplicaciones con Android 11 o inferior sería necesario la creación de una paleta de colores fija alternativa, pero nuestra aplicación va destinada a Android 13 como mínimo, por lo que no será necesario esta adaptación.
 
-![Paleta colores](/media/22_paleta_dinamica.png)
+![Paleta colores](media/22_paleta_dinamica.png)
 
-![Paleta ejemplos](/media/23_paleta_ejemplos.png)
+![Paleta ejemplos](media/23_paleta_ejemplos.png)
 
-![Paleta ejemplos 2](/media/24_paleta_ejemplos2.png)
+![Paleta ejemplos 2](media/24_paleta_ejemplos2.png)
 
 ### 4.2 Configuración de la fuente
 
 Descarga desde Google Fonts
 
-![fuente](/media/14_fuente.png)
+![fuente](media/14_fuente.png)
 
 Tras ello vamos a renombrar los ficheros de la fuente para ser compatible con el sistema android: todo minúsculas y guiones bajos. Podemos usar la herramienta PowerRename para ello:
 
-![fuente renombrada](/media/15_fuente_renombrada.png)
+![fuente renombrada](media/15_fuente_renombrada.png)
 
 Ubicación en el proyecto Android:
 
-![fuente en proyecto](/media/16_fuente_en_proyecto.png)
+![fuente en proyecto](media/16_fuente_en_proyecto.png)
 
 ### 4.3 Configuración del tema para las vistas basadas en View
 
@@ -835,30 +835,116 @@ NOTA: si nuestra aplicación tuviera soporte para Android 11 o inferior, deberí
 
 En el fichero aplicación llamamos a la siguiente función para activar la paleta de colores dinámica:
 
-![activación paleta dinámica](/media/17_applyToActivitiesIfAvailable.png)
+![activación paleta dinámica](media/17_applyToActivitiesIfAvailable.png)
 
-#### Ejemplo
+#### Ejemplos
 
+**Ejemplo 1**
 Basado en este fondo, obtenemos los siguientes colores clave automáticamente:
 
-![background](/media/25_background.png)
+![background](media/25_background.png)
 
-Modo nocturno off:
+Modo nocturno desactivado:
 
-![paleta día](/media/26_palette_day.png)
+![paleta día](media/26_palette_day.png)
 
-Modo nocturno on:
+Modo nocturno activado:
 
-![paleta night](/media/27_palette_night.png)
+![paleta night](media/27_palette_night.png)
+
+**Ejemplo 2**
+
+Si ahora elegimos un fondo con colores distintos, nuestra paleta de colores clave también lo hace:
+
+![wallpaper2](media/28_wallpaper2.png)
+
+Modo nocturno desactivado:
+
+![paleta2.1](media/29.png)
+
+Modo nocturno activado:
+
+![paleta2.2](media/30.png)
 
 
 ### 4.4 Configuración del tema para las vistas basadas en Jetpack Compose
 
+En Compose los temas se configuran mediante código kotlin y usando la etiqueta `@Composable` a cada función que así lo sea. 
 
----
+La definición de la familia de fuentes `ComfortaaFontFamily` así como una para los casos que necesitemos una fuente monoespaciada, cogiendo como familia de fuentes `UbuntuMono`:
 
-# TO DO
+```kotlin
+private val ComfortaaFontFamily = FontFamily(
+    Font(resId = R.font.comfortaa_regular, weight = FontWeight.Normal),
+    Font(resId = R.font.comfortaa_bold, weight = FontWeight.Bold))
 
-- Documentar `<style name="Theme.ReciclaIA" parent="Theme.Material3.DayNight.NoActionBar">` Para colores dinámicos https://codelabs.developers.google.com/codelabs/apply-dynamic-color?hl=es-419#0
+val monospaceFontFamily = FontFamily(
+    Font(R.font.ubuntumono_regular, FontWeight.Normal),
+    Font(R.font.ubuntumono_bold, FontWeight.Bold),
+    Font(R.font.ubuntumono_italic, FontWeight.Normal, FontStyle.Italic),
+    Font(R.font.ubuntumono_bolditalic, FontWeight.Bold, FontStyle.Italic))
+```
 
+Voy a crear una clase que envuelva la configuración (wrapper) personalizada del tema, con la fuente y paleta de colores dinámicos que hemos definido anteriormente para el caso de `View` y layouts basados en `xml`:
 
+```kotlin
+@Composable
+fun MyComposeWrapper(content: @Composable () -> Unit) {
+    ReciclaIaTheme(content = content)
+}
+
+@Composable
+fun ReciclaIaTheme(darkTheme: Boolean = isSystemInDarkTheme(),
+                   dynamicColor: Boolean = true,
+                   content: @Composable () -> Unit) {
+    val context = LocalContext.current
+    val defTyp = MaterialTheme.typography
+    val colorScheme = when {
+        dynamicColor -> if (darkTheme) dynamicLightColorScheme(context) else dynamicDarkColorScheme(context)
+        darkTheme -> DarkColors
+        else -> LightColors
+    }
+    val myTypography = Typography(
+        displayLarge = defTyp.displayLarge.copy(fontFamily = ComfortaaFontFamily),
+        displayMedium = defTyp.displayMedium.copy(fontFamily = ComfortaaFontFamily),
+        displaySmall = defTyp.displaySmall.copy(fontFamily = ComfortaaFontFamily),
+        headlineLarge = defTyp.headlineLarge.copy(fontFamily = ComfortaaFontFamily),
+        headlineMedium = defTyp.headlineMedium.copy(fontFamily = ComfortaaFontFamily),
+        headlineSmall = defTyp.headlineSmall.copy(fontFamily = ComfortaaFontFamily),
+        bodyLarge = defTyp.bodyLarge.copy(fontFamily = ComfortaaFontFamily),
+        bodyMedium = defTyp.bodyMedium.copy(fontFamily = ComfortaaFontFamily),
+        bodySmall = defTyp.bodySmall.copy(fontFamily = ComfortaaFontFamily),
+        titleLarge = defTyp.titleLarge.copy(fontFamily = ComfortaaFontFamily, fontWeight = FontWeight.Bold),
+        titleMedium = defTyp.titleMedium.copy(fontFamily = ComfortaaFontFamily, fontWeight = FontWeight.Bold),
+        titleSmall = defTyp.titleSmall.copy(fontFamily = ComfortaaFontFamily, fontWeight = FontWeight.Bold),
+        labelLarge = defTyp.labelLarge.copy(fontFamily = ComfortaaFontFamily, fontWeight = FontWeight.Bold),
+        labelMedium = defTyp.labelMedium.copy(fontFamily = ComfortaaFontFamily, fontWeight = FontWeight.Bold),
+        labelSmall = defTyp.labelSmall.copy(fontFamily = ComfortaaFontFamily, fontWeight = FontWeight.Bold))
+
+    MaterialTheme(colorScheme = colorScheme, content = content, typography = myTypography)
+}
+
+//En el caso de que el sistema no soportara colores dinámicos:
+private val LightColors = lightColorScheme(
+    primary = Purple40,
+    secondary = PurpleGrey40,
+    tertiary = Pink40)
+private val DarkColors = darkColorScheme(
+    primary = Purple80,
+    secondary = PurpleGrey80,
+    tertiary = Pink80)
+```
+
+Ahora, de manera sencill podemos aplicar ese Wrapper a nuestro contenido en compose para que pinte con lo configurado en el tema:
+
+```kotlin
+binding.composeView.setContent {
+            MyComposeWrapper {
+                MyBox()
+            }
+        }
+```
+
+___
+
+## TO-DO

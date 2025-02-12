@@ -2,14 +2,17 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?attr/colorSurface">
     <TextView
         android:id="@+id/text_view_destino"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="0dp"
-        android:text="Fragment destino"/>
+        android:padding="12dp"
+        android:background="?attr/colorSurfaceVariant"
+        android:text="Herramienta de testeo de API. Pulsa para ir atrás"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -41,7 +44,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
-        android:background="@color/purple_200"
+        android:background="?attr/colorPrimaryContainer"
         android:minHeight="80dp"
         android:textColor="@color/black"
         android:layout_margin="16dp"

@@ -4,8 +4,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavDirections
+import androidx.navigation.findNavController
 import com.ingencode.reciclaia.databinding.ActivityMainBinding
 import com.ingencode.reciclaia.routing.IBackPressedListener
+import com.ingencode.reciclaia.ui.screens.start.FragmentStart
+import com.ingencode.reciclaia.ui.screens.start.FragmentStartDirections
 import com.ingencode.reciclaia.utils.nameClass
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
