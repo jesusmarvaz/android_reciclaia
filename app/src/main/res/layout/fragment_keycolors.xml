@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?attr/colorSurface">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/key_colors"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_subtitle"
+        android:text="@string/key_colors_explanation"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:padding="8dp"
+        />
+
+    <TextView
+        android:id="@+id/tv_text1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_subtitle"
+        android:layout_marginTop="48dp"
+        android:textSize="18sp"
+        android:fontFamily="@font/comfortaa_regular"
+        android:text="Primary"
+        android:textColor="?attr/colorSurface"
+        android:textAlignment="center"
+        android:background="?attr/colorPrimary"/>
+    <TextView
+        android:id="@+id/tv_text2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_text1"
+        android:layout_marginTop="18dp"
+        android:textSize="18sp"
+        android:fontFamily="@font/comfortaa_regular"
+        android:text="Secondary"
+        android:textColor="?attr/colorSurface"
+        android:textAlignment="center"
+        android:background="?attr/colorSecondary"/>
+    <TextView
+        android:id="@+id/tv_text3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_text2"
+        android:layout_marginTop="18dp"
+        android:textSize="18sp"
+        android:fontFamily="@font/comfortaa_regular"
+        android:text="Tertiary"
+        android:textColor="?attr/colorSurface"
+        android:textAlignment="center"
+        android:background="?attr/colorTertiary"/>
+    <TextView
+        android:id="@+id/tv_text4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_text3"
+        android:layout_marginTop="18dp"
+        android:textSize="18sp"
+        android:fontFamily="@font/comfortaa_regular"
+        android:text="Neutral (Surface)"
+        android:textColor="?attr/colorTertiary"
+        android:textAlignment="center"
+        android:background="?attr/colorSurface"/>
+    <TextView
+        android:id="@+id/tv_text5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_text4"
+        android:layout_marginTop="18dp"
+        android:textSize="18sp"
+        android:fontFamily="@font/comfortaa_regular"
+        android:text="Neutral Variant (Surface Variant)"
+        android:textColor="?attr/colorTertiary"
+        android:textAlignment="center"
+        android:background="?attr/colorSurfaceVariant"/>
+    <TextView
+        android:id="@+id/tv_text6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_text5"
+        android:layout_marginTop="18dp"
+        android:textSize="18sp"
+        android:fontFamily="@font/comfortaa_regular"
+        android:text="Color Error"
+        android:textColor="?attr/colorSurface"
+        android:textAlignment="center"
+        android:background="?attr/colorError"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

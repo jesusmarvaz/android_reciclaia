@@ -26,5 +26,19 @@
         <action
             android:id="@+id/action_fragmentStart_to_fragmentInitial2"
             app:destination="@id/fragmentInitial2" />
+        <action
+            android:id="@+id/action_fragmentStart_to_keyColorsFragment"
+            app:destination="@id/keyColorsFragment" />
+        <action
+            android:id="@+id/action_fragmentStart_to_fragmentApp"
+            app:destination="@id/fragmentApp" />
     </fragment>
+    <fragment
+        android:id="@+id/keyColorsFragment"
+        android:name="com.ingencode.reciclaia.ui.screens.keycolors.KeyColorsFragment"
+        android:label="KeyColorsFragment" />
+    <fragment
+        android:id="@+id/fragmentApp"
+        android:name="com.ingencode.reciclaia.ui.screens.app.FragmentApp"
+        android:label="FragmentApp" />
 </navigation>

@@ -8,23 +8,18 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.PlatformTextStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
+import com.ingencode.reciclaia.R
 import com.ingencode.reciclaia.ui.theme.Pink40
 import com.ingencode.reciclaia.ui.theme.Pink80
 import com.ingencode.reciclaia.ui.theme.Purple40
 import com.ingencode.reciclaia.ui.theme.Purple80
 import com.ingencode.reciclaia.ui.theme.PurpleGrey40
 import com.ingencode.reciclaia.ui.theme.PurpleGrey80
-import com.ingencode.reciclaia.R
-import kotlin.random.Random
 
 /**
 Created with ❤ by Jesús Martín (jesusmarvaz@gmail.com) on 2025-02-10.

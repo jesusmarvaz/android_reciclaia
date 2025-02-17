@@ -5,4 +5,5 @@
     <string name="test_api">test API</string>
     <string name="start_app">Start app</string>
     <string name="do_not_show_tutorial_again">Don\'t show tutorial again</string>
+    <string name="key_colors_explanation">These are the colors generated from the user\'s wallpaper</string>
 </resources>
