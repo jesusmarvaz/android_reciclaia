@@ -48,7 +48,7 @@ fun Tutorial() {
         Column {
             HorizontalPager(
                 state = pager,
-                modifier = Modifier.height(350.dp),
+                modifier = Modifier.fillMaxWidth(),
                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp), pageSpacing = 16.dp) {
                 page -> GetContentForPage(page)
             }
@@ -95,7 +95,7 @@ fun Tutorial() {
 
 @Composable
 fun GetContentForPage(page: Int) {
-   return Card(shape = RoundedCornerShape(16.dp), elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)) {
+   return Card(shape = RoundedCornerShape(16.dp), elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)) {
         Column {
             Box(
                 modifier =

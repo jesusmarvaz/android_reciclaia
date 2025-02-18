@@ -945,6 +945,25 @@ binding.composeView.setContent {
         }
 ```
 
+## 5 Jetpack Compose
+
+Vamos a añadir una vista diseñada con Compose dentro de otra basada en View, una situación común si se trabaja con proyectos algo antiguos basados en View. Vamos a ver cómo es posible esta integración fácilmente creando la pantalla de tutorial dentro de la inicial.
+
+![alt text](image.png)
+
+Como se ha descrito anteriormente de manera escueta, la integración de Compose en View requiere del uso del componente `androidx.compose.ui.platform.ComposeView`:
+
+```xml
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/compose_view"
+        app:layout_constraintTop_toBottomOf="@id/bt_palette"
+        app:layout_constraintBottom_toTopOf="@id/ll_skip"
+        android:layout_marginVertical="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="8dp"
+        />
+```
 ___
 
 ## TO-DO
