@@ -949,7 +949,7 @@ binding.composeView.setContent {
 
 Vamos a añadir una vista diseñada con Compose dentro de otra basada en View, una situación común si se trabaja con proyectos algo antiguos basados en View. Vamos a ver cómo es posible esta integración fácilmente creando la pantalla de tutorial dentro de la inicial.
 
-![alt text](image.png)
+![Tutorial Compose](media/31.png)
 
 Como se ha descrito anteriormente de manera escueta, la integración de Compose en View requiere del uso del componente `androidx.compose.ui.platform.ComposeView`:
 
@@ -964,6 +964,187 @@ Como se ha descrito anteriormente de manera escueta, la integración de Compose 
         android:elevation="8dp"
         />
 ```
+
+En `FragmentStart.kt` podemos inflar el contenido de Compose fácilmente mediante el método `setContent` quedando de esta manera: 
+
+```kotlin
+class FragmentStart: FragmentBaseForViewmodel() {
+    ...
+    binding.composeView.setContent {
+        MyComposeWrapper {
+            Tutorial()
+        }
+    }
+    ...
+```
+
+### Vistas en Compose
+
+[Información oficial](https://developer.android.com/jetpack/androidx/releases/compose-kotlin)
+
+#### Preview
+
+Con el sistema de previsualización de Compose es muy sencillo elegir qué partes previsualizar, hay que crear una función etiquetada con `@Composeable`y `@Preview`
+
+```kotlin
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    MyComposeWrapper {
+        Tutorial()
+    }
+}
+```
+
+#### Pager de Material3
+
+Implementaremos un elemento `HorizontalPager` que albergará las distintas páginas del tutorial:
+
+```kotlin
+@Composable
+fun Tutorial() {
+    var pager = rememberPagerState(initialPage = 0, pageCount = { 3 }, initialPageOffsetFraction = 0f)
+    val coroutineScope = rememberCoroutineScope()
+
+    ReciclaIaTheme {
+        Column {
+            HorizontalPager(
+                state = pager,
+                modifier = Modifier.fillMaxWidth().weight(10f),
+                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp), pageSpacing = 16.dp) {
+                page -> GetContentForPage(page)
+            }
+        }
+    }
+}
+```
+
+Donde `@Composable fun GetContentForPage(page: Int){...}` es la función que devuelve el contenido de cada página del tutorial en función del índice de página.
+
+Este tutorial se completará más adelante con los aspectos clave desarrollados, solo hará fala completar cada pantalla con la información más relevante de la app una vez terminada.
+
+## 6 Creación de la barra de navegación (View)
+
+Esta parte se realizará usando las vistas clásicas basadas en `View` y `xml`.
+
+Es interesante hacer uso de la vinculación entre **Jetpack Navigation** y la barra inferior de navegación `BottomNavigationView` simplificando mucho su implementación. Más adelante, si fuese necesario capturar la navegación hacia cada pantalla, se podrá sustituir por una implementación más personalizada, de momento lo que queremos es que la navegación de cada botón inferior esté automaticamente ligada a una pantalla concreta. Veamos cómo hacerlo.
+
+### 6.1 Creación de un menú para `BottomNavigationView`
+
+Para que la magia suceda y pueda relacionar los botones de la barra inferior de navegación BottomNavigationView con los fragmentos que me interesen debo hacer un par de "trucos":
+
+1. Definir los ids de los destinos que queramos relacionar haciendo que coincidan con los ids del menu de navegación asociado al BottomNavigationView
+2. Relacionar la barra de navegación con el controlador de navegación anidado navController (se pueden tener controladores de navegación dentro de otros, pero sólo el padre tendrá esta configuración: `app:defaultNavHost="true"`)
+
+```xml
+<androidx.fragment.app.FragmentContainerView
+        android:id="@+id/hostNavFragment"
+        android:background="?attr/colorSurface"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/host"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="1dp" />
+
+```
+
+NavHostFragment hijo (app:defaultNavHost="false"):
+```xml
+  <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/appNavFragment"
+        android:background="?attr/colorSurface"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bnv_app"
+        app:defaultNavHost="false"
+        app:navGraph="@navigation/app_navigation" />
+````
+
+   
+#### 1 Relacionar los ids del menú con los del gráfico de navegación
+
+El gráfico de navegación `app_navigation.xml`:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_navigation"
+    app:startDestination="@id/navigation_home">
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.ingencode.reciclaia.ui.screens.app.home.FragmentHome"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_home"
+        />
+    <fragment
+        android:id="@+id/navigation_history"
+        android:name="com.ingencode.reciclaia.ui.screens.app.history.FragmentHistory"
+        android:label="@string/history"
+        tools:layout="@layout/fragment_history"
+        />
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.ingencode.reciclaia.ui.screens.app.profile.FragmentProfile"
+        android:label="@string/profile"
+        tools:layout="@layout/fragment_profile"
+        />
+    <fragment
+        android:id="@+id/navigation_options"
+        android:name="com.ingencode.reciclaia.ui.screens.app.settings.FragmentSettings"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_settings"
+        />
+</navigation>
+```
+
+Elemento de menú utilizado en la barra de navegación inferior (obsérvese cómo los ids de los items del menú coinciden con los de los fragmentos del gráfico de navegación)
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/rounded_home_24"
+        android:title="@string/home"/>
+    <item
+        android:id="@+id/navigation_history"
+        android:icon="@drawable/round_history_24"
+        android:title="@string/history" />
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/round_person_24"
+        android:title="@string/profile" />
+    <item
+        android:id="@+id/navigation_options"
+        android:icon="@drawable/round_settings_24"
+        android:title="@string/settings" />
+</menu>
+```
+
+
+#### 2 Relacionar la barra de navegación con el controlador de navegación navController
+
+Esto lo haremos en el fragmento que contiene tanto la barra inferior de navegación como el elemento `NavHostFragment` que es `FragmentApp`
+
+```kotlin
+@AndroidEntryPoint
+class FragmentApp : FragmentBase() {  
+    val navHostFragment = childFragmentManager.findFragmentById(R.id.appNavFragment) as NavHostFragment
+    binding.bnvApp.setupWithNavController(navHostFragment.navController)
+    ...
+}
+```
+
+![BottomNavBar](media/32_bottom_nav_bar.png)
+
 ___
 
 ## TO-DO
+
+* Configurar MenuFactory si fuera necesario más adelanta

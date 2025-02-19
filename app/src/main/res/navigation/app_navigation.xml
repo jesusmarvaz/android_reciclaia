@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_navigation"
+    app:startDestination="@id/navigation_home">
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.ingencode.reciclaia.ui.screens.app.home.FragmentHome"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_home"
+        />
+    <fragment
+        android:id="@+id/navigation_history"
+        android:name="com.ingencode.reciclaia.ui.screens.app.history.FragmentHistory"
+        android:label="@string/history"
+        tools:layout="@layout/fragment_history"
+        />
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.ingencode.reciclaia.ui.screens.app.profile.FragmentProfile"
+        android:label="@string/profile"
+        tools:layout="@layout/fragment_profile"
+        />
+    <fragment
+        android:id="@+id/navigation_options"
+        android:name="com.ingencode.reciclaia.ui.screens.app.settings.FragmentSettings"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_settings"
+        />
+
+</navigation>
+<!--<item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/rounded_home_24"
+        android:title="@string/home"/>
+
+    <item
+        android:id="@+id/navigation_history"
+        android:icon="@drawable/round_history_24"
+        android:title="@string/history" />
+
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/round_person_24"
+        android:title="@string/profile" />
+
+    <item
+        android:id="@+id/navigation_options"
+        android:icon="@drawable/round_settings_24"
+        android:title="@string/settings" />-->

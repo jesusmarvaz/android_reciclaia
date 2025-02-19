@@ -45,6 +45,19 @@ class FragmentStart: FragmentBaseForViewmodel() {
     }
 
     private fun startApp() {
+        val viewVersion = sharedPreferences.getBoolean(Constants.SharedPreferencesKeys.viewVersion, true)
+        if (viewVersion) startViewVersionApp() else startComposeVersionApp()
+    }
+
+    private fun startViewVersionApp() {
+        sharedPreferences.edit()
+            .putBoolean(Constants.SharedPreferencesKeys.viewVersion, true).apply()
+        findNavController().navigate(FragmentStartDirections.actionFragmentStartToFragmentApp())
+    }
+
+    private fun startComposeVersionApp() {
+        sharedPreferences.edit()
+            .putBoolean(Constants.SharedPreferencesKeys.viewVersion, false).apply()
         findNavController().navigate(FragmentStartDirections.actionFragmentStartToFragmentApp())
     }
 
@@ -70,7 +83,8 @@ class FragmentStart: FragmentBaseForViewmodel() {
                 .apply()
         }
         binding.checkboxNoTutorial.isChecked = skipTutorial
-        binding.btSkip.setOnClickListener { startApp() }
+        binding.btAppViewVersion.setOnClickListener { startViewVersionApp() }
+        binding.btAppComposeVersion.setOnClickListener { startComposeVersionApp() }
 
         binding.composeView.setContent {
             MyComposeWrapper {

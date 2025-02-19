@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ingencode.reciclaia.ui.compose.MyComposeWrapper
 import com.ingencode.reciclaia.ui.compose.ReciclaIaTheme
 import kotlinx.coroutines.launch
 
@@ -45,20 +46,20 @@ fun Tutorial() {
     val coroutineScope = rememberCoroutineScope()
 
     ReciclaIaTheme {
-        Column {
+        Column(Modifier.fillMaxSize()) {
             HorizontalPager(
                 state = pager,
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp), pageSpacing = 16.dp) {
+                modifier = Modifier.fillMaxWidth().weight(10f),
+                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp),
+                pageSpacing = 16.dp) {
                 page -> GetContentForPage(page)
             }
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(4.dp).weight(1f))
             Row(
                 modifier = Modifier
-                    .wrapContentHeight()
                     .fillMaxWidth()
-                    .padding(bottom = 8.dp),
+                    .padding(bottom = 8.dp).weight(2f),
                 horizontalArrangement = Arrangement.Center
             ) {
                 repeat(pager.pageCount) { iteration ->
@@ -102,8 +103,7 @@ fun GetContentForPage(page: Int) {
                 Modifier
                     .padding(0.dp)
                     .background(MaterialTheme.colorScheme.primary)
-                    .fillMaxSize()
-                    .aspectRatio(0.5f),
+                    .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 Text(text = "Tutorial, página ${page+1}", fontSize = 28.sp, color = Color.White)
@@ -115,5 +115,7 @@ fun GetContentForPage(page: Int) {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    Tutorial()
+    MyComposeWrapper {
+        Tutorial()
+    }
 }

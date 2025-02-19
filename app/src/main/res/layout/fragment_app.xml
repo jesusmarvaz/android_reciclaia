@@ -3,22 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="?attr/colorSurface">
-    <TextView
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bnv_app"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="fragmentApp"
-        app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/tv"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_menu"
         />
-    <CheckBox
-        android:id="@+id/checkbox_no_tutorial"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/appNavFragment"
+        android:background="?attr/colorSurface"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/do_not_show_tutorial_again"
-        android:paddingHorizontal="12dp"
-        android:layout_marginVertical="8dp"
-        app:layout_constraintTop_toBottomOf="@id/tv"/>
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bnv_app"
+        app:defaultNavHost="false"
+        app:navGraph="@navigation/app_navigation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

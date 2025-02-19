@@ -6,4 +6,11 @@
     <string name="start_app">Iniciar app</string>
     <string name="do_not_show_tutorial_again">No volver a mostrar tutorial</string>
     <string name="key_colors_explanation">Estos son los colores generados a partir del fondo de pantalla del usuario</string>
+    <string name="view_based_app">Versión View</string>
+    <string name="compose_based_app">Versión Compose</string>
+    <string name="home">Inicio</string>
+    <string name="history">Historial</string>
+    <string name="learn">Aprende</string>
+    <string name="profile">Perfil</string>
+    <string name="settings">Ajustes</string>
 </resources>

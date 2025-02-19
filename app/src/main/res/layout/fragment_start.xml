@@ -92,13 +92,33 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         android:paddingTop="8dp">
-        <Button
-            android:id="@+id/bt_skip"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/start_app"
-            android:backgroundTint="?attr/colorPrimary"
-            android:layout_marginHorizontal="16dp"/>
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            >
+            <Button
+                android:id="@+id/bt_app_view_version"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/view_based_app"
+                android:layout_weight="1"
+                android:textSize="12sp"
+                android:backgroundTint="?attr/colorPrimary"
+                android:layout_marginHorizontal="4dp"/>
+            <Button
+                android:id="@+id/bt_app_compose_version"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="12sp"
+                android:text="@string/compose_based_app"
+                android:backgroundTint="?attr/colorPrimary"
+                android:tooltipText="Inicia la vista creada con el framework JetPack Compose"
+                android:layout_marginHorizontal="4dp"/>
+        </LinearLayout>
+
         <CheckBox
             android:id="@+id/checkbox_no_tutorial"
             android:layout_width="wrap_content"
