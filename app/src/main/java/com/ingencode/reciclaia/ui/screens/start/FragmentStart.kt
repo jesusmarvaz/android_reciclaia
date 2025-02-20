@@ -13,8 +13,8 @@ import androidx.viewbinding.ViewBinding
 import com.ingencode.reciclaia.databinding.FragmentStartBinding
 import com.ingencode.reciclaia.ui.components.FragmentBaseForViewmodel
 import com.ingencode.reciclaia.ui.components.ViewModelBase
-import com.ingencode.reciclaia.ui.compose.MyComposeWrapper
 import com.ingencode.reciclaia.ui.screens.tutorial.Tutorial
+import com.ingencode.reciclaia.ui.theme.MyComposeWrapper
 import com.ingencode.reciclaia.utils.Constants
 import com.ingencode.reciclaia.utils.nameClass
 
@@ -58,7 +58,7 @@ class FragmentStart: FragmentBaseForViewmodel() {
     private fun startComposeVersionApp() {
         sharedPreferences.edit()
             .putBoolean(Constants.SharedPreferencesKeys.viewVersion, false).apply()
-        findNavController().navigate(FragmentStartDirections.actionFragmentStartToFragmentApp())
+        findNavController().navigate(FragmentStartDirections.actionFragmentStartToFragmentAppComposeVersion())
     }
 
     override fun initProperties() {
@@ -87,9 +87,7 @@ class FragmentStart: FragmentBaseForViewmodel() {
         binding.btAppComposeVersion.setOnClickListener { startComposeVersionApp() }
 
         binding.composeView.setContent {
-            MyComposeWrapper {
-                Tutorial()
-            }
+            MyComposeWrapper { Tutorial() }
         }
     }
 

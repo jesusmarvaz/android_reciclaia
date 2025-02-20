@@ -5,7 +5,7 @@ import android.util.Log
 import android.view.KeyEvent
 import androidx.appcompat.app.AppCompatActivity
 import com.ingencode.reciclaia.databinding.ActivityMainBinding
-import com.ingencode.reciclaia.routing.IBackPressedListener
+import com.ingencode.reciclaia.ui.navigation.IBackPressedListener
 import com.ingencode.reciclaia.utils.nameClass
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

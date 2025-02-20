@@ -2,9 +2,12 @@ package com.ingencode.reciclaia.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.ingencode.reciclaia.R
 
 // Set of Material typography styles to start with
 val Typography = Typography(
@@ -32,3 +35,13 @@ val Typography = Typography(
     )
     */
 )
+
+val ComfortaaFontFamily = FontFamily(
+    Font(resId = R.font.comfortaa_regular, weight = FontWeight.Normal),
+    Font(resId = R.font.comfortaa_bold, weight = FontWeight.Bold))
+
+val monospaceFontFamily = FontFamily(
+    Font(R.font.ubuntumono_regular, FontWeight.Normal),
+    Font(R.font.ubuntumono_bold, FontWeight.Bold),
+    Font(R.font.ubuntumono_italic, FontWeight.Normal, FontStyle.Italic),
+    Font(R.font.ubuntumono_bolditalic, FontWeight.Bold, FontStyle.Italic))

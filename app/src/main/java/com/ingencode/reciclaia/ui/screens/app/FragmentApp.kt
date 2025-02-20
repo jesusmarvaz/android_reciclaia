@@ -1,18 +1,15 @@
 package com.ingencode.reciclaia.ui.screens.app
 
 import android.content.Context
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.viewbinding.ViewBinding
+import com.ingencode.reciclaia.R
 import com.ingencode.reciclaia.databinding.FragmentAppBinding
 import com.ingencode.reciclaia.ui.components.FragmentBase
 import com.ingencode.reciclaia.utils.Constants
 import com.ingencode.reciclaia.utils.nameClass
 import dagger.hilt.android.AndroidEntryPoint
-import com.ingencode.reciclaia.R
 
 /**
 Created with ❤ by Jesús Martín (jesusmarvaz@gmail.com) on 2025-02-12.

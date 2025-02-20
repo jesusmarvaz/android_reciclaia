@@ -32,6 +32,9 @@
         <action
             android:id="@+id/action_fragmentStart_to_fragmentApp"
             app:destination="@id/fragmentApp" />
+        <action
+            android:id="@+id/action_fragmentStart_to_fragmentAppComposeVersion"
+            app:destination="@id/fragmentAppComposeVersion" />
     </fragment>
     <fragment
         android:id="@+id/keyColorsFragment"
@@ -41,4 +44,8 @@
         android:id="@+id/fragmentApp"
         android:name="com.ingencode.reciclaia.ui.screens.app.FragmentApp"
         android:label="FragmentApp" />
+    <fragment
+        android:id="@+id/fragmentAppComposeVersion"
+        android:name="com.ingencode.reciclaia.ui.screens.app.FragmentAppComposeVersion"
+        android:label="FragmentAppComposeVersion" />
 </navigation>

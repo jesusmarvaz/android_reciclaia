@@ -5,7 +5,6 @@ import android.widget.ProgressBar
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
 import com.ingencode.reciclaia.databinding.FragmentHistoryBinding
-import com.ingencode.reciclaia.databinding.FragmentHomeBinding
 import com.ingencode.reciclaia.ui.components.FragmentBaseForViewmodel
 import com.ingencode.reciclaia.ui.components.ViewModelBase
 import com.ingencode.reciclaia.utils.nameClass

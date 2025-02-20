@@ -9,8 +9,8 @@ En este documento se explicará la implementación del proyecto, detallando en l
 | **Característica**                | Valor                                                                    |
 | --------------------------------- | ------------------------------------------------------------------------ |
 | **Versión de Android Studio**     | Android Studio Ladybug Feature Drop - 2024.2.11                                |
-| **Gradle**                        | 8.10.2 ( `gradle-wrapper.properties` )                                        |
-| AGP (Android Gradle Plugin)       | `8.8.0` |
+| **Gradle**                        | `8.10.2` -> `gradle-wrapper.properties`                                         |
+| AGP (Android Gradle Plugin)       | `8.8.1` -> `libs.versions.toml`  |
 | **Lenguaje configuración Gradle** | Kotlin (Groovy está en vías de desaparecer), ficheros `build.gradle.kts` |
 | **Lenguaje código fuente**        | Kotlin `2.0.0` |
 | **Plugins**                       | Jetpack View Binding, Jetpack Compose                                             |
@@ -900,7 +900,7 @@ fun ReciclaIaTheme(darkTheme: Boolean = isSystemInDarkTheme(),
     val context = LocalContext.current
     val defTyp = MaterialTheme.typography
     val colorScheme = when {
-        dynamicColor -> if (darkTheme) dynamicLightColorScheme(context) else dynamicDarkColorScheme(context)
+        dynamicColor -> if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         darkTheme -> DarkColors
         else -> LightColors
     }
@@ -1025,13 +1025,20 @@ Este tutorial se completará más adelante con los aspectos clave desarrollados,
 
 ## 6 Creación de la barra de navegación (View)
 
+Además de centrarse en la funcionalidad de la aplicación final, este proyecto tiene como objetivo ilustrar y explicar la implementación de las herramientas y marcos de trabajo actuales. Para lograr esto, la interfaz de usuario se implementará utilizando tanto `View` como `Compose` en distintas vistas. Esto nos ayudará a separar bien la lógica de negocio, que será común para ambas implementaciones.
+
+![compose and view](media/33_compose_and_view.png)
+
+
+### 6.1 Implementación en View
+
 Esta parte se realizará usando las vistas clásicas basadas en `View` y `xml`.
 
 Es interesante hacer uso de la vinculación entre **Jetpack Navigation** y la barra inferior de navegación `BottomNavigationView` simplificando mucho su implementación. Más adelante, si fuese necesario capturar la navegación hacia cada pantalla, se podrá sustituir por una implementación más personalizada, de momento lo que queremos es que la navegación de cada botón inferior esté automaticamente ligada a una pantalla concreta. Veamos cómo hacerlo.
 
-### 6.1 Creación de un menú para `BottomNavigationView`
+**Creación de un menú para `BottomNavigationView`**
 
-Para que la magia suceda y pueda relacionar los botones de la barra inferior de navegación BottomNavigationView con los fragmentos que me interesen debo hacer un par de "trucos":
+Para que la magia suceda y pueda relacionar los botones de la barra inferior de navegación BottomNavigationView con los fragmentos que me interesen debo hacer un par de configuraciones:
 
 1. Definir los ids de los destinos que queramos relacionar haciendo que coincidan con los ids del menu de navegación asociado al BottomNavigationView
 2. Relacionar la barra de navegación con el controlador de navegación anidado navController (se pueden tener controladores de navegación dentro de otros, pero sólo el padre tendrá esta configuración: `app:defaultNavHost="true"`)
@@ -1102,6 +1109,13 @@ El gráfico de navegación `app_navigation.xml`:
         />
 </navigation>
 ```
+**Uso de la librería de iconos extendida de Material**
+
+Podemos usar por ahora la librería de Material que dispone de una gran cantidad de iconos actuales. Será necesaria agregar la siguiente dependencia en `libs.versions.toml`:
+
+```toml
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
+```
 
 Elemento de menú utilizado en la barra de navegación inferior (obsérvese cómo los ids de los items del menú coinciden con los de los fragmentos del gráfico de navegación)
 
@@ -1110,19 +1124,19 @@ Elemento de menú utilizado en la barra de navegación inferior (obsérvese cóm
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/rounded_home_24"
+        android:icon="@drawable/rounded_home_material"
         android:title="@string/home"/>
     <item
         android:id="@+id/navigation_history"
-        android:icon="@drawable/round_history_24"
+        android:icon="@drawable/rounded_history_material"
         android:title="@string/history" />
     <item
         android:id="@+id/navigation_profile"
-        android:icon="@drawable/round_person_24"
+        android:icon="@drawable/rounded_person_material"
         android:title="@string/profile" />
     <item
         android:id="@+id/navigation_options"
-        android:icon="@drawable/round_settings_24"
+        android:icon="@drawable/rounded_settings_material"
         android:title="@string/settings" />
 </menu>
 ```
@@ -1143,6 +1157,90 @@ class FragmentApp : FragmentBase() {
 
 ![BottomNavBar](media/32_bottom_nav_bar.png)
 
+### 6.2 Implementación en Compose
+
+#### Dependencias adicionales de Navigation
+Vamos a necesitar la siguiente dependencia, plugin o complemento para que funcione en Compose, edición del archivo `libs.versions.toml`:
+
+```toml
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationUi" }
+```
+
+Código en el Fragmento agregando el contenido de Compose:
+
+```kotlin
+class FragmentAppComposeVersion : FragmentBase() {
+    private lateinit var binding: FragmentAppComposeBinding
+    ...
+    override fun initProperties() {
+        binding.appComposeVersion.setContent { MyComposeWrapper { AppInCompose() } }
+    }
+    ...
+    @Composable
+    fun AppInCompose() {
+        val navController = rememberNavController()
+        Scaffold(
+            topBar = {Text(LocalContext.current.getString(R.string.compose_based_app), style = MaterialTheme.typography.bodySmall, modifier = Modifier.background(
+                MaterialTheme.colorScheme.surfaceVariant).fillMaxWidth())},
+            bottomBar = { MyBottomNavigationBar(navController) }) {
+            padding ->
+            Box(modifier = Modifier.padding(padding).fillMaxSize()) {
+                NavigationForBottomBar(navController = navController)
+            }
+        }
+    }
+```
+
+El elemento `Scaffold` de Compose nos permite agregar fácilmente elementos comunes de la IU, he definito una barra superior (`topBar`) indicando que estamos en la versión de Compose de la aplicación. También se ha asignado el bottomBar como `MyBottomNavigationBar` y por último el contenido de la vista, que irá cambiando en función del elemento seleccionado de la barra inferior. Eso se define en ` NavigatonForBottomBar`. 
+
+Vamos a profundizar en las implementaciones de estos dos elementos `MyBottomNavigationBar` y `NavigatonForBottomBar`
+
+#### `MyBottomNavigationBar`
+
+```kotlin
+@Composable
+fun MyBottomNavigationBar(navHostController: NavHostController) {
+    val c = LocalContext.current
+    val menuItems = listOf(Item1(c), Item2(c), Item3(c), Item4(c))
+
+    NavigationBar {
+        menuItems.forEach { item ->
+            val selected = currentRoute(navHostController) == item.route
+            NavigationBarItem(selected = selected, onClick = { navHostController.navigate(item.route)}, icon = { Icon(item.icon, item.title) }, label = { Text(item.title) }, alwaysShowLabel = true)
+        }
+    }
+}
+```
+
+Se trata de una función @Composable que implementa la barra inferior. Se ha creado una lista de elementos que contienen la información necesaria para cada botón de la barra inferior: icono, etiqueta, ruta. Se comprueba si el elemento debe seleccionarse si coincide con la ruta activa, y también la ruta a la que lleva cada botón. 
+
+#### `NavigatonForBottomBar`
+
+¿Cómo vinculamos el click del botón con una pantalla (función Composable)? Eso se definirá en `NavigationForBottomBar` donde haremos uso de la dependencia recién añadida que nos brinda esa funcionalidad: `androidx.navigation:navigation-compose`.
+
+```kotlin
+@Composable
+fun NavigationForBottomBar(
+    navController: NavHostController
+) {
+    NavHost(navController = navController, startDestination = EnumScreensForBottomBar.HomeScreen.name) {
+        composable(EnumScreensForBottomBar.HomeScreen.name) {
+            HomeScreen()
+        }
+        composable(EnumScreensForBottomBar.HistoryScreen.name) {
+            HistoryScreen()
+        }
+        composable(EnumScreensForBottomBar.ProfileScreen.name) {
+            ProfileScreen()
+        }
+        composable(EnumScreensForBottomBar.SettingsScreen.name) {
+            SettingsScreen()
+        }
+    }
+}
+```
+
+![compose bottom nav](media/34_compose_bottom_nav.png)
 ___
 
 ## TO-DO

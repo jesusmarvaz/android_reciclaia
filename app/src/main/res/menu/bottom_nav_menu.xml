@@ -2,18 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/rounded_home_24"
+        android:icon="@drawable/rounded_home_material"
         android:title="@string/home"/>
     <item
         android:id="@+id/navigation_history"
-        android:icon="@drawable/round_history_24"
+        android:icon="@drawable/rounded_history_material"
         android:title="@string/history" />
     <item
         android:id="@+id/navigation_profile"
-        android:icon="@drawable/round_person_24"
+        android:icon="@drawable/rounded_person_material"
         android:title="@string/profile" />
     <item
         android:id="@+id/navigation_options"
-        android:icon="@drawable/round_settings_24"
+        android:icon="@drawable/rounded_settings_material"
         android:title="@string/settings" />
 </menu>
