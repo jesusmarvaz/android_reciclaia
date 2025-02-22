@@ -17,6 +17,7 @@ import com.google.gson.JsonParser
 import com.ingencode.reciclaia.data.remote.dto.DTO
 import com.ingencode.reciclaia.data.remote.dto.ErrorDTO
 import retrofit2.HttpException
+import kotlin.math.roundToInt
 
 /**
 Created with ❤ by jesusmarvaz on 2025-01-12.
@@ -56,19 +57,8 @@ fun View.fadeInScaling() {
     this.visibility = View.VISIBLE
 }
 
-fun AppCompatImageView.setSizeInDp(dp: Float) {
-    val size = this.context.dpToPx(dp)
-    this.layoutParams.height = size
-    this.layoutParams.width = size
-}
-
 fun AppCompatImageView.loadUrlImage(url: String) {
     Glide.with(context).load(url).into(this)
-}
-
-fun Context.dpToPx(dp: Float): Int {
-    val d = this.resources.displayMetrics.density
-    return (dp * d).roundToInt()
 }
 
 fun Fragment.getNavController(navEnum: EnumNavHostFragments): NavController? {
@@ -281,6 +271,17 @@ fun AppCompatActivity.setFullScreenOff() {
 
 
 */
+
+fun Context.dpToPx(dp: Float): Int {
+    val d = this.resources.displayMetrics.density
+    return (dp * d).roundToInt()
+}
+
+fun ImageView.setSizeInDp(dp: Float) {
+    val size = this.context.dpToPx(dp)
+    this.layoutParams.height = size
+    this.layoutParams.width = size
+}
 
 fun ImageView.setTint(@ColorRes color: Int) {
     this.setColorFilter(ContextCompat.getColor(context, color), PorterDuff.Mode.SRC_IN);

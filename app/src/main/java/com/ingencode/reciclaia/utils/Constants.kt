@@ -8,5 +8,11 @@ object Constants {
         const val sharedPreferencesKey:String = "my_shared_preferences"
         const val skipTutorialKey:String = "skip_tutorial"
         const val viewVersion:String = "is_view_version_on"
+        const val themeMode:String = "theme_mode"
+    }
+    object ThemeModeValues {
+        const val dark: String = "dark"
+        const val light: String = "light"
+        const val system: String = "system"
     }
 }

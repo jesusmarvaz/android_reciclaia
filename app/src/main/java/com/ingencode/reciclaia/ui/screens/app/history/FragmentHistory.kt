@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.ProgressBar
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
+import com.ingencode.reciclaia.R
 import com.ingencode.reciclaia.databinding.FragmentHistoryBinding
 import com.ingencode.reciclaia.ui.components.FragmentBaseForViewmodel
 import com.ingencode.reciclaia.ui.components.ViewModelBase
@@ -41,7 +42,7 @@ class FragmentHistory : FragmentBaseForViewmodel() {
 
 
     override fun initProperties() {
-        //TODO("Not yet implemented")
+        binding.title.tvScreenTitle.text = getString(R.string.history)
     }
 
     override fun getInflatedViewBinding(): ViewBinding {

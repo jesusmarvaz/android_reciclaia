@@ -13,4 +13,5 @@
     <string name="learn">Aprende</string>
     <string name="profile">Perfil</string>
     <string name="settings">Ajustes</string>
+    <string name="image_for_the_item_option">Imagen para el elemento de las opciones</string>
 </resources>

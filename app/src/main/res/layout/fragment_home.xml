@@ -3,6 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSurface">
+    <include
+        android:id="@+id/title"
+        layout="@layout/screen_title"/>
 
     <TextView
         android:layout_width="match_parent"

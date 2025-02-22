@@ -1157,6 +1157,54 @@ class FragmentApp : FragmentBase() {
 
 ![BottomNavBar](media/32_bottom_nav_bar.png)
 
+#### Creación de un layout reutilizable
+
+Llegados a este punto, vamos a realizar una tarea común a cada una de las pantallas asociadas con cada uno de los botones de la barra inferior de navegación: el título. Para ellos crearemos un layout en `xml` que lo reutilizaremos. Veamos cómo hacerlo:
+
+Archivo `screen_title.xml`
+
+```xml
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="54dp"
+    android:orientation="horizontal"
+    android:background="@drawable/rounded_bottom_corners"
+    android:elevation="4dp">
+    <TextView
+        android:id="@+id/tv_screen_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:gravity="center"
+        android:textColor="?attr/colorSurface"
+        tools:text="{Introduce el título}"/>
+</LinearLayout>
+```
+
+**¿Cómo incluir este layout y reutilizarlo en otras vistas?** Debemos hacerlo con el uso de la etiqueta `<include>`:
+
+```xml
+    <include
+        android:id="@+id/title"
+        layout="@layout/screen_title"/>
+```
+
+#### Edición en código
+
+Necesitamos acceder al texto para su configuración, desde cada fragmento que lo use:
+
+```kotlin
+    ...
+    binding.title.tvScreenTitle.text = getString(R.string.history)
+    ...
+```
+
+![including layouts](media/36.png)
+
+
+
 ### 6.2 Implementación en Compose
 
 #### Dependencias adicionales de Navigation
@@ -1241,8 +1289,144 @@ fun NavigationForBottomBar(
 ```
 
 ![compose bottom nav](media/34_compose_bottom_nav.png)
+
+#### Creación del composable reutilizable
+
+Al igual que hicimos en la versión clásica con xml y View, vamos a crear el título de cada pantalla asociada al menú inferior de navegación. En este caso es mucho más sencillo, gracias a Compose.
+
+Creación del título reutilizable, archivo `title.kt`:
+
+```kotlin
+@Composable
+fun Title(title: String) {
+    Card(modifier = Modifier.fillMaxWidth().height(54.dp), elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        shape = RoundedCornerShape(0.dp, 0.dp, 16.dp, 16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.surface)) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text(text = title, style = MaterialTheme.typography.titleLarge, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+        }
+    }
+}
+```
+
+Vamos ahora a modificar ligeramente para albergar el título y preparar el contenido del resto de la pantalla, de manera general, ejemplo, fichero `HistoryCompose.kt`:
+
+```kotlin
+@Composable
+fun HistoryScreen() {
+    /*Column(modifier = Modifier.fillMaxSize().padding(16.dp).background(MaterialTheme.colorScheme.surface),
+        verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("Pantalla Historial (Compose)", style = MaterialTheme.typography.titleLarge,
+            textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.tertiary)
+    }*/
+    val c = LocalContext.current
+    Column(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface),
+        verticalArrangement = Arrangement.Top, horizontalAlignment = Alignment.CenterHorizontally) {
+        Title(title = c.getString(R.string.history))
+        Box(modifier = Modifier.fillMaxSize().background(Color.Transparent))
+    }
+}
+```
+
+Resultado (tema oscuro - tema claro):
+
+![titulo compose](media/37_titulo_compose.png)
+
+Colores, paleta de colores clave, basada en este fondo:
+
+![fondo colores dinámicos](media/38.png)
+
+Estamos viendo como para layouts sencillos y comunes, Compose es mucho más ágil. Voy a seguir analizando en paralelo cada implementación, por si hubiera algún problema en vistas más avanzadas y la manera de implementarlo. La flexibilidad que ofrece la inclusión de Compose junto con View, nos permite precisamente considerar diseñar una vista particular usando `View` y `xml` si fuera necesario por alguna incompatibilidad o carencia de la librería de Compose.
+
+## 7 Pantalla de opciones | **Conceptos tratados**: *Diseño avanzado de la IU*
+
+Constará de dos secciones: *configuración* e *información*.
+
+1. **Configuración**: Se podrá elegir el tema de color de la aplicación (oscuro-claro-sistema), configurar si se debe mostrar el tutorial al inicio y ajustes de procesado por defecto del modelo, local o remoto.
+1. **Información**: Mostrará la versión de la aplicación, términos y condiciones, valorar app en tienda, política de privacidad, contacto (Intent hacia aplicación de correo), así como visualizar el tutorial inicial.
+
+### 7.1 Implementación en View
+
+#### Creación de un componente compuesto
+
+Se creará un componente compuesto a partir de un `ViewGroup` que será un `ConstraintLayout` **con atributos propios** para los elementos de información, de manera que podamos aplicar cómodamente sus atributos desde la vista en `xml` en lugar de extraer la propiedad en código como se hizo en el layout importado. En la siguiente figura se muestra un boceto del componente a diseñar:
+
+![componente compuesto](media/35_compuesto.png)
+
+
+Dispondrá de un separador, icono, texto principal y texto secundario (opcional). Vamos a definir estos atributos en `values/attrs.xml`:
+
+```xml
+<resources>
+    <attr name="label" format="string"/>
+    <attr name="itemDetail" format="string"/>
+    <attr name="isSeparatorVisible" format="boolean"/>
+    <attr name="iconSrcId" format="integer"/>
+    <attr name="iconSizeInDp" format="float"/>
+    <declare-styleable name="InfoIconTextView">
+        <attr name="label"/>
+        <attr name="itemDetail"/>
+        <attr name="isSeparatorVisible"/>
+        <attr name="iconSrcId"/>
+        <attr name="iconSizeInDp"/>
+    </declare-styleable>
+</resources>
+```
+
+La vista personalizada, por convenio, deberá tener el mismo nombre que el elemento `declare-styleable`:
+
+```kotlin
+class InfoIconTextView : ConstraintLayout {
+    constructor(context: Context): super(context) { initialize(null) }
+    constructor(context: Context, attrs: AttributeSet?): super(context, attrs){ initialize(attrs) }
+    constructor(context: Context, attrs: AttributeSet?, defStyle: Int): super(context, attrs, defStyle){ initialize(attrs) }
+    {
+        private lateinit var label: TextView
+        ...
+        private fun initialize(attrs: AttributeSet?) {
+            val li = LayoutInflater.from(context)
+            li.inflate(R.layout.info_icon_textview, this, true)
+            label = findViewById(R.id.tv_info_icon)
+            ...
+            var ta: TypedArray? = null
+            try {
+                ta = context.obtainStyledAttributes(attrs, R.styleable.InfoIconTextView)
+                val icon: Drawable? = ta.getDrawable(R.styleable.InfoIconTextView_iconSrcId)
+                val iconSize = ta.getFloat(R.styleable.InfoIconTextView_iconSizeInDp, 32f)
+                val labelText = ta.getString(R.styleable.InfoIconTextView_label)
+                val detailText = ta.getString(R.styleable.InfoIconTextView_itemDetail)
+                val isSeparatorVisible = ta.getBoolean(R.styleable.InfoIconTextView_isSeparatorVisible, true)
+            
+            setIcon(icon)
+            ...
+            } catch (e: Exception) {throw e} finally {ta?.recycle()}
+        }
+        fun setLabelText(textLabel: String) {
+            this.label.text = textLabel
+        }
+        ...
+}
+```
+
+**Layout de la vista personalizada**
+
+Vamos a crear el layout `info_icon_textview`:
+
+```xml
+
+```
+
+___
+
+### 7.2 Implementación en Compose
+
 ___
 
 ## TO-DO
 
 * Configurar MenuFactory si fuera necesario más adelanta
+* Notificaciones (canales y permisos)
+* Animaciones
+* Sonidos
+* Permisos: ubicación, internet, cámara, almacenamiento, notificaciones

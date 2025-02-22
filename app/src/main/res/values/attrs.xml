@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="label" format="string"/>
+    <attr name="itemDetail" format="string"/>
+    <attr name="isSeparatorVisible" format="boolean"/>
+    <attr name="iconSrcId" format="integer"/>
+    <attr name="iconSizeInDp" format="float"/>
+    <declare-styleable name="InfoIconTextView">
+        <attr name="label"/>
+        <attr name="itemDetail"/>
+        <attr name="isSeparatorVisible"/>
+        <attr name="iconSrcId"/>
+        <attr name="iconSizeInDp"/>
+    </declare-styleable>
+</resources>
+
+    <!--<declare-styleable name="FormEditText">
+        <attr name="isPassword" format="boolean"/>
+        <attr name="isEmail" format="boolean"/>
+        <attr name="isNumber" format="boolean"/>
+        <attr name="tag" format="string"/>
+        <attr name="hint" format="string"/>
+        <attr name="iconSrcId"/>
+        <attr name="iconSizeInDp"/>
+    </declare-styleable>-->

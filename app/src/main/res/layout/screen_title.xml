@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="54dp"
+    android:orientation="horizontal"
+    android:background="@drawable/rounded_bottom_corners"
+    android:elevation="4dp"
+    >
+    <TextView
+        android:id="@+id/tv_screen_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:gravity="center"
+        android:textColor="?attr/colorSurface"
+        tools:text="{Introduce el título}"
+        />
+</LinearLayout>

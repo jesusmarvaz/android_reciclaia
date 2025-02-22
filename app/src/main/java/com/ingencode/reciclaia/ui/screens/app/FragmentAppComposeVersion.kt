@@ -1,9 +1,7 @@
 package com.ingencode.reciclaia.ui.screens.app
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,21 +9,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import androidx.viewbinding.ViewBinding
+import com.ingencode.reciclaia.R
 import com.ingencode.reciclaia.databinding.FragmentAppComposeBinding
 import com.ingencode.reciclaia.ui.components.FragmentBase
 import com.ingencode.reciclaia.ui.navigation.compose.MyBottomNavigationBar
 import com.ingencode.reciclaia.ui.navigation.compose.NavigationForBottomBar
 import com.ingencode.reciclaia.ui.theme.MyComposeWrapper
 import com.ingencode.reciclaia.utils.nameClass
-import com.ingencode.reciclaia.R
 
 /**
 Created with ❤ by jesusmarvaz on 2025-02-19.
