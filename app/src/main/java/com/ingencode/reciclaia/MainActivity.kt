@@ -3,22 +3,29 @@ package com.ingencode.reciclaia
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.ingencode.reciclaia.databinding.ActivityMainBinding
 import com.ingencode.reciclaia.ui.navigation.IBackPressedListener
+import com.ingencode.reciclaia.ui.viewmodels.SettingsViewModel
+import com.ingencode.reciclaia.utils.applyTheme
 import com.ingencode.reciclaia.utils.nameClass
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlin.getValue
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private val settingsViewModel: SettingsViewModel by viewModels()
 
     @Inject
     lateinit var backPressedListener: IBackPressedListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val theme = settingsViewModel.getThemeMode()
+        applyTheme(theme)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }

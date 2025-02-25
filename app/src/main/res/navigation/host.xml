@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/host"
     app:startDestination="@id/fragmentStart">
-
+    <include app:graph="@navigation/app_navigation" />
     <fragment
         android:id="@+id/fragmentInitial"
         android:name="com.ingencode.reciclaia.ui.screens.initial.FragmentInitial"
@@ -43,9 +43,27 @@
     <fragment
         android:id="@+id/fragmentApp"
         android:name="com.ingencode.reciclaia.ui.screens.app.FragmentApp"
-        android:label="FragmentApp" />
+        android:label="FragmentApp" >
+        <action
+            android:id="@+id/action_fragmentApp_to_fragmentWeb"
+            app:destination="@id/fragmentWeb" />
+    </fragment>
     <fragment
         android:id="@+id/fragmentAppComposeVersion"
         android:name="com.ingencode.reciclaia.ui.screens.app.FragmentAppComposeVersion"
         android:label="FragmentAppComposeVersion" />
+    <fragment
+        android:id="@+id/fragmentWeb"
+        android:name="com.ingencode.reciclaia.ui.screens.web.FragmentWeb"
+        android:label="FragmentWeb">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="url"
+            app:argType="string" />
+        <argument
+            android:name="enumnavhostfragment"
+            app:argType="com.ingencode.reciclaia.ui.navigation.NavHostFragments" />
+    </fragment>
 </navigation>

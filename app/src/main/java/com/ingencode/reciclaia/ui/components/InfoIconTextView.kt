@@ -9,7 +9,9 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.graphics.drawable.DrawableCompat
 import com.ingencode.reciclaia.R
+import com.ingencode.reciclaia.utils.getThemeColor
 import com.ingencode.reciclaia.utils.setSizeInDp
 
 /**
@@ -68,12 +70,15 @@ class InfoIconTextView : ConstraintLayout {
 
     fun setIcon(id: Drawable?) {
         if(id != null) {
-            //icon.background = context.getDrawable(id)
-            //icon.background = AppCompatResources.getDrawable(context, id)
-            icon.background = id
-            icon.visibility = View.VISIBLE
+            val wrappedDrawable = DrawableCompat.wrap(id).mutate()
+            val primaryColor = context.getThemeColor(android.R.attr.colorPrimary)
+            DrawableCompat.setTint(wrappedDrawable, primaryColor)
+            icon.background = wrappedDrawable
+            icon.visibility = VISIBLE
+            //icon.background = id
+            //icon.visibility = VISIBLE
         }
-        else icon.visibility = View.GONE
+        else icon.visibility = GONE
     }
 
     fun setIconSize(size: Float) {
@@ -81,6 +86,6 @@ class InfoIconTextView : ConstraintLayout {
     }
 
     fun setSeparatorVisible(visible: Boolean) {
-        this.separator.visibility = if (visible) View.VISIBLE else View.INVISIBLE
+        this.separator.visibility = if (visible) VISIBLE else INVISIBLE
     }
 }

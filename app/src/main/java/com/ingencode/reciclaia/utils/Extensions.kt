@@ -1,14 +1,19 @@
 package com.ingencode.reciclaia.utils
 
 import android.content.Context
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.graphics.PorterDuff
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.util.TypedValue
 import android.widget.ImageView
+import androidx.annotation.AttrRes
 import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
@@ -17,6 +22,7 @@ import com.google.gson.JsonParser
 import com.ingencode.reciclaia.data.remote.dto.DTO
 import com.ingencode.reciclaia.data.remote.dto.ErrorDTO
 import retrofit2.HttpException
+import java.io.Serializable
 import kotlin.math.roundToInt
 
 /**
@@ -61,22 +67,7 @@ fun AppCompatImageView.loadUrlImage(url: String) {
     Glide.with(context).load(url).into(this)
 }
 
-fun Fragment.getNavController(navEnum: EnumNavHostFragments): NavController? {
-    with(this.requireActivity()) {
-        val id = when(navEnum) {
-            EnumNavHostFragments.HOST -> R.id.hostNavFragment
-            EnumNavHostFragments.NESTED_INITIAL -> R.id.nestedInitialNavFragment
-            EnumNavHostFragments.NESTED_HOME -> R.id.nestedHomeNavFragment
-            EnumNavHostFragments.NESTED_ADMIN -> R.id.nestedAdminNavFragment
-        }
-        return try {
-            this.findNavController(id)
-        } catch (e: Exception) {
-            Log.e(this.nameClass, e.message.toString())
-            null
-        }
-    }
-}
+
 
 inline fun <reified T: Serializable> Fragment.getSerializable(key: String): T? {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -120,13 +111,6 @@ fun Context.isAnyNetworkActive(): Boolean {
 fun Context.themeColor(@AttrRes attrRes: Int): Int = TypedValue()
     .apply { theme.resolveAttribute (attrRes, this, true) }
     .data
-
-fun PackageManager.getPackageInfoCompat(packageName: String, flags: Int = 0): PackageInfo =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(flags.toLong()))
-    } else {
-        @Suppress("DEPRECATION") getPackageInfo(packageName, flags)
-    }
 
 fun <T> Single<T>.configAsync(): Single<T> {
     return this.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
@@ -271,6 +255,17 @@ fun AppCompatActivity.setFullScreenOff() {
 
 
 */
+inline fun <reified T: Serializable> Fragment.getSerializable(key: String): T? {
+    return arguments?.getSerializable(key, T::class.java)
+}
+
+fun PackageManager.getPackageInfoCompat(packageName: String, flags: Int = 0): PackageInfo =
+    getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(flags.toLong()))
+    /*    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(flags.toLong()))
+    } else {
+        @Suppress("DEPRECATION") getPackageInfo(packageName, flags)
+    }*/
 
 fun Context.dpToPx(dp: Float): Int {
     val d = this.resources.displayMetrics.density
@@ -285,6 +280,12 @@ fun ImageView.setSizeInDp(dp: Float) {
 
 fun ImageView.setTint(@ColorRes color: Int) {
     this.setColorFilter(ContextCompat.getColor(context, color), PorterDuff.Mode.SRC_IN);
+}
+
+fun Context.getThemeColor(@AttrRes attrRes: Int): Int {
+    val typedValue = TypedValue()
+    theme.resolveAttribute(attrRes, typedValue, true)
+    return typedValue.data
 }
 
 inline fun <reified T: DTO> T.getJsonElement(): JsonElement {

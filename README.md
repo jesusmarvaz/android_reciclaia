@@ -2,7 +2,7 @@
 
 Código fuente de la aplicación nativa ReciclaIA para Android.
 
-En este documento se explicará la implementación del proyecto, detallando en la medida de lo posible las técnicas y patrones de diseño, tecnologías y configuración y uso de las principales tecnologías, frameworks y librerías.
+En este documento se explicará la implementación del proyecto, detallando en la medida de lo posible las técnicas, patrones de diseño, configuración y uso de los principales frameworks y librerías.
 
 ## 1 Configuración del proyecto
 
@@ -1414,12 +1414,173 @@ class InfoIconTextView : ConstraintLayout {
 Vamos a crear el layout `info_icon_textview`:
 
 ```xml
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="@android:color/transparent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:contentDescription="@string/image_for_the_item_option"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/iv_info_icon"
+                android:scaleType="centerCrop"
+                android:padding="6dp"
+                tools:src="@drawable/logo_reciclaia_big"
+                />
+            <androidx.constraintlayout.widget.Barrier
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="iv_info_icon"
+                app:barrierDirection="right"
+                android:id="@+id/barrier"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/barrier"
+                app:layout_constraintEnd_toStartOf="@id/tv_info_icon_detail"
+                android:id="@+id/tv_info_icon"
+                android:paddingStart="@dimen/margin_1"
+                android:paddingEnd="@dimen/margin_1"
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:textColor="?attr/colorSecondary"
+                android:textAlignment="textStart"
+                tools:text="Texto de prueba"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="@dimen/margin_1"
+                android:id="@+id/tv_info_icon_detail"
+                android:paddingStart="@dimen/margin_1"
+                style="@style/TextAppearance.Material3.BodySmall"
+                android:textColor="?attr/colorPrimaryVariant"
+                android:textAlignment="textEnd"
+                tools:text="Texto de prueba"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_info_icon"
+                android:background="?attr/colorSecondaryVariant"
+                android:id="@+id/view_separator"
+                android:layout_marginTop="@dimen/margin_1"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
 ```
+
+Pantalla de ajustes usando el componente compuesto en la sección de "Información de la aplicación":
+
+![ajustes](media/39_ajustes.png)
+
+
 
 ___
 
 ### 7.2 Implementación en Compose
+
+==TO-DO==
+
+## 8. Navegación avanzada con Jetpack Navigation (View)
+
+En este apartado vamos a ver cómo podemos navegar desde un fragmento que se encuentra gestionado por un grafo de navegación anidado dentro de otro. Y también como podemos pasar información a un fragmento gestionado con Jetpack Navigation.
+
+### 8.1 Acceso al grafo de navegación desde otro anidado
+
+En nuestro caso tenemos una estructura anidada, a groso modo, como la que sigue:
+
+![navegación](media/40_navigation.png)
+
+Es por ello que debemos poder referenciar el objeto `NavController` asociado al `NavHostFragment` con id `hostNavFragment` desde el fragmento `FragmentSetttings` que lo gestiona el `NavController` del `NavHostFragment` con id `appNavFragment`.
+
+Organización de los NavHostFragments en una `enum class`:
+
+```kotlin
+enum class NavHostFragments(val idNavHostFragment: Int) {
+    HOST(R.id.hostNavFragment),
+    HOME(R.id.appNavFragment)
+}
+```
+
+### 8.2 Paso de parámetros a un fragmento usando el gráfico de navegación
+
+Vamos a realizar ahora un par de configuraciones:
+
+1. Debemos crear la acción de navegación desde `FragmentApp` con id `fragmentApp` (ver xml unas líneas más abajo).
+1. Debemos especificar en el fragmento **destino** el tipo y nombre de los parámetros que va a recibir, en `host.xml`:
+
+```xml
+     <fragment
+        android:id="@+id/fragmentApp"
+        android:name="com.ingencode.reciclaia.ui.screens.app.FragmentApp"
+        android:label="FragmentApp" >
+        <action
+            android:id="@+id/action_fragmentApp_to_fragmentWeb"
+            app:destination="@id/fragmentWeb" />
+    </fragment>
+ <fragment
+        android:id="@+id/fragmentAppComposeVersion"
+        android:name="com.ingencode.reciclaia.ui.screens.app.FragmentAppComposeVersion"
+        android:label="FragmentAppComposeVersion" />
+    <fragment
+        android:id="@+id/fragmentWeb"
+        android:name="com.ingencode.reciclaia.ui.screens.web.FragmentWeb"
+        android:label="FragmentWeb">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="url"
+            app:argType="string" />
+        <argument
+            android:name="enumnavhostfragment"
+            app:argType="com.ingencode.reciclaia.ui.navigation.NavHostFragments" />
+    </fragment>
+```
+
+Gráficamente:
+
+![parámetros](media/41_parameters.png)
+
+### Ejecución de la navegación
+
+Veamos como combinar lo aprendido para poder realizar una navegación (y poder volver atrás) desde `FragmentSettings`:
+
+```kotlin
+requireActivity().findNavController(NavHostFragments.HOST.idNavHostFragment)
+    .navigate(FragmentAppDirections.actionFragmentAppToFragmentWeb(
+    title = getString(R.string.privacy_policy),
+    url = Routes.WEB_PRIVACY, enumnavhostfragment = NavHostFragments.HOST))
+```
+
+El paso de volver atrás se realiza quitando de la pila el último destino con el método `popBackStack()`:
+
+```kotlin
+class FragmentWeb: FragmentBase() {
+    override fun goBack() { findNavController().popBackStack() }
+    ...
+}
+```
 
 ___
 
