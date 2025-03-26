@@ -26,6 +26,13 @@ fun SettingsScreen() {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally) {
         Title(title = c.getString(R.string.settings))
-        Box(modifier = Modifier.fillMaxSize().background(Color.Transparent))
+        AppConfigurationSection()
+        IaConfigurationSection()
+        AppInfoSection()
     }
+}
+
+@Composable
+fun AppConfigurationSection() {
+
 }

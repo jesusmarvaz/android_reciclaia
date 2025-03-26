@@ -22,7 +22,6 @@ class FragmentWeb: FragmentBase() {
     private lateinit var title: String
     private lateinit var argumentUrl: String
 
-
     override fun initProperties() {
         title = arguments?.getString("title", "") ?: ""
         argumentUrl = arguments?.getString("url", "") ?: ""
