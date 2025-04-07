@@ -4,9 +4,10 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
-        android:allowBackup="false"
         android:name=".utils.di.ReciclaIAApp"
+        android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -15,6 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ReciclaIA"
         tools:targetApi="35">
+        <activity
+            android:name=".ui.screens.imagevisor.ImageVisor"
+            android:exported="false"
+            android:label="@string/title_activity_image_visor"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.ReciclaIA" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

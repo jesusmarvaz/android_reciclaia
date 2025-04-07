@@ -2,6 +2,6 @@
 <resources>
     <dimen name="margin_1">12dp</dimen>
     <dimen name="margin_2">16dp</dimen>
-
     <dimen name="icon_padding10dp">44dp</dimen>
+    <dimen name="big_icon_padding10dp">74dp</dimen>
 </resources>

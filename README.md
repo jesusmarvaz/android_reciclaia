@@ -10,7 +10,7 @@ En este documento se explicará la implementación del proyecto, detallando en l
 | --------------------------------- | ------------------------------------------------------------------------ |
 | **Versión de Android Studio**     | Android Studio Ladybug Feature Drop - 2024.2.11                                |
 | **Gradle**                        | `8.10.2` -> `gradle-wrapper.properties`                                         |
-| AGP (Android Gradle Plugin)       | `8.8.1` -> `libs.versions.toml`  |
+| AGP (Android Gradle Plugin)       | `8.9.0` -> `libs.versions.toml`  |
 | **Lenguaje configuración Gradle** | Kotlin (Groovy está en vías de desaparecer), ficheros `build.gradle.kts` |
 | **Lenguaje código fuente**        | Kotlin `2.0.0` |
 | **Plugins**                       | Jetpack View Binding, Jetpack Compose                                             |
@@ -1501,6 +1501,7 @@ ___
 
 ==TO-DO==
 
+
 ## 8. Navegación avanzada con Jetpack Navigation (View)
 
 En este apartado vamos a ver cómo podemos navegar desde un fragmento que se encuentra gestionado por un grafo de navegación anidado dentro de otro. Y también como podemos pasar información a un fragmento gestionado con Jetpack Navigation.
@@ -1581,6 +1582,103 @@ class FragmentWeb: FragmentBase() {
     ...
 }
 ```
+
+## 9. Adquisición de imágenes
+
+En este apartado, se va a crear la funcionalidad de escanear una imagen para su análisis, o bien elegir una de la galería. Esta proceso se desarrollará en varias pantallas o interfaces gráficas. Se comenzará con el botón de añadir imagen para su procesado, que lanzará un modal donde se elegirá la fuente (galería o cámara). La galería tendrá un picker de imágenes de galería según permisos del usuario (acceso total o restringido). Para el caso de cámara, se abrirá una vista personalizada donde se encuadrará el visor con una relación de aspecto de 1:1, pues así será tanto el entrenamiento del modelo como la inferencia del mismo. Las imágenes almacenadas localmente también tendrán esa proporción. 
+
+### 9.1 Creación del modal
+
+Voy a diseñar un elemento del tipo 'BottomSheet' que muestre las opciones de capturar mediante cámara o agregar una imagen existente. Todas las imágenes que se seleccionen se convertirán a cuadradas, y se almacenarán en una carpeta local del dispositivo, así como las que se hagan en el momento con la cámara. Pero esto lo veremos más adelante. La idea de ahora es abrir un modal con las esquinas superiores redondeadas
+
+#### Estilo personalizado
+
+Voy a crear un estilo personalizado que herede de `Widget.Material3.BottomSheet.Modal`.
+```xml
+    <style name="BottomSheetDialogStyle" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/ModalBottomSheetDialog</item>
+    </style>
+    <style name="ModalBottomSheetDialog" parent="Widget.Material3.BottomSheet.Modal">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MyApp.BottomSheet</item>
+    </style>
+    <style name="ShapeAppearanceOverlay.MyApp.BottomSheet" parent="">
+        <item name="cornerSizeTopLeft">16dp</item>
+        <item name="cornerSizeTopRight">16dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+```
+
+Código kotlin que lanza el modal:
+
+```kotlin
+ val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogStyle)
+        val view = layoutInflater.inflate(R.layout.image_source_selector_layout, null)
+        bottomSheetDialog.setContentView(view)
+        view.findViewById<ImageView>(R.id.iv_source_camera).setOnClickListener { bottomSheetDialog.dismiss(); openCameraVisor() }
+        view.findViewById<ImageView>(R.id.iv_source_gallery).setOnClickListener { bottomSheetDialog.dismiss(); openGallery() }
+        bottomSheetDialog.show()
+```
+
+Resultado:
+
+![modal](media/42_modal.png)
+
+### 9.2 Creación del selector de imágenes locales
+
+En este apartado vamos a gestionar la adquisición de una imagen desde la galería. Hay un cambio en el mecanismo de abrir una actividad para recuperar datos. Antes se utilizaba el método `startActivityForResult(intent: Intent, requestCode:Int)` y sobreescribía `onActivityResult(requestCode: Int, resultCode:Int, data:Intent?)`. Ahora se hace de la siguiente manera:
+
+```kotlin
+//Antes
+    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_IMAGE_PICK && resultCode == Activity.RESULT_OK && data != null) {
+            val imageUri = data.data
+            imageUri?.let { uri ->
+                processAndSaveImage(uri)
+            }
+        }
+    } deprecated*/
+//Ahora
+private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
+...
+imagePickerLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                val imageUri = result.data?.data
+                imageUri?.let { uri ->
+                    openCameraVisor(uri)
+                }
+            }
+        }
+    ...
+
+//Antes
+val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        //  You might want to add a chooser:
+         val chooser = Intent.createChooser(intent, "Select Image")
+        //  startActivityForResult(chooser, REQUEST_IMAGE_PICK)
+//Ahora
+val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+    val chooser = Intent.createChooser(intent, "Select Image")
+    imagePickerLauncher.launch(chooser)
+```
+
+### 9.3 Creación del visor de imágenes 1:1
+
+#### 9.3.1 Modo en tiempo real (cámara) y captura
+
+#### 9.3.2 Modo estático, visor y función de detección estática
+
+### 9.4 Elección del modelo de datos para almacenar los datos de las capturas (prueba de concepto)
+
+Las imágenes se redimensionarán para almacenarse en 512 x 512 px
+
+### 9.5 Almacenamiento local de imágenes y datos (con Room)
+
+###
+
 
 ___
 

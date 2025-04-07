@@ -22,7 +22,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
@@ -54,7 +53,6 @@ class FragmentSettings : FragmentBaseForViewmodel() {
     private lateinit var binding: FragmentSettingsBinding
     private val settingsViewModel: SettingsViewModel by viewModels()
     private var showTutorial by mutableStateOf(false)
-    private lateinit var composeView: ComposeView
 
     override fun getViewLifeCycleOwner(): LifecycleOwner = viewLifecycleOwner
     override fun goBack() = requireActivity().finish()

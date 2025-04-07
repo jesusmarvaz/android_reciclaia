@@ -34,4 +34,9 @@
     <string name="terms_and_conditions">Términos y condiciones</string>
     <string name="privacy_policy">Política de privacidad</string>
     <string name="rate_us">¡Valóranos!</string>
+    <string name="adds_a_new_image_to_the_library" translatable="false">Añade una nueva imagen a la biblioteca</string>
+    <string name="select_image_source">Selecciona origen de la imagen</string>
+    <string name="camera">cámara</string>
+    <string name="gallery">galería</string>
+    <string name="title_activity_image_visor">ImageVisor</string>
 </resources>

@@ -7,7 +7,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
-import com.ingencode.reciclaia.ui.navigation.compose.BottomNavItems.*
+import com.ingencode.reciclaia.ui.navigation.compose.BottomNavItems.Item1
+import com.ingencode.reciclaia.ui.navigation.compose.BottomNavItems.Item2
+import com.ingencode.reciclaia.ui.navigation.compose.BottomNavItems.Item3
+import com.ingencode.reciclaia.ui.navigation.compose.BottomNavItems.Item4
 
 /**
 Created with ❤ by jesusmarvaz on 2025-02-20.

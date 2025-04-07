@@ -1,5 +1,5 @@
 [versions]
-agp = "8.8.1"
+agp = "8.9.1"
 appcompat = "1.7.0"
 materialIconsExtended = "1.7.8"
 retrofitVersion = "2.9.0"

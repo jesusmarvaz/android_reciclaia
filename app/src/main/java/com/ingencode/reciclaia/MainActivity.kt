@@ -12,7 +12,6 @@ import com.ingencode.reciclaia.utils.applyTheme
 import com.ingencode.reciclaia.utils.nameClass
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import kotlin.getValue
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

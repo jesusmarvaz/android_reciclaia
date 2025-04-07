@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="?attr/colorSurface">
     <TextView
         android:layout_width="match_parent"
@@ -32,5 +31,17 @@
         app:layout_constraintBottom_toTopOf="@id/bnv_app"
         app:defaultNavHost="false"
         app:navGraph="@navigation/app_navigation" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fav_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/adds_a_new_image_to_the_library"
+        app:layout_constraintTop_toTopOf="@id/bnv_app"
+        app:layout_constraintBottom_toTopOf="@id/bnv_app"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/rounded_add_24"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
