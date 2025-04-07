@@ -1667,6 +1667,8 @@ val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT
 
 ### 9.3 Creación del visor de imágenes 1:1
 
+Se puede realizar con un componente propio o extensión de vista existente, en este caso ImageView. Esta es una parte importante de diseño de vistas avanzadas, se trata de crear un componente propio (o extensión de vista existente) que contenga una imagen y permita encuadrarla para obtener una imagen cuadrada para su análisis por el modelo de Deep Learning. Se podrá desplazar, hacer zoom y rotar en pasos de 90 grados, a partir de ahí analizarla y guardar los resultados (imagen transformada y datos asociados).
+
 #### 9.3.1 Modo en tiempo real (cámara) y captura
 
 #### 9.3.2 Modo estático, visor y función de detección estática
