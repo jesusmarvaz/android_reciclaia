@@ -15,6 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.ingencode.reciclaia.R
 import com.ingencode.reciclaia.databinding.FragmentAppBinding
 import com.ingencode.reciclaia.ui.components.FragmentBase
+import com.ingencode.reciclaia.ui.screens.imagevisor.ImageVisor
 import com.ingencode.reciclaia.utils.nameClass
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
@@ -75,7 +76,8 @@ class FragmentApp : FragmentBase() {
 
     private fun openCameraVisor(uri:Uri? = null) {
         logDebug("openCamera clicked, uri: ${uri?.toString()}")
-        val intent = Intent(this, ImageVisor::class.java)
+        val intent = Intent(requireContext(), ImageVisor::class.java)
+        intent.putExtra("uri", uri)
         startActivity(intent)
     }
 
