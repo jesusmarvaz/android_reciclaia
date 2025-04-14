@@ -1667,19 +1667,150 @@ val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT
 
 ### 9.3 Creación del visor de imágenes 1:1
 
-Se puede realizar con un componente propio o extensión de vista existente, en este caso ImageView. Esta es una parte importante de diseño de vistas avanzadas, se trata de crear un componente propio (o extensión de vista existente) que contenga una imagen y permita encuadrarla para obtener una imagen cuadrada para su análisis por el modelo de Deep Learning. Se podrá desplazar, hacer zoom y rotar en pasos de 90 grados, a partir de ahí analizarla y guardar los resultados (imagen transformada y datos asociados).
+Se puede realizar con un componente propio, implementado a partir de una extensión de View. Esta es una parte importante de diseño de vistas avanzadas, se trata de crear un componente propio que contenga una imagen y permita encuadrarla para obtener una imagen cuadrada para su análisis por el modelo de Deep Learning. Se podrá desplazar, hacer zoom y rotar en pasos de 90 grados, a partir de ahí analizarla y guardar los resultados (imagen transformada y datos asociados).
 
-Requisitos:
 
-Glide
+#### 9.3.1 Modo estático, visor y función de detección estática
+|Requisito|Dependencia|
+|--|--|
+|Glide|`implementation("com.github.bumptech.glide:glide:4.13.0")`|
 
-`implementation("com.github.bumptech.glide:glide:4.13.0")`
+Pasos para crear este componente:
 
-#### 9.3.1 Modo en tiempo real (cámara) y captura
+* Haremos un visor de imágenes (como un ImageView) pero creado a partir de `View`, llamado `EditableVisor` y que contendrá los métodos para ampliar la imagen, arrastrarla y centrarla y restaurar la imagen con doble pulsación: esto hará que se restablezca el giro, desplazamiento y zoom aplicado.
+* Usaremos Glide (librería externa) para la carga de la imagen en el visor.
+* Este elemento formará parte de otro, que será un elemento compuesto que herede de un `ViewGroup` y contendrá botón para girar en pasos de 90 grados en ambos sentidos y un botón para guardar la imagen ajustada, de relación de aspecto 1:1 y 512x512. Dispondrá de guías en las posiciones relativas 1/3 y 2/3 del ancho y alto respectivamente para ayudar a encuadrar el objeto de la imagen a analizar.
 
-#### 9.3.2 Modo estático, visor y función de detección estática
+**Creación de `EditableVisor`**
+
+```kotlin
+class EditableVisor: View {
+    private var imageBitmap: Bitmap? = null
+    private var matrix = Matrix()
+    private lateinit var scaleGestureDetector: ScaleGestureDetector
+    private lateinit var gestureDetector: GestureDetector
+    private var lastTouchX = 0f
+    private var lastTouchY = 0f
+    private val paint = Paint()
+    private var imageRect: RectF? = null
+    private var viewRect: RectF? = null
+    constructor(context: Context) : super(context) { init() }
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) { init() }
+    private fun init() {
+        scaleGestureDetector = ScaleGestureDetector(context, ScaleListener())
+        gestureDetector = GestureDetector(context, GestureListener())
+        setOnTouchListener(TouchListener())
+    }
+    private inner class ScaleListener : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        override fun onScale(detector: ScaleGestureDetector): Boolean {
+            val scaleFactor = detector.scaleFactor
+            matrix.postScale(scaleFactor, scaleFactor, detector.focusX, detector.focusY)
+            invalidate()
+            return true
+        }
+    }
+    private inner class GestureListener : GestureDetector.SimpleOnGestureListener() { // GestureListener
+        override fun onDoubleTap(e: MotionEvent): Boolean {
+            resetZoom()
+            return true
+        }
+
+        override fun onSingleTapUp(e: MotionEvent): Boolean {
+            performClick()
+            return true
+        }
+    }
+    private inner class TouchListener : OnTouchListener {
+        override fun onTouch(v: View, event: MotionEvent): Boolean {
+            scaleGestureDetector.onTouchEvent(event)
+            gestureDetector.onTouchEvent(event)
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    lastTouchX = event.x
+                    lastTouchY = event.y
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    val dx = event.x - lastTouchX
+                    val dy = event.y - lastTouchY
+                    matrix.postTranslate(dx, dy)
+                    lastTouchX = event.x
+                    lastTouchY = event.y
+                    invalidate()
+                }
+            }
+            performClick()
+            return true
+        }
+    }
+    private fun resetZoom() {
+        imageBitmap?.let { bitmap ->
+            val scale: Float = min(width.toFloat() / bitmap.width, height.toFloat() / bitmap.height)
+            matrix.reset()
+            matrix.postScale(scale, scale, width / 2f, height / 2f)
+            invalidate()
+        }
+    }
+    fun rotate(degrees: Float) {
+        val centerX = width / 2f
+        val centerY = height / 2f
+        matrix.postRotate(degrees, centerX, centerY)
+        invalidate()
+    }
+    fun setImageUri(uri: Uri) {
+        Glide.with(this)
+            .asBitmap()
+            .load(uri)
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(
+                    resource: Bitmap,
+                    transition: Transition<in Bitmap>?
+                ) {
+                    imageBitmap = resource
+                    imageRect = RectF(0f, 0f, resource.width.toFloat(), resource.height.toFloat())
+                    viewRect = RectF(0f, 0f, width.toFloat(), height.toFloat())
+                    matrix = Matrix() // Reset matrix for the new image
+                    // Calculate initial scale to fit the image within the view.
+                    val scale: Float = min(width.toFloat() / resource.width, height.toFloat() / resource.height)
+                    matrix.postScale(scale, scale, width / 2f, height / 2f)
+                    invalidate()
+                }
+                override fun onLoadCleared(placeholder: Drawable?) {
+                    imageBitmap = null
+                    invalidate()
+                }
+            })
+    }
+    fun getImageMatrix(): Matrix = this.matrix
+    fun getImageBitmap(): Bitmap? = this.imageBitmap
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        imageBitmap?.let { bitmap ->
+            canvas.withMatrix(matrix) {
+                imageRect?.let {
+                    drawBitmap(bitmap, null, it, paint)
+                }
+            }
+        }
+    }
+}
+```
+
+**Creación del componente compuesto**
+
+Este mejorará la UI del visor, añadiendo líneas horizontales y verticales para ayudar a centrar el objeto (en el layout xml), y dos botones de rotar.
+
+
+```kotlin
+
+```
+
+#### 9.3.2 Modo en tiempo real (cámara)
 
 ### 9.4 Elección del modelo de datos para almacenar los datos de las capturas (prueba de concepto)
+
+La implementación de salvar la imagen, en ningún caso sobreescribirá la imagen original, por ejemplo de la galería, la idea es procesarla y almacenarla en el directorio local de la aplicación, más info en:
+
+[Documentación oficial fichero en carpeta local](https://developer.android.com/training/data-storage/app-specific)
 
 Las imágenes se redimensionarán para almacenarse en 512 x 512 px
 

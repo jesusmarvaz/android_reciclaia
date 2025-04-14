@@ -26,7 +26,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -103,7 +102,7 @@ fun GetContentForPage(page: Int) {
                     .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "Tutorial, página ${page+1}", fontSize = 28.sp, color = Color.White)
+                Text(text = "Tutorial, página ${page+1}", fontSize = 28.sp, color = MaterialTheme.colorScheme.surface)
             }
         }
     }

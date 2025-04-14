@@ -2,8 +2,9 @@
 <resources>
 
     <!--<style name="Theme.ReciclaIA" parent="Theme.MaterialComponents.DayNight.NoActionBar">-->
+    <!--<style name="Theme.ReciclaIA" parent="android:Theme.Material.Light.NoActionBar" />-->
     <style name="Theme.ReciclaIA" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Habilitar colores dinámicos -->
+        <!-- Enables dynamic colors -->
         <item name="android:theme">@style/ThemeOverlay.Material3.DynamicColors.DayNight</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="fontFamily">@font/comfortaa_regular</item>
@@ -12,17 +13,43 @@
     <style name="BottomSheetDialogStyle" parent="ThemeOverlay.Material3.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/ModalBottomSheetDialog</item>
     </style>
-
     <style name="ModalBottomSheetDialog" parent="Widget.Material3.BottomSheet.Modal">
         <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MyApp.BottomSheet</item>
     </style>
-
     <style name="ShapeAppearanceOverlay.MyApp.BottomSheet" parent="">
         <item name="cornerSizeTopLeft">16dp</item>
         <item name="cornerSizeTopRight">16dp</item>
         <item name="cornerSizeBottomRight">0dp</item>
         <item name="cornerSizeBottomLeft">0dp</item>
     </style>
-
-    <!--<style name="Theme.ReciclaIA" parent="android:Theme.Material.Light.NoActionBar" />-->
+    <!--AlertBottomSheet themes-->
+    <!--Parent themes-->
+    <style name="AlertBottomSheetShape" parent="Widget.Material3.BottomSheet.Modal">
+        <item name="shapeAppearanceOverlay">@style/AlertBottomSheetCorners</item>
+    </style>
+    <style name="AlertBottomSheetCorners" parent="">
+        <item name="cornerSizeTopLeft">8dp</item>
+        <item name="cornerSizeTopRight">8dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+    <!--Success BottomSheet theme-->
+    <style name="SuccessBottomSheetTheme" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AlertBottomSheetShape</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:navigationBarColor">?attr/colorPrimary</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+    </style>
+    <!--Error BottomSheet theme-->
+    <style name="ErrorBottomSheetTheme" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AlertBottomSheetShape</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:navigationBarColor">?attr/colorError</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+    </style>
+    <!--Classic Alert Dialog-->
+    <style name="MyAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorAccent">?attr/colorSecondary</item>
+        <item name="android:windowBackground">@drawable/rounded_dialog_background</item>
+    </style>
 </resources>

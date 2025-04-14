@@ -37,4 +37,9 @@
     <string name="select_image_source">Select image source</string>
     <string name="camera">camera</string>
     <string name="gallery">gallery</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm_action">Confirm action</string>
+    <string name="want_saving">Want to save the current image?</string>
+    <string name="cancelled">Cancelled...</string>
 </resources>

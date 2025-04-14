@@ -21,4 +21,5 @@ sealed class SealedError(val message: String? = null) : ISealedError {
     class DefaultError(message: String? = null): SealedError(message)
     class WrongFormData(): SealedError()
     class ConnectivityError() : SealedError()
+    class ProblemSavingImagesLocally(message: String? = null): SealedError(message)
 }

@@ -2,7 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:fitsSystemWindows="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?attr/colorPrimaryContainer">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/visor_parent"
         android:layout_width="match_parent"
@@ -10,15 +12,85 @@
         android:layout_height="0dp"
         app:layout_constraintDimensionRatio="1:1"
         android:background="?attr/colorSurfaceContainer">
-        <com.ingencode.reciclaia.ui.components.EditableImageView
+        <!--<com.ingencode.reciclaia.ui.components.visor.EditableImageView
             android:id="@+id/visor"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent" />-->
+        <!--<com.ingencode.reciclaia.ui.components.visor.EditableVisor
+            android:id="@+id/visor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />-->
+        <com.ingencode.reciclaia.ui.components.visor.ComposedVisor
+            android:id="@+id/composed_visor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+    <ImageButton
+        android:id="@+id/back"
+        android:layout_width="@dimen/icon_padding10dp"
+        android:layout_height="@dimen/icon_padding10dp"
+        android:src="@drawable/rounded_arrow_back_24"
+        android:padding="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/back_icon"
+        android:elevation="2dp"
+        android:foreground="?attr/selectableItemBackground"
+        android:background="@drawable/rounded_dialog_background"
+        app:tint="?attr/colorPrimary"
+        android:layout_margin="8dp"
+        android:alpha="0.7"
+        />
+    <ImageButton
+        android:id="@+id/save_image_folder"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/icon_padding10dp"
+        android:padding="10dp"
+        android:elevation="2dp"
+        android:contentDescription="@string/saves_image"
+        app:layout_constraintTop_toTopOf="@id/visor_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/share_image_folder"
+        android:foreground="?attr/selectableItemBackground"
+        app:tint="?attr/colorPrimary"
+        android:background="@drawable/rounded_dialog_background"
+        android:layout_margin="8dp"
+        android:alpha="0.7"
+        />
+    <LinearLayout
+        android:id="@+id/ll_bottom_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <ImageButton
+            android:id="@+id/save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:contentDescription="@string/saves_image"
+            app:layout_constraintTop_toBottomOf="@id/visor_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/round_save_24"
+            android:foreground="?attr/selectableItemBackground"
+            app:tint="?attr/colorPrimary"
+            android:background="@drawable/rounded_dialog_background"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:elevation="2dp"
+            />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

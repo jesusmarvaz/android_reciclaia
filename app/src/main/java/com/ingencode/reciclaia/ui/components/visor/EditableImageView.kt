@@ -1,16 +1,13 @@
-package com.ingencode.reciclaia.ui.components
+package com.ingencode.reciclaia.ui.components.visor
 
-import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Matrix
 import android.net.Uri
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
-import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.compose.animation.with
-import android.graphics.Matrix
 import com.bumptech.glide.Glide
 
 /**

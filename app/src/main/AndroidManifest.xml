@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".utils.di.ReciclaIAApp"
@@ -17,7 +18,7 @@
         android:theme="@style/Theme.ReciclaIA"
         tools:targetApi="35">
         <activity
-            android:name=".ui.screens.imagevisor.ImageVisor"
+            android:name=".ui.screens.imagevisor.ImageVisorActivity"
             android:exported="false"
             android:label="@string/title_activity_image_visor"
             android:screenOrientation="portrait"

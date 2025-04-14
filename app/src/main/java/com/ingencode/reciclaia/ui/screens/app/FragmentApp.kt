@@ -2,7 +2,6 @@ package com.ingencode.reciclaia.ui.screens.app
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
 import android.widget.ImageView
@@ -15,12 +14,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.ingencode.reciclaia.R
 import com.ingencode.reciclaia.databinding.FragmentAppBinding
 import com.ingencode.reciclaia.ui.components.FragmentBase
-import com.ingencode.reciclaia.ui.screens.imagevisor.ImageVisor
+import com.ingencode.reciclaia.ui.screens.imagevisor.ImageVisorActivity
 import com.ingencode.reciclaia.utils.nameClass
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
 
 /**
 Created with ❤ by Jesús Martín (jesusmarvaz@gmail.com) on 2025-02-12.
@@ -28,9 +24,6 @@ Created with ❤ by Jesús Martín (jesusmarvaz@gmail.com) on 2025-02-12.
 
 @AndroidEntryPoint
 class FragmentApp : FragmentBase() {
-    companion object {
-        private const val REQUEST_IMAGE_PICK = 1001
-    }
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
     private lateinit var binding: FragmentAppBinding
     override fun goBack() = requireActivity().finish()
@@ -76,7 +69,7 @@ class FragmentApp : FragmentBase() {
 
     private fun openCameraVisor(uri:Uri? = null) {
         logDebug("openCamera clicked, uri: ${uri?.toString()}")
-        val intent = Intent(requireContext(), ImageVisor::class.java)
+        val intent = Intent(requireContext(), ImageVisorActivity::class.java)
         intent.putExtra("uri", uri)
         startActivity(intent)
     }
@@ -87,26 +80,5 @@ class FragmentApp : FragmentBase() {
         //  You might want to add a chooser:
          val chooser = Intent.createChooser(intent, "Select Image")
         imagePickerLauncher.launch(chooser)
-    }
-
-    private fun cropBitmapToSquare(bitmap: Bitmap): Bitmap {
-        val size = kotlin.comparisons.minOf(bitmap.width, bitmap.height)
-        val x = (bitmap.width - size) / 2
-        val y = (bitmap.height - size) / 2
-        return Bitmap.createBitmap(bitmap, x, y, size, size)
-    }
-
-    private fun saveImageToAppFolder(bitmap: Bitmap) {
-        val fileName = "image_${System.currentTimeMillis()}.png"
-        val file = File(requireContext().filesDir, fileName)
-        try {
-            FileOutputStream(file).use { out ->
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
-            }
-            logDebug("Image saved to: ${file.absolutePath}")
-            //  Here you can update UI or store the file path
-        } catch (e: IOException) {
-            logError("Error saving image: ${e.message}")
-        }
     }
 }
