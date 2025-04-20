@@ -7,11 +7,9 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
-import androidx.compose.ui.graphics.vector.path
 import androidx.core.graphics.scale
 import com.ingencode.reciclaia.data.remote.api.SealedResult
-import com.ingencode.reciclaia.data.remote.dto.ErrorDTO
-import com.ingencode.reciclaia.utils.SealedError
+import com.ingencode.reciclaia.utils.SealedAppError
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
 import java.io.FileOutputStream
@@ -25,8 +23,8 @@ Created with ❤ by jesusmarvaz on 2025-04-11.
 class LocalStorageProvider @Inject constructor(@ApplicationContext private val context: Context) {
     //companion object { const val APP_FILE_PROVIDER_AUTHORITY = "com.ingencode.reciclaia.fileprovider" }
     companion object {
-        const val PREFIX_SAVED_LOCALLY_PROCESSED_IMAGE = "processed_image_"
-        const val PREFIX_EXPORTED_PROCESSED_IMAGE = "reciclaia_exported_processed_image_"
+        const val PREFIX_SAVED_LOCALLY_PROCESSED_IMAGE = "recicla_ia_processed_image_"
+        const val PREFIX_EXPORTED_PROCESSED_IMAGE = "recicla_ia_exported_processed_image_"
     }
 
     private fun isAppUri(uri: Uri): Boolean {
@@ -89,17 +87,18 @@ class LocalStorageProvider @Inject constructor(@ApplicationContext private val c
     }
 
     private fun saveBitmapToAppStorage(context: Context, bitmap: Bitmap, fileName: String): Uri? {
-        val directory: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return if (directory != null) {
+        val directory: File? = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "ReciclaIA")
+        if (directory != null) {
+            if (!directory.exists()) directory.mkdirs()
             val file = File(directory, fileName)
             try {
                 FileOutputStream(file).use { outputStream ->
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
                 }
-                Uri.fromFile(file)
+                return Uri.fromFile(file)
             } catch (e: IOException) {
                 e.printStackTrace()
-                null
+                return null
             }
         } else {
             Log.e("ImageSaving", "External storage not available. Could not save image, saving in app files directory instead")
@@ -122,8 +121,8 @@ class LocalStorageProvider @Inject constructor(@ApplicationContext private val c
 
     //In case store to public Directory of pics
     fun exportBitmapToNewFileInMediaStore(bitmap: Bitmap): SealedResult<Uri> {
-        val croppedBitmap = bitmap
-        val resizedBitmap = croppedBitmap.scale(512, 512)
+        //val croppedBitmap = bitmap
+        //val resizedBitmap = croppedBitmap.scale(512, 512)
         val fileName = "${PREFIX_EXPORTED_PROCESSED_IMAGE}${System.currentTimeMillis()}.jpg"
         val values = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
@@ -134,11 +133,11 @@ class LocalStorageProvider @Inject constructor(@ApplicationContext private val c
 
         val resolver = context.contentResolver
         val imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-            ?: return SealedResult.ResultError(SealedError.ProblemSavingImagesLocally("Error inserting MediaStore values"))
+            ?: return SealedResult.ResultError(SealedAppError.ProblemSavingImagesLocally("Error inserting MediaStore values"))
         try {
             imageUri.let {
                 resolver.openOutputStream(it)?.use { outputStream ->
-                    resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
                 }
                 values.put(MediaStore.Images.Media.IS_PENDING, 0)
                 resolver.update(it, values, null, null)
@@ -147,7 +146,7 @@ class LocalStorageProvider @Inject constructor(@ApplicationContext private val c
         } catch (e: IOException) {
             e.printStackTrace()
             imageUri.let { resolver.delete(it, null, null) } // Clean up failed insert
-            return SealedResult.ResultError(SealedError.ProblemSavingImagesLocally(e.message))
+            return SealedResult.ResultError(SealedAppError.ProblemSavingImagesLocally(e.message))
         }
     }
 }

@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.ingencode.reciclaia.utils.ILog
 import com.ingencode.reciclaia.utils.ISealedError
 import com.ingencode.reciclaia.utils.SealedApiError
-import com.ingencode.reciclaia.utils.SealedError
+import com.ingencode.reciclaia.utils.SealedAppError
 import com.ingencode.reciclaia.utils.nameClass
 
 /**
@@ -21,11 +21,11 @@ abstract class ViewModelBase: ViewModel(), ILog {
     fun observableLoading(): LiveData<Boolean> = loading
 
     private fun manageSealedError() {
-        when (sealedError.value as SealedError) {
-            is SealedError.DefaultError -> {}
-            is SealedError.ConnectivityError -> {}
-            is SealedError.WrongFormData -> {}
-            is SealedError.ProblemSavingImagesLocally -> {}
+        when (sealedError.value as SealedAppError) {
+            is SealedAppError.DefaultError -> {}
+            is SealedAppError.ConnectivityError -> {}
+            is SealedAppError.WrongFormData -> {}
+            is SealedAppError.ProblemSavingImagesLocally -> {}
         }
         Log.e(this.nameClass, "manageSealedError: ${sealedError.value?.nameClass}", )
     }
@@ -38,7 +38,7 @@ abstract class ViewModelBase: ViewModel(), ILog {
         Log.d(this.nameClass, "error: ${sealedError.nameClass}")
         val error = sealedError.value ?: return
         when (error) {
-            is SealedError -> manageSealedError()
+            is SealedAppError -> manageSealedError()
             is SealedApiError -> manageSealedApiError()
         }
     }

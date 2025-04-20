@@ -1,10 +1,13 @@
 package com.ingencode.reciclaia.ui.screens.app.settings
 
+import android.Manifest
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.provider.Settings
 import android.view.View
 import android.widget.ProgressBar
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.IdRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -43,6 +46,8 @@ import com.ingencode.reciclaia.utils.getPackageInfoCompat
 import com.ingencode.reciclaia.utils.nameClass
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import androidx.core.net.toUri
+import com.ingencode.reciclaia.ui.components.dialogs.AlertHelper
 
 /**
 Created with ❤ by jesusmarvaz on 2025-02-19.
@@ -54,18 +59,44 @@ class FragmentSettings : FragmentBaseForViewmodel() {
     private val settingsViewModel: SettingsViewModel by viewModels()
     private var showTutorial by mutableStateOf(false)
 
+    private val requestLocationPermissions =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+            settingsViewModel.checkLocationAvailability()
+        }
+
     override fun getViewLifeCycleOwner(): LifecycleOwner = viewLifecycleOwner
     override fun goBack() = requireActivity().finish()
     override fun getFragmentTag(): String = this.nameClass
     override fun getViewModelBase(): ViewModelBase? = null
     override fun getPb(): ProgressBar? = null
     override fun getShaderLoading(): View? = null
-    override fun observeVM() {}
+    override fun observeVM() {
+        settingsViewModel.showLocationPermissionRequestButton.observe(this) {
+            it?.let {
+                binding.checkboxLocation.isEnabled = it
+                binding.checkboxLocation.isChecked = if (!it) false else settingsViewModel.getIsLocationEnabled()
+                binding.btStartLocationChecker.visibility = if (it) View.GONE else View.VISIBLE
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        settingsViewModel.checkLocationAvailability()
+    }
 
     override fun initProperties() {
         binding.title.tvScreenTitle.text = getString(R.string.settings)
-        binding.appVersion.setDetail(String.format("v%s",
-            context?.packageName?.let { context?.packageManager?.getPackageInfoCompat(it, 0)?.versionName }))
+        binding.appVersion.setDetail(
+            String.format(
+                "v%s",
+                context?.packageName?.let {
+                    context?.packageManager?.getPackageInfoCompat(
+                        it,
+                        0
+                    )?.versionName
+                })
+        )
 
         binding.checkboxTutorial.apply {
             isChecked = !settingsViewModel.getSkipTutorial()
@@ -98,22 +129,54 @@ class FragmentSettings : FragmentBaseForViewmodel() {
             }
         }
 
-        val dlProcessorLocation = mapDlLocationToRadioId(settingsViewModel.getIsIAProcessedLocally())
+        val dlProcessorLocation =
+            mapDlLocationToRadioId(settingsViewModel.getIsIAProcessedLocally())
 
         binding.radioGroupDl.apply {
             check(dlProcessorLocation)
-            setOnCheckedChangeListener {_, checkedId ->
+            setOnCheckedChangeListener { _, checkedId ->
                 val isDLLocally = mapRadioIdToDlLocation(checkedId)
                 settingsViewModel.setIsIAProcessedLocally(isDLLocally)
             }
         }
 
+        binding.checkboxLocation.apply {
+            isChecked = settingsViewModel.getIsLocationEnabled()
+            setOnCheckedChangeListener { _, isChecked ->
+                settingsViewModel.setIsLocationEnabled(isChecked)
+            }
+        }
+
+        binding.btStartLocationChecker.setOnClickListener {
+            if(shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)
+                || shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                requestLocationPermissions.launch(
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    )
+                )
+            } else {
+                AlertHelper.BottomAlertDialog
+                    .Builder(requireContext(), AlertHelper.Type.Error, getString(R.string.permission_denied_check_app_settings))
+                    .setDelay(4000)
+                    .setAction { launchSettings() }
+                    .build().show()
+            }
+        }
+
         binding.contactUs.setOnClickListener {
-            startActivity(Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", Routes.SUPPORT_EMAIL, null)))
+            startActivity(
+                Intent(
+                    Intent.ACTION_SENDTO,
+                    Uri.fromParts("mailto", Routes.SUPPORT_EMAIL, null)
+                )
+            )
         }
 
         binding.rateUs.setOnClickListener {
-            val uri = Uri.parse("market://details?id=" + context?.packageName)
+            val uri =
+                Uri.parse("market://details?id=" + context?.packageName) //or using the Ktx extension, as below
             val intent = Intent(Intent.ACTION_VIEW, uri)
             intent.addFlags(
                 Intent.FLAG_ACTIVITY_NO_HISTORY or
@@ -126,7 +189,7 @@ class FragmentSettings : FragmentBaseForViewmodel() {
                 startActivity(
                     Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse("http://play.google.com/store/apps/details?id=" + context?.packageName)
+                        ("http://play.google.com/store/apps/details?id=" + context?.packageName).toUri()
                     )
                 )
             }
@@ -134,16 +197,22 @@ class FragmentSettings : FragmentBaseForViewmodel() {
 
         binding.privacy.setOnClickListener {
             requireActivity().findNavController(NavHostFragments.HOST.idNavHostFragment)
-                .navigate(FragmentAppDirections.actionFragmentAppToFragmentWeb(
-                title = getString(R.string.privacy_policy),
-                url = Routes.WEB_PRIVACY, enumnavhostfragment = NavHostFragments.HOST))
+                .navigate(
+                    FragmentAppDirections.actionFragmentAppToFragmentWeb(
+                        title = getString(R.string.privacy_policy),
+                        url = Routes.WEB_PRIVACY, enumnavhostfragment = NavHostFragments.HOST
+                    )
+                )
         }
 
         binding.terms.setOnClickListener {
             requireActivity().findNavController(NavHostFragments.HOST.idNavHostFragment)
-                .navigate(FragmentAppDirections.actionFragmentAppToFragmentWeb(
-                title = getString(R.string.terms_and_conditions),
-                url = Routes.WEB_TERMS, enumnavhostfragment = NavHostFragments.HOST))
+                .navigate(
+                    FragmentAppDirections.actionFragmentAppToFragmentWeb(
+                        title = getString(R.string.terms_and_conditions),
+                        url = Routes.WEB_TERMS, enumnavhostfragment = NavHostFragments.HOST
+                    )
+                )
         }
 
         binding.composeView.setContent {
@@ -159,8 +228,15 @@ class FragmentSettings : FragmentBaseForViewmodel() {
         }
     }
 
-    private fun launchTutorial(){
+    private fun launchTutorial() {
         showTutorial = true
+    }
+
+    private fun launchSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = Uri.fromParts("package", requireContext().packageName, null)
+        }
+        startActivity(intent)
     }
 
     private fun checkAvailabilityOfComposeCheckBox() {
@@ -187,15 +263,15 @@ class FragmentSettings : FragmentBaseForViewmodel() {
         return if (isDLProcessedLocally) binding.radioLocal.id else binding.radioRemote.id
     }
 
-    private fun mapRadioIdToDlLocation(@IdRes id:Int): Boolean {
-        return when(id) {
+    private fun mapRadioIdToDlLocation(@IdRes id: Int): Boolean {
+        return when (id) {
             binding.radioLocal.id -> true
             else -> false
         }
     }
 
-    private fun mapRadioIdToTheme(@IdRes id:Int): String {
-        return when(id) {
+    private fun mapRadioIdToTheme(@IdRes id: Int): String {
+        return when (id) {
             binding.radioSystem.id -> ISettingsRepository.system
             binding.radioLight.id -> ISettingsRepository.light
             binding.radioDark.id -> ISettingsRepository.dark

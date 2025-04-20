@@ -45,11 +45,19 @@
     <string name="ok">Ok</string>
     <string name="cancel">Cancelar</string>
     <string name="confirm_action">Confirmar acción</string>
-    <string name="want_saving">¿Quieres guardar la imagen actual en tu repositorio de capturas?</string>
+    <string name="want_saving">¿Quieres guardar la captura actual en tu lista?</string>
     <string name="cancelled">Cancelado...</string>
     <string name="back_icon" translatable="false">back_icon</string>
     <string name="saves_image" translatable="false">saves_image</string>
-    <string name="want_sharing_to_local_media">¿Quieres guardar la imágen en la galería?</string>
+    <string name="want_sharing_to_local_media">¿Quieres guardar la imagen en la galería?</string>
     <string name="saved_successfully">¡Guardado con éxito!</string>
     <string name="error_with_the_image_processing">Ha habido un error procesando la imagen...</string>
+    <string name="ai_visor">Visor IA</string>
+    <string name="enable_location_in_new_captions">Incluir localización en nuevas capturas</string>
+    <string name="enable_location_in_new_captions_title">Incluir ubicación en capturas</string>
+    <string name="request_location_permission">Permiso ubicación</string>
+    <string name="permission_denied_check_app_settings">Permiso denegado, habilítalo en los ajustes de la app.</string>
+    <string name="scan">Procesar</string>
+    <string name="exported_successfully">Imagen guardada en galería</string>
+    <string name="error_with_the_image_saving">Error guardando la imagen...</string>
 </resources>

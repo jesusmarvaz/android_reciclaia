@@ -1696,11 +1696,13 @@ class EditableVisor: View {
     private var viewRect: RectF? = null
     constructor(context: Context) : super(context) { init() }
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) { init() }
+
     private fun init() {
         scaleGestureDetector = ScaleGestureDetector(context, ScaleListener())
         gestureDetector = GestureDetector(context, GestureListener())
         setOnTouchListener(TouchListener())
     }
+
     private inner class ScaleListener : ScaleGestureDetector.SimpleOnScaleGestureListener() {
         override fun onScale(detector: ScaleGestureDetector): Boolean {
             val scaleFactor = detector.scaleFactor
@@ -1709,6 +1711,7 @@ class EditableVisor: View {
             return true
         }
     }
+
     private inner class GestureListener : GestureDetector.SimpleOnGestureListener() { // GestureListener
         override fun onDoubleTap(e: MotionEvent): Boolean {
             resetZoom()
@@ -1720,6 +1723,7 @@ class EditableVisor: View {
             return true
         }
     }
+
     private inner class TouchListener : OnTouchListener {
         override fun onTouch(v: View, event: MotionEvent): Boolean {
             scaleGestureDetector.onTouchEvent(event)
@@ -1742,25 +1746,34 @@ class EditableVisor: View {
             return true
         }
     }
+
     private fun resetZoom() {
         imageBitmap?.let { bitmap ->
             val scale: Float = min(width.toFloat() / bitmap.width, height.toFloat() / bitmap.height)
             matrix.reset()
             matrix.postScale(scale, scale, width / 2f, height / 2f)
+            val scaledWidth = bitmap.width * scale
+            val scaledHeight = bitmap.height * scale
+            val dx = (width - scaledWidth) / 2f
+            val dy = (height - scaledHeight) / 2f
+            matrix.postTranslate(dx, dy)
             invalidate()
         }
     }
+
     fun rotate(degrees: Float) {
         val centerX = width / 2f
         val centerY = height / 2f
         matrix.postRotate(degrees, centerX, centerY)
         invalidate()
     }
+
     fun setImageUri(uri: Uri) {
         Glide.with(this)
             .asBitmap()
             .load(uri)
             .into(object : CustomTarget<Bitmap>() {
+
                 override fun onResourceReady(
                     resource: Bitmap,
                     transition: Transition<in Bitmap>?
@@ -1769,19 +1782,32 @@ class EditableVisor: View {
                     imageRect = RectF(0f, 0f, resource.width.toFloat(), resource.height.toFloat())
                     viewRect = RectF(0f, 0f, width.toFloat(), height.toFloat())
                     matrix = Matrix() // Reset matrix for the new image
+
                     // Calculate initial scale to fit the image within the view.
                     val scale: Float = min(width.toFloat() / resource.width, height.toFloat() / resource.height)
-                    matrix.postScale(scale, scale, width / 2f, height / 2f)
+                    matrix.postScale(scale, scale) // Scale without a pivot point
+
+                    // Calculate translation to center the scaled image.
+                    val scaledWidth = resource.width * scale
+                    val scaledHeight = resource.height * scale
+                    val dx = (width - scaledWidth) / 2f
+                    val dy = (height - scaledHeight) / 2f
+                    matrix.postTranslate(dx, dy)
+
                     invalidate()
                 }
+
                 override fun onLoadCleared(placeholder: Drawable?) {
                     imageBitmap = null
                     invalidate()
                 }
             })
     }
+
     fun getImageMatrix(): Matrix = this.matrix
+
     fun getImageBitmap(): Bitmap? = this.imageBitmap
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         imageBitmap?.let { bitmap ->
@@ -1799,14 +1825,57 @@ class EditableVisor: View {
 
 Este mejorará la UI del visor, añadiendo líneas horizontales y verticales para ayudar a centrar el objeto (en el layout xml), y dos botones de rotar.
 
-
 ```kotlin
+class ComposedVisor: ConstraintLayout {
+    enum class RotationMode { Clockwise, Counterclockwise }
+    constructor(context: Context): super(context) { initialize() }
+    constructor(context: Context, attrs: AttributeSet?): super(context, attrs){ initialize() }
+    constructor(context: Context, attrs: AttributeSet?, defStyle: Int): super(context, attrs, defStyle){ initialize() }
 
+    private lateinit var editableVisor: EditableVisor
+    private lateinit var clockWiseButton: ImageButton
+    private lateinit var counterClockWiseButton: ImageButton
+
+    private fun initialize(/*attrs: AttributeSet? = null*/) {
+        val li = LayoutInflater.from(context)
+        li.inflate(R.layout.composed_visor_layout, this, true)
+        editableVisor = findViewById<EditableVisor>(R.id.editable_visor)
+
+        clockWiseButton = findViewById<ImageButton>(R.id.iv_clockwise)
+        clockWiseButton.setOnClickListener { rotate(RotationMode.Clockwise) }
+
+        counterClockWiseButton = findViewById<ImageButton>(R.id.iv_counterclockwise)
+        counterClockWiseButton.setOnClickListener { rotate(RotationMode.Counterclockwise) }
+    }
+
+    private fun rotate(rotationMode: RotationMode) {
+        val angle = if (rotationMode == RotationMode.Counterclockwise) -90f else 90f
+        editableVisor.rotate(angle)
+    }
+
+    fun setImageUri(uri: Uri) = editableVisor.setImageUri(uri)
+
+    fun getCroppedBitmap(): Bitmap? {
+        return try {
+            val originalBitmap = editableVisor.getImageBitmap() ?: return null
+            val croppedBitmap = createBitmap(width, height)
+            val canvas = Canvas(croppedBitmap)
+            val drawMatrix = Matrix().apply {
+                postTranslate(-editableVisor.left.toFloat(), -editableVisor.top.toFloat())
+                postConcat(editableVisor.getImageMatrix())
+            }
+
+            canvas.drawBitmap(originalBitmap, drawMatrix, null)
+            croppedBitmap
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+}
 ```
 
-#### 9.3.2 Modo en tiempo real (cámara)
-
-### 9.4 Elección del modelo de datos para almacenar los datos de las capturas (prueba de concepto)
+### 9.4 Elección del modelo de datos para almacenar los datos de las capturas | **Conceptos tratados**: *Patrón de diseño "Build"*
 
 La implementación de salvar la imagen, en ningún caso sobreescribirá la imagen original, por ejemplo de la galería, la idea es procesarla y almacenarla en el directorio local de la aplicación, más info en:
 
@@ -1814,9 +1883,68 @@ La implementación de salvar la imagen, en ningún caso sobreescribirá la image
 
 Las imágenes se redimensionarán para almacenarse en 512 x 512 px
 
+Este será el modelo de datos, he utilizado un builder para agregar fácilmente las propiedades:
+
+```kotlin
+class ProcessedImageModel private constructor(uri: Uri) {
+    val uri: Uri = uri; private set
+    val predictions: ArrayList<ClassificationPrediction> = arrayListOf<ClassificationPrediction>(); private set
+    var model: ModelInfo? = null; private set
+    var timeStamp: Long? = null; private set
+    var title: String? = null; private set
+    var comments: String? = null; private set
+    var location: Location? = null; private set
+    fun addPrediction(prediction: ClassificationPrediction) = this.predictions.add(prediction)
+    data class ClassificationPrediction(val label: String, val confidence: Float)
+    data class ModelInfo(val modalName:String, val modelVersion: String? = null)
+    class Builder(uri: Uri) {
+        private val processedImageModel = ProcessedImageModel(uri)
+        fun predictions(predictions: ArrayList<ClassificationPrediction>) = apply {
+            processedImageModel.predictions.clear()
+            processedImageModel.predictions.addAll(predictions)
+        }
+        fun model(model: ModelInfo) = apply { processedImageModel.model = model }
+        fun timeStamp(timeStamp: Long) = apply { processedImageModel.timeStamp = timeStamp }
+        fun title(title: String) = apply { processedImageModel.title }
+        fun comments(comments: String) = apply { processedImageModel.comments }
+        fun location(lat: Double, long: Double, provider: String?) = apply { processedImageModel.location = Location(provider).apply { latitude = lat; longitude = long } }
+        fun build(): ProcessedImageModel = processedImageModel
+    }
+}
+```
+
 ### 9.5 Almacenamiento local de imágenes y datos (con Room)
 
-###
+Room es una librería del conjunto Jetpack, que facilita la implementación de bases de datos SQLite en Android, al igual que "Hibernate" en Java o "Entity Framework" en el framework .NET. Se trata de un [ORM](https://es.wikipedia.org/wiki/Mapeo_relacional_de_objetos).
+
+#### 9.5.1 Configuración
+
+Debemos agregar las siguientes dependencias en gradle:
+
+FICHERO `build.gradle.kts` (app)
+
+```kotlin
+implementation(libs.androidx.room.runtime)
+ksp(libs.room.compiler)
+implementation(libs.androidx.room.ktx) // optional - Kotlin Extensions and Coroutines support for Room
+```
+
+FICHERO `lib.versions.toml`
+
+```toml
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomRuntime"}
+```
+
+#### 9.5.2 Implementación
+
+Al usar Room debemos crear abstracciones y varias capas de separación de datos. Principalmente tendremos los siguientes elementos:
+* Entity: hace referencia a la tabla
+* Model: hace referencia al modelo de datos que nuestra aplicación usa
+* DAO: es el objeto que media entre la base de datos y la entidad, alberga los métodos necesarios para modificar, crear, leer y eliminar (CRUD) de manera segura
+
+El
 
 
 ___

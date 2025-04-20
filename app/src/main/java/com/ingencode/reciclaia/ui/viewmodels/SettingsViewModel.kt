@@ -1,5 +1,7 @@
 package com.ingencode.reciclaia.ui.viewmodels
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.ingencode.reciclaia.data.repositories.ISettingsRepository
 import com.ingencode.reciclaia.ui.components.ViewModelBase
 import com.ingencode.reciclaia.utils.nameClass
@@ -19,6 +21,9 @@ class SettingsViewModel @Inject constructor(private val settingsRepository: ISet
     private val _isIAProcessedLocally: MutableLiveData<Boolean> = MutableLiveData(true)
     val isIAProcessedLocally: LiveData<Boolean> = _isIAProcessedLocally*/
 
+    private val _showLocationPermissionRequestButton: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+    val showLocationPermissionRequestButton: LiveData<Boolean> = _showLocationPermissionRequestButton
+
     fun getSkipTutorial(): Boolean{
         val skipTutorial = settingsRepository.getSkipTutorial()
         return skipTutorial
@@ -33,4 +38,10 @@ class SettingsViewModel @Inject constructor(private val settingsRepository: ISet
     fun setIsViewVersion(isViewVersion: Boolean) = settingsRepository.setIsViewVersion(isViewVersion)
     fun getIsIAProcessedLocally(): Boolean = settingsRepository.getIsIAProcessedLocally()
     fun setIsIAProcessedLocally(isProcessedLocally: Boolean) = settingsRepository.setIsIAProcessedLocally(isProcessedLocally)
+    fun getIsLocationEnabled(): Boolean = settingsRepository.getIsLocationEnabled()
+    fun setIsLocationEnabled(isEnabled: Boolean) = settingsRepository.setLocationEnabled(isEnabled)
+
+    fun checkLocationAvailability() {
+        _showLocationPermissionRequestButton.postValue(settingsRepository.getLocationAvailability())
+    }
 }

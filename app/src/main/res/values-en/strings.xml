@@ -42,4 +42,15 @@
     <string name="confirm_action">Confirm action</string>
     <string name="want_saving">Want to save the current image?</string>
     <string name="cancelled">Cancelled...</string>
+    <string name="want_sharing_to_local_media">Do you want to save the pic in the gallery?</string>
+    <string name="saved_successfully">Saved!</string>
+    <string name="error_with_the_image_processing">Error processing picture!</string>
+    <string name="ai_visor">AI Visor</string>
+    <string name="enable_location_in_new_captions">Include location on new captures</string>
+    <string name="enable_location_in_new_captions_title">Include location in captures</string>
+    <string name="request_location_permission">Location permission</string>
+    <string name="permission_denied_check_app_settings">Permission denied, please enable it in the app settings.</string>
+    <string name="scan">Process</string>
+    <string name="exported_successfully">Image saved in gallery</string>
+    <string name="error_with_the_image_saving">Error saving image</string>
 </resources>

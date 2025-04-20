@@ -79,4 +79,7 @@ dependencies {
     implementation(libs.retrofit.converter.gson)
     implementation(libs.retrofit.logging.interceptor)
     implementation(libs.glide)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx) // optional - Kotlin Extensions and Coroutines support for Room
+    ksp(libs.room.compiler)
 }

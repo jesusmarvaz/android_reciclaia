@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSurface">
+
     <include
         android:id="@+id/title"
-        layout="@layout/screen_title"/>
+        layout="@layout/screen_title" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -20,12 +23,12 @@
                 android:id="@+id/tv_title_settings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:text="@string/app_configuration"
-                app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="72dp"
-                android:paddingHorizontal="@dimen/margin_1"/>
+                android:paddingHorizontal="@dimen/margin_1"
+                android:text="@string/app_configuration"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cv_app_config"
@@ -33,92 +36,98 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_1"
                 android:padding="@dimen/margin_1"
-                app:layout_constraintTop_toBottomOf="@id/tv_title_settings"
-                app:cardElevation="0dp"
                 app:cardBackgroundColor="?attr/colorSurfaceVariant"
-                app:cardCornerRadius="@dimen/margin_1">
+                app:cardCornerRadius="@dimen/margin_1"
+                app:cardElevation="0dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_title_settings">
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="@dimen/margin_1">
+
                     <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline_vertical"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/guideline_vertical"
                         android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.5"/>
+                        app:layout_constraintGuide_percent="0.5" />
+
                     <View
                         android:id="@+id/view_separator"
                         android:layout_width="1sp"
                         android:layout_height="0dp"
-                        app:layout_constraintStart_toStartOf="@id/guideline_vertical"
-                        app:layout_constraintEnd_toEndOf="@id/guideline_vertical"
                         android:background="?attr/colorPrimary"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/guideline_vertical"
+                        app:layout_constraintStart_toStartOf="@id/guideline_vertical"
+                        app:layout_constraintTop_toTopOf="parent" />
+
                     <TextView
                         android:id="@+id/tv_skip_tutorial_title"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:text="@string/start_settings"
+                        android:textAlignment="center"
                         android:textSize="12sp"
                         android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/guideline_vertical"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:text="@string/start_settings"
-                        android:textAlignment="center"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
                     <CheckBox
                         android:id="@+id/checkbox_tutorial"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/tv_skip_tutorial_title"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/guideline_vertical"
                         android:text="@string/startup_tutorial"
                         android:textSize="11sp"
-                        />
+                        app:layout_constraintEnd_toStartOf="@id/guideline_vertical"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_skip_tutorial_title" />
+
                     <CheckBox
                         android:id="@+id/checkbox_compose"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/checkbox_tutorial"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/guideline_vertical"
                         android:text="@string/startup_compose"
                         android:textSize="11sp"
-                        />
+                        app:layout_constraintEnd_toStartOf="@id/guideline_vertical"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/checkbox_tutorial" />
+
                     <Button
                         android:id="@+id/bt_start_tutorial"
+                        style="@style/Widget.AppCompat.Button.Borderless"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/checkbox_compose"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="@id/guideline_vertical"
                         android:layout_marginEnd="@dimen/margin_1"
                         android:text="@string/start_tutorial"
-                        android:textSize="11sp"
-                        style="@style/Widget.AppCompat.Button.Borderless"
                         android:textColor="?attr/colorPrimary"
-                        />
+                        android:textSize="11sp"
+                        app:layout_constraintEnd_toEndOf="@id/guideline_vertical"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/checkbox_compose" />
+
                     <TextView
                         android:id="@+id/tv_theme_title"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:text="@string/app_theme"
+                        android:textAlignment="center"
                         android:textSize="12sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/guideline_vertical"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:text="@string/app_theme"
-                        android:textAlignment="center"/>
+                        app:layout_constraintTop_toTopOf="parent" />
+
                     <RadioGroup
                         android:id="@+id/radio_group"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/tv_theme_title"
-                        app:layout_constraintStart_toEndOf="@id/guideline_vertical"
+                        android:paddingStart="@dimen/margin_1"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:paddingStart="@dimen/margin_1">
+                        app:layout_constraintStart_toEndOf="@id/guideline_vertical"
+                        app:layout_constraintTop_toBottomOf="@id/tv_theme_title">
 
                         <RadioButton
                             android:id="@+id/radio_system"
@@ -126,19 +135,21 @@
                             android:layout_height="wrap_content"
                             android:text="@string/system"
                             android:textSize="11sp" />
+
                         <RadioButton
                             android:id="@+id/radio_light"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_margin="0dp"
                             android:text="@string/light"
-                            android:textSize="11sp"
-                            android:layout_margin="0dp" />
+                            android:textSize="11sp" />
+
                         <RadioButton
                             android:id="@+id/radio_dark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/dark"
-                            android:textSize="11sp"/>
+                            android:textSize="11sp" />
                     </RadioGroup>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
@@ -147,12 +158,12 @@
                 android:id="@+id/tv_title_ia_settings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:text="@string/ia_configuration"
-                app:layout_constraintTop_toBottomOf="@id/cv_app_config"
                 android:layout_marginTop="@dimen/margin_2"
-                android:paddingHorizontal="@dimen/margin_1"/>
+                android:paddingHorizontal="@dimen/margin_1"
+                android:text="@string/ia_configuration"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/cv_app_config" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cv_dl_config"
@@ -160,35 +171,37 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_1"
                 android:padding="@dimen/margin_1"
-                app:layout_constraintTop_toBottomOf="@id/tv_title_ia_settings"
-                app:cardElevation="0dp"
                 app:cardBackgroundColor="?attr/colorSurfaceVariant"
-                app:cardCornerRadius="@dimen/margin_1">
+                app:cardCornerRadius="@dimen/margin_1"
+                app:cardElevation="0dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_title_ia_settings">
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="@dimen/margin_1">
+
                     <TextView
                         android:id="@+id/tv_ia_config_title"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:text="@string/dl_configuration"
+                        android:textAlignment="textStart"
                         android:textSize="12sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:text="@string/dl_configuration"
-                        android:textAlignment="center"/>
+                        app:layout_constraintTop_toTopOf="parent" />
+
                     <RadioGroup
                         android:id="@+id/radio_group_dl"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/tv_ia_config_title"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:paddingStart="@dimen/margin_1"
                         android:orientation="horizontal"
-                        android:gravity="center">
+                        android:paddingStart="@dimen/margin_1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_ia_config_title">
 
                         <RadioButton
                             android:id="@+id/radio_local"
@@ -196,6 +209,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/local"
                             android:textSize="11sp" />
+
                         <RadioButton
                             android:id="@+id/radio_remote"
                             android:layout_width="wrap_content"
@@ -203,6 +217,41 @@
                             android:text="@string/remote"
                             android:textSize="11sp" />
                     </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/tv_location_inclusion_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/enable_location_in_new_captions_title"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/radio_group_dl" />
+
+                    <CheckBox
+                        android:id="@+id/checkbox_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/enable_location_in_new_captions"
+                        android:textSize="11sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_location_inclusion_title" />
+
+                    <Button
+                        android:id="@+id/bt_start_location_checker"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_1"
+                        android:text="@string/request_location_permission"
+                        android:textColor="?attr/colorPrimary"
+                        android:textSize="11sp"
+
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/checkbox_location"
+                        tools:visibility="visible" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
@@ -210,84 +259,86 @@
                 android:id="@+id/tv_title_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:text="@string/app_info"
-                app:layout_constraintTop_toBottomOf="@id/cv_dl_config"
                 android:layout_marginTop="@dimen/margin_2"
-                android:paddingHorizontal="@dimen/margin_1"/>
+                android:paddingHorizontal="@dimen/margin_1"
+                android:text="@string/app_info"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/cv_dl_config" />
+
             <com.ingencode.reciclaia.ui.components.InfoIconTextView
                 android:id="@+id/app_version"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_1"
-                app:layout_constraintTop_toBottomOf="@id/tv_title_info"
-                app:iconSrcId="@drawable/rounded_numbers_24"
                 android:backgroundTint="?attr/colorPrimary"
-                app:label="@string/version"
-                app:isSeparatorVisible="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:paddingHorizontal="@dimen/margin_1"
-                />
+                app:iconSrcId="@drawable/rounded_numbers_24"
+                app:isSeparatorVisible="true"
+                app:label="@string/version"
+                app:layout_constraintTop_toBottomOf="@id/tv_title_info" />
+
             <com.ingencode.reciclaia.ui.components.InfoIconTextView
                 android:id="@+id/contact_us"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_1"
-                app:layout_constraintTop_toBottomOf="@id/app_version"
-                app:iconSrcId="@drawable/round_key_24"
                 android:backgroundTint="?attr/colorPrimary"
-                app:label="@string/contact_us"
-                app:isSeparatorVisible="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:paddingHorizontal="@dimen/margin_1"
-                />
+                app:iconSrcId="@drawable/round_key_24"
+                app:isSeparatorVisible="true"
+                app:label="@string/contact_us"
+                app:layout_constraintTop_toBottomOf="@id/app_version" />
+
             <com.ingencode.reciclaia.ui.components.InfoIconTextView
                 android:id="@+id/terms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_1"
-                app:layout_constraintTop_toBottomOf="@id/contact_us"
-                app:iconSrcId="@drawable/round_menu_book_24"
                 android:backgroundTint="?attr/colorPrimary"
-                app:label="@string/terms_and_conditions"
-                app:isSeparatorVisible="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:paddingHorizontal="@dimen/margin_1"
-                />
+                app:iconSrcId="@drawable/round_menu_book_24"
+                app:isSeparatorVisible="true"
+                app:label="@string/terms_and_conditions"
+                app:layout_constraintTop_toBottomOf="@id/contact_us" />
+
             <com.ingencode.reciclaia.ui.components.InfoIconTextView
                 android:id="@+id/privacy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_1"
-                app:layout_constraintTop_toBottomOf="@id/terms"
-                app:iconSrcId="@drawable/round_shield_24"
                 android:backgroundTint="?attr/colorPrimary"
-                app:label="@string/privacy_policy"
-                app:isSeparatorVisible="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:paddingHorizontal="@dimen/margin_1"
-                />
+                app:iconSrcId="@drawable/round_shield_24"
+                app:isSeparatorVisible="true"
+                app:label="@string/privacy_policy"
+                app:layout_constraintTop_toBottomOf="@id/terms" />
+
             <com.ingencode.reciclaia.ui.components.InfoIconTextView
                 android:id="@+id/rate_us"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_1"
-                app:layout_constraintTop_toBottomOf="@id/privacy"
-                app:iconSrcId="@drawable/round_star_rate_24"
                 android:backgroundTint="?attr/colorPrimary"
-                app:label="@string/rate_us"
-                app:isSeparatorVisible="false"
                 android:foreground="?attr/selectableItemBackground"
                 android:paddingHorizontal="@dimen/margin_1"
-                />
+                app:iconSrcId="@drawable/round_star_rate_24"
+                app:isSeparatorVisible="false"
+                app:label="@string/rate_us"
+                app:layout_constraintTop_toBottomOf="@id/privacy" />
+
             <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/compose_view"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
+

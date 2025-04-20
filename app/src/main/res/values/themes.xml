@@ -52,4 +52,6 @@
         <item name="colorAccent">?attr/colorSecondary</item>
         <item name="android:windowBackground">@drawable/rounded_dialog_background</item>
     </style>
+    <style name="MyToolbar" parent="ThemeOverlay.Material3.Toolbar.Surface">
+    </style>
 </resources>

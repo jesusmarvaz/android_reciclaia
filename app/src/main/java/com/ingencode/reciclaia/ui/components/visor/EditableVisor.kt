@@ -91,6 +91,11 @@ class EditableVisor: View {
             val scale: Float = min(width.toFloat() / bitmap.width, height.toFloat() / bitmap.height)
             matrix.reset()
             matrix.postScale(scale, scale, width / 2f, height / 2f)
+            val scaledWidth = bitmap.width * scale
+            val scaledHeight = bitmap.height * scale
+            val dx = (width - scaledWidth) / 2f
+            val dy = (height - scaledHeight) / 2f
+            matrix.postTranslate(dx, dy)
             invalidate()
         }
     }
@@ -107,7 +112,7 @@ class EditableVisor: View {
             .asBitmap()
             .load(uri)
             .into(object : CustomTarget<Bitmap>() {
-                override fun onResourceReady(
+                /*override fun onResourceReady(
                     resource: Bitmap,
                     transition: Transition<in Bitmap>?
                 ) {
@@ -118,6 +123,29 @@ class EditableVisor: View {
                     // Calculate initial scale to fit the image within the view.
                     val scale: Float = min(width.toFloat() / resource.width, height.toFloat() / resource.height)
                     matrix.postScale(scale, scale, width / 2f, height / 2f)
+                    invalidate()
+                }*/
+
+                override fun onResourceReady(
+                    resource: Bitmap,
+                    transition: Transition<in Bitmap>?
+                ) {
+                    imageBitmap = resource
+                    imageRect = RectF(0f, 0f, resource.width.toFloat(), resource.height.toFloat())
+                    viewRect = RectF(0f, 0f, width.toFloat(), height.toFloat())
+                    matrix = Matrix() // Reset matrix for the new image
+
+                    // Calculate initial scale to fit the image within the view.
+                    val scale: Float = min(width.toFloat() / resource.width, height.toFloat() / resource.height)
+                    matrix.postScale(scale, scale) // Scale without a pivot point
+
+                    // Calculate translation to center the scaled image.
+                    val scaledWidth = resource.width * scale
+                    val scaledHeight = resource.height * scale
+                    val dx = (width - scaledWidth) / 2f
+                    val dy = (height - scaledHeight) / 2f
+                    matrix.postTranslate(dx, dy)
+
                     invalidate()
                 }
 

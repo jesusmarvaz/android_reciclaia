@@ -30,14 +30,14 @@
         app:layout_constraintStart_toEndOf="@id/success_bottom_sheet_image"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/success_bottom_sheet_close"
+        app:layout_constraintEnd_toStartOf="@id/success_bottom_sheet_action"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
         />
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/success_bottom_sheet_close"
+        android:id="@+id/success_bottom_sheet_action"
         android:layout_width="@dimen/icon_padding10dp"
         android:layout_height="@dimen/icon_padding10dp"
         app:layout_constraintTop_toTopOf="parent"
@@ -45,7 +45,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="16dp"
         android:padding="10dp"
-        android:src="@drawable/close"
+        android:src="@drawable/arrow_forward"
         app:tint="?attr/colorSurface"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

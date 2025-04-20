@@ -23,6 +23,7 @@ import com.ingencode.reciclaia.data.remote.dto.DTO
 import com.ingencode.reciclaia.data.remote.dto.ErrorDTO
 import retrofit2.HttpException
 import java.io.Serializable
+import java.security.MessageDigest
 import kotlin.math.roundToInt
 
 /**
@@ -255,6 +256,13 @@ fun AppCompatActivity.setFullScreenOff() {
 
 
 */
+
+fun String.sha256(): String {
+    return MessageDigest.getInstance("SHA-256")
+        .digest(this.toByteArray())
+        .fold("") { str, it -> str + "%02x".format(it) }
+}
+
 inline fun <reified T: Serializable> Fragment.getSerializable(key: String): T? {
     return arguments?.getSerializable(key, T::class.java)
 }
@@ -323,7 +331,7 @@ fun AppCompatActivity.setLightModeInStatusBar(light: Boolean) {
 
 fun Throwable.classifyError(c: Context): ISealedError {
     return if (this is ISealedError) return this
-    else if (!c.isAnyNetworkActive()) SealedError.ConnectivityError()
+    else if (!c.isAnyNetworkActive()) SealedAppError.ConnectivityError()
     else if (this is HttpException) {
         val stringDTO: String? = this.response()?.errorBody()?.string()
         try {
@@ -353,6 +361,6 @@ fun Throwable.classifyError(c: Context): ISealedError {
             }
         }
     } else {
-        SealedError.DefaultError()
+        SealedAppError.DefaultError()
     }
 }

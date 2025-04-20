@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material3.AlertDialog
 import com.ingencode.reciclaia.R
 import com.ingencode.reciclaia.data.remote.api.SealedResult
 import com.ingencode.reciclaia.databinding.ActivityImagevisorBinding
+import com.ingencode.reciclaia.domain.model.ProcessedImageModel
 import com.ingencode.reciclaia.ui.components.dialogs.AlertHelper
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,23 +27,39 @@ class ImageVisorActivity : AppCompatActivity() {
 
     private fun init() {
         val uri = intent.getParcelableExtra("uri", Uri::class.java) ?: return
+        setSupportActionBar(binding.topAppBar)
         observeViewModel()
         viewModel.setUri(uri)
         binding.apply {
-            back.setOnClickListener { finish() }
+            topAppBar.setNavigationOnClickListener { finish() }
             save.setOnClickListener { binding.composedVisor.getCroppedBitmap()?.let { askSaving(it) }}
             saveImageFolder.setOnClickListener { binding.composedVisor.getCroppedBitmap()?.let { askSharing(it) }}
         }
     }
+
     private fun observeViewModel() {
         with(viewModel) {
             uri.observe(this@ImageVisorActivity) {
                 if (it != null) binding.composedVisor.apply { setImageUri(it) }
             }
-            result.observe(this@ImageVisorActivity) {
+            exportedSuccessfully.observe(this@ImageVisorActivity) {
                 var message = ""
-                val type = if (it is SealedResult.ResultSuccess<Uri>) {
-                    message = "${getString(R.string.saved_successfully)}. Uri:${it.data.path}"
+                var type: AlertHelper.Type = AlertHelper.Type.Error
+
+                if (it != null && it == true) {
+                    message = getString(R.string.exported_successfully)
+                    type = AlertHelper.Type.Success
+                }
+                if (it != null && it == false) {
+                    message = getString(R.string.error_with_the_image_saving)
+                }
+                val builder = AlertHelper.BottomAlertDialog.Builder(this@ImageVisorActivity, type, message)
+                builder.build().show()
+            }
+            processedImageResult.observe(this@ImageVisorActivity) {
+                var message = ""
+                val type = if (it is SealedResult.ResultSuccess<ProcessedImageModel>) {
+                    message = "${getString(R.string.saved_successfully)}. Uri:${it.data.uri}"
                     AlertHelper.Type.Success
                 } else if (it is SealedResult.ResultError) {
                     message = "${getString(R.string.error_with_the_image_processing)}. ${it.error.message?.let{e-> "Error: $e"}}"
@@ -55,8 +71,8 @@ class ImageVisorActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
+
     fun askSaving(bitmap: Bitmap) {
         val title = getString(R.string.confirm_action)
         val message = getString(R.string.want_saving)

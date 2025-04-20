@@ -22,7 +22,7 @@ object AlertHelper {
             if (delay > 0) {
                 object : CountDownTimer(this.delay, this .delay) {
                     override fun onTick(millisUntilFinished: Long) {}
-                    override fun onFinish() { action.invoke() }
+                    override fun onFinish() { alert.dismiss() }
                 }.start()
             }
             alert.show()
@@ -51,7 +51,7 @@ object AlertHelper {
             fun build(): BottomAlertDialog {
                 val alertView: View
                 val textViewAlert: TextView
-                val close: AppCompatImageView
+                val actionButton: AppCompatImageView
                 val style: Int
 
                 when (type) {
@@ -59,14 +59,14 @@ object AlertHelper {
                         style = R.style.SuccessBottomSheetTheme
                         alertView = LayoutInflater.from(c).inflate(R.layout.bottom_sheet_success, null).also {
                             textViewAlert = it.findViewById(R.id.success_bottom_sheet_text)
-                            close = it.findViewById(R.id.success_bottom_sheet_close)
+                            actionButton = it.findViewById(R.id.success_bottom_sheet_action)
                         }
                     }
                     Type.Error -> {
                         style = R.style.ErrorBottomSheetTheme
                         alertView = LayoutInflater.from(c).inflate(R.layout.bottom_sheet_error, null).also {
                             textViewAlert = it.findViewById(R.id.error_bottom_sheet_text)
-                            close = it.findViewById(R.id.error_bottom_sheet_close)
+                            actionButton = it.findViewById(R.id.error_bottom_sheet_action)
                         }
                     }
                 }
@@ -79,8 +79,7 @@ object AlertHelper {
 
                 this.alert = BottomSheetDialog(c, style).apply {
                     setContentView(alertView)
-                    close.setOnClickListener { actionDismissing() }
-                    setOnDismissListener { actionDismissing() }
+                    actionButton.setOnClickListener { actionDismissing() }
                 }
                 return BottomAlertDialog(alert, delay, ::actionDismissing)
             }
