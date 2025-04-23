@@ -11,6 +11,7 @@ import com.ingencode.reciclaia.data.remote.api.SealedResult
 import com.ingencode.reciclaia.databinding.ActivityImagevisorBinding
 import com.ingencode.reciclaia.domain.model.ProcessedImageModel
 import com.ingencode.reciclaia.ui.components.dialogs.AlertHelper
+import com.ingencode.reciclaia.utils.SealedAppError
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -62,7 +63,7 @@ class ImageVisorActivity : AppCompatActivity() {
                     message = "${getString(R.string.saved_successfully)}. Uri:${it.data.uri}"
                     AlertHelper.Type.Success
                 } else if (it is SealedResult.ResultError) {
-                    message = "${getString(R.string.error_with_the_image_processing)}. ${it.error.message?.let{e-> "Error: $e"}}"
+                    message = "${getString(R.string.error_with_the_image_processing)}. ${if (it.error is SealedAppError && it.error.message != null) "Error: ${it.error.message}" else ""}}"
                     AlertHelper.Type.Error
                 } else null
                 type?.let {

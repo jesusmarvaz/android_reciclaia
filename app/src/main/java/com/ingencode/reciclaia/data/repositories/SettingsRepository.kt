@@ -1,12 +1,12 @@
 package com.ingencode.reciclaia.data.repositories
 
+import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
-import androidx.core.content.edit
-import android.Manifest
 
 /**
 Created with ❤ by Jesús Martín (jesusmarvaz@gmail.com) on 2025-02-22.

@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.ingencode.reciclaia.data.remote.api.SealedResult
+import com.ingencode.reciclaia.data.repositories.IClassificationProvider
 import com.ingencode.reciclaia.data.repositories.IProcessedImageModelRepository
 import com.ingencode.reciclaia.data.repositories.LocalStorageProvider
 import com.ingencode.reciclaia.domain.model.ProcessedImageModel
@@ -23,7 +24,9 @@ Created with ❤ by jesusmarvaz on 2025-04-11.
 
 
 @HiltViewModel
-class ImageVisorViewModel @Inject constructor(private val localStorageProvider: LocalStorageProvider, private val localDataBaseProvider: IProcessedImageModelRepository) : ViewModelBase() {
+class ImageVisorViewModel @Inject constructor(private val localStorageProvider: LocalStorageProvider,
+                                              private val localDataBaseProvider: IProcessedImageModelRepository,
+                                              private val classificationProvider: IClassificationProvider) : ViewModelBase() {
     private val _exportedSuccessfully: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     val exportedSuccessfully: LiveData<Boolean> = _exportedSuccessfully
     private val _uri: MutableLiveData<Uri> = MutableLiveData<Uri>()

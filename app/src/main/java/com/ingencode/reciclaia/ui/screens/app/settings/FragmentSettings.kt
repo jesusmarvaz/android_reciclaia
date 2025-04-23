@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.findNavController
@@ -36,6 +37,7 @@ import com.ingencode.reciclaia.data.repositories.ISettingsRepository
 import com.ingencode.reciclaia.databinding.FragmentSettingsBinding
 import com.ingencode.reciclaia.ui.components.FragmentBaseForViewmodel
 import com.ingencode.reciclaia.ui.components.ViewModelBase
+import com.ingencode.reciclaia.ui.components.dialogs.AlertHelper
 import com.ingencode.reciclaia.ui.navigation.NavHostFragments
 import com.ingencode.reciclaia.ui.screens.app.FragmentAppDirections
 import com.ingencode.reciclaia.ui.screens.tutorial.Tutorial
@@ -46,8 +48,6 @@ import com.ingencode.reciclaia.utils.getPackageInfoCompat
 import com.ingencode.reciclaia.utils.nameClass
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import androidx.core.net.toUri
-import com.ingencode.reciclaia.ui.components.dialogs.AlertHelper
 
 /**
 Created with ❤ by jesusmarvaz on 2025-02-19.

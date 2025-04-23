@@ -2,10 +2,9 @@ package com.ingencode.reciclaia.utils.di
 
 import android.content.Context
 import com.ingencode.reciclaia.data.repositories.IProcessedImageModelRepository
-import com.ingencode.reciclaia.data.repositories.ProcessedImageModelRepositoryImpl
 import com.ingencode.reciclaia.data.repositories.ISettingsRepository
-
 import com.ingencode.reciclaia.data.repositories.LocalStorageProvider
+import com.ingencode.reciclaia.data.repositories.ProcessedImageModelRepositoryImpl
 import com.ingencode.reciclaia.data.repositories.SettingsRepository
 import com.ingencode.reciclaia.ui.navigation.BackPressedListener
 import com.ingencode.reciclaia.ui.navigation.IBackPressedListener
