@@ -9,7 +9,7 @@ Created with ❤ by jesusmarvaz on 2025-04-20.
  */
 
 @Entity
-data class ProcessedImageEntity(@PrimaryKey val id: String,
+data class ClassificationEntity(@PrimaryKey val id: String,
                                 val uri: String,
                                 val predictions: String,
                                 @ColumnInfo("model_name") var modelName: String? = null,

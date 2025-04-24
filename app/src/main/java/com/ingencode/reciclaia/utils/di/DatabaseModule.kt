@@ -3,7 +3,7 @@ package com.ingencode.reciclaia.utils.di
 import android.content.Context
 import androidx.room.Room
 import com.ingencode.reciclaia.data.local.AppDatabase
-import com.ingencode.reciclaia.data.local.dao.ProcessedImageDao
+import com.ingencode.reciclaia.data.local.dao.ClassificationDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,7 +25,7 @@ object DatabaseModule {
     }
 
     @Provides
-    fun provideProcessedImageDao(database: AppDatabase): ProcessedImageDao {
+    fun provideProcessedImageDao(database: AppDatabase): ClassificationDao {
         return database.processedImageDao()
     }
 }

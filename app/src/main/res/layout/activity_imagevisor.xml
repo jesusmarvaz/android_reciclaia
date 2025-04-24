@@ -45,7 +45,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageButton
-        android:id="@+id/save_image_folder"
+        android:id="@+id/store_image_to_folder"
         android:layout_width="0dp"
         android:layout_height="@dimen/icon_padding10dp"
         android:padding="10dp"

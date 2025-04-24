@@ -1,44 +1,44 @@
 package com.ingencode.reciclaia.data.repositories
 
-import com.ingencode.reciclaia.data.local.dao.ProcessedImageDao
-import com.ingencode.reciclaia.domain.model.ProcessedImageModel
+import com.ingencode.reciclaia.data.local.dao.ClassificationDao
 import com.ingencode.reciclaia.data.local.mappers.toEntity
 import com.ingencode.reciclaia.data.local.mappers.toModel
+import com.ingencode.reciclaia.domain.model.ClassificationModel
 import javax.inject.Inject
 
 /**
 Created with ❤ by jesusmarvaz on 2025-04-20.
  */
 
-interface IProcessedImageModelRepository {
-    fun insert(model: ProcessedImageModel)
-    fun insertAll(list: List<ProcessedImageModel>)
-    fun getProcessedImageById(id:Int): ProcessedImageModel
-    fun getAllProcessedImages(): List<ProcessedImageModel>
+interface IClassificationRepository {
+    fun insert(model: ClassificationModel)
+    fun insertAll(list: List<ClassificationModel>)
+    fun getClassificationsById(id:Int): ClassificationModel
+    fun getAllProcessedImages(): List<ClassificationModel>
     fun deleteAllProcessedImages(): Int
     fun deleteById(id:Int): Int
-    fun updateProcessedImageById(model: ProcessedImageModel)
+    fun updateProcessedImageById(model: ClassificationModel)
 }
 
-class ProcessedImageModelRepositoryImpl @Inject constructor(private val processedImageDao: ProcessedImageDao): IProcessedImageModelRepository {
-    override fun insert(model: ProcessedImageModel) =
-        processedImageDao.insert(model.toEntity())
+class ClassificationRepositoryImpl @Inject constructor(private val classificationDao: ClassificationDao): IClassificationRepository {
+    override fun insert(model: ClassificationModel) =
+        classificationDao.insert(model.toEntity())
 
-    override fun insertAll(list: List<ProcessedImageModel>) =
-        processedImageDao.insertAll(list.map { it.toEntity() })
+    override fun insertAll(list: List<ClassificationModel>) =
+        classificationDao.insertAll(list.map { it.toEntity() })
 
-    override fun getProcessedImageById(id: Int): ProcessedImageModel =
-        processedImageDao.getProcessedImageById(id).toModel()
+    override fun getClassificationsById(id: Int): ClassificationModel =
+        classificationDao.getById(id).toModel()
 
-    override fun getAllProcessedImages(): List<ProcessedImageModel> =
-        processedImageDao.getAllProcessedImages().map { it.toModel() }
+    override fun getAllProcessedImages(): List<ClassificationModel> =
+        classificationDao.getAll().map { it.toModel() }
 
     override fun deleteAllProcessedImages(): Int =
-        processedImageDao.deleteAllProcessedImages()
+        classificationDao.deleteAll()
 
     override fun deleteById(id: Int): Int =
-        processedImageDao.deleteById(id)
+        classificationDao.deleteById(id)
 
-    override fun updateProcessedImageById(model: ProcessedImageModel) =
-        processedImageDao.updateProcessedImageById(model.toEntity())
+    override fun updateProcessedImageById(model: ClassificationModel) =
+        classificationDao.update(model.toEntity())
 }
