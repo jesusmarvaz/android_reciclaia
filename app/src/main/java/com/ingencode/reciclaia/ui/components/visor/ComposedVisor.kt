@@ -1,6 +1,7 @@
 package com.ingencode.reciclaia.ui.components.visor
 
 import android.content.Context
+import android.content.res.TypedArray
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Matrix
@@ -18,15 +19,16 @@ Created with ❤ by jesusmarvaz on 2025-04-09.
 
 class ComposedVisor: ConstraintLayout {
     enum class RotationMode { Clockwise, Counterclockwise }
-    constructor(context: Context): super(context) { initialize() }
-    constructor(context: Context, attrs: AttributeSet?): super(context, attrs){ initialize() }
-    constructor(context: Context, attrs: AttributeSet?, defStyle: Int): super(context, attrs, defStyle){ initialize() }
+    constructor(context: Context): super(context) { initialize(null) }
+    constructor(context: Context, attrs: AttributeSet?): super(context, attrs){ initialize(attrs) }
+    constructor(context: Context, attrs: AttributeSet?, defStyle: Int): super(context, attrs, defStyle){ initialize(attrs) }
 
     private lateinit var editableVisor: EditableVisor
     private lateinit var clockWiseButton: ImageButton
     private lateinit var counterClockWiseButton: ImageButton
+    var isEditable: Boolean = true
 
-    private fun initialize(/*attrs: AttributeSet? = null*/) {
+    private fun initialize(attrs: AttributeSet?) {
         val li = LayoutInflater.from(context)
         li.inflate(R.layout.composed_visor_layout, this, true)
         editableVisor = findViewById<EditableVisor>(R.id.editable_visor)
@@ -36,6 +38,21 @@ class ComposedVisor: ConstraintLayout {
 
         counterClockWiseButton = findViewById<ImageButton>(R.id.iv_counterclockwise)
         counterClockWiseButton.setOnClickListener { rotate(RotationMode.Counterclockwise) }
+
+        if (attrs == null) return
+
+        var ta: TypedArray? = null
+        try {
+            ta = context.obtainStyledAttributes(attrs, R.styleable.ComposedVisor)
+            isEditable = ta.getBoolean(R.styleable.ComposedVisor_isEditable, true)
+
+        } catch (e: Exception) {
+            throw e
+        } finally {
+            ta?.recycle()
+        }
+
+        editableVisor.isEnabled = isEditable
     }
 
     private fun rotate(rotationMode: RotationMode) {

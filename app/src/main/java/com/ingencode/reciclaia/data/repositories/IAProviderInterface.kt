@@ -1,15 +1,9 @@
 package com.ingencode.reciclaia.data.repositories
 
-import com.ingencode.reciclaia.domain.model.ClassificationModel
 import androidx.core.net.toUri
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.ingencode.reciclaia.domain.model.ClassificationModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okhttp3.Dispatcher
-import java.sql.Timestamp
-import java.util.Date
+import javax.inject.Inject
 import kotlin.random.Random
 
 /**
@@ -20,7 +14,7 @@ interface IAProviderInterface {
     suspend fun getClassificationFromInference(): ClassificationModel
 }
 
-class IAProviderMockImp : IAProviderInterface {
+class IAProviderMockImp @Inject constructor() : IAProviderInterface {
     companion object {
         private fun getPredictionList(size: Int): ArrayList<ClassificationModel.ClassificationPrediction> {
             val tempClassificationList = arrayListOf<ClassificationModel.ClassificationPrediction>()
@@ -29,8 +23,8 @@ class IAProviderMockImp : IAProviderInterface {
             }
             return tempClassificationList
         }
-        private val classificationList: ArrayList<ClassificationModel> by lazy(::getClassificationList)
-        private fun getClassificationList(): ArrayList<ClassificationModel> {
+        private val classificationList: ArrayList<ClassificationModel> by lazy(::buildClassificationList)
+        private fun buildClassificationList(): ArrayList<ClassificationModel> {
             val tempList: ArrayList<ClassificationModel> = arrayListOf()
             (0 until 100).forEach { tempList.add(
                 ClassificationModel.Builder("uri_mock_${it}".toUri())
@@ -44,7 +38,7 @@ class IAProviderMockImp : IAProviderInterface {
             ) }
             return tempList
         }
-        fun classificationMock(): ClassificationModel = getClassificationList()[Random.nextInt(0, 100)]
+        fun classificationMock(): ClassificationModel = buildClassificationList()[Random.nextInt(0, 100)]
 
     }
     override suspend fun getClassificationFromInference(): ClassificationModel {

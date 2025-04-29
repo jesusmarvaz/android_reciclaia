@@ -9,9 +9,9 @@ Created with ❤ by jesusmarvaz on 2025-04-15.
  */
 
 class ClassificationModel private constructor(uri: Uri) {
-    val id: String = uri.toString().sha256(); private set
-    val uri: Uri = uri; private set
-    val predictions: ArrayList<ClassificationPrediction> = arrayListOf<ClassificationPrediction>(); private set
+    var id: String = uri.toString().sha256(); private set
+    var uri: Uri = uri; private set
+    var predictions: ArrayList<ClassificationPrediction> = arrayListOf<ClassificationPrediction>(); private set
     var model: ModelInfo? = null; private set
     var timestamp: Long? = null; private set
     var title: String? = null; private set

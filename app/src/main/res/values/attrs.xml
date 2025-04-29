@@ -5,12 +5,16 @@
     <attr name="isSeparatorVisible" format="boolean"/>
     <attr name="iconSrcId" format="integer"/>
     <attr name="iconSizeInDp" format="float"/>
+    <attr name="isEditable" format="boolean"/>
     <declare-styleable name="InfoIconTextView">
         <attr name="label"/>
         <attr name="itemDetail"/>
         <attr name="isSeparatorVisible"/>
         <attr name="iconSrcId"/>
         <attr name="iconSizeInDp"/>
+    </declare-styleable>
+    <declare-styleable name="ComposedVisor">
+        <attr name="isEditable"/>
     </declare-styleable>
 </resources>
 

@@ -9,7 +9,6 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="fontFamily">@font/comfortaa_regular</item>
     </style>
-
     <style name="BottomSheetDialogStyle" parent="ThemeOverlay.Material3.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/ModalBottomSheetDialog</item>
     </style>

@@ -37,6 +37,7 @@ abstract class CommonModule {
 object CommonModuleImplementation {
 
     @Provides
+    @Singleton
     fun provideLocalStorageProvider(@ApplicationContext context: Context): LocalStorageProvider {
         return LocalStorageProvider(context)
     }

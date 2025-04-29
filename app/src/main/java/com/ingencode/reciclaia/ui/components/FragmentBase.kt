@@ -18,7 +18,8 @@ abstract class FragmentBase : Fragment(), ILog {
     abstract fun initProperties()
     abstract fun getInflatedViewBinding(): ViewBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = getInflatedViewBinding().root
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+        getInflatedViewBinding().root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

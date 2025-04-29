@@ -29,8 +29,10 @@ class ImageVisorViewModel @Inject constructor(
     private val localDataBaseProvider: IClassificationRepository,
     private val classificationProvider: IAProviderInterface
 ) : ViewModelBase() {
-    private val _exportedSuccessfully: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
-    val exportedSuccessfully: LiveData<Boolean> = _exportedSuccessfully
+    private val _exportedSuccessfully: MutableLiveData<Unit> = MutableLiveData<Unit>()
+    val exportedSuccessfully: LiveData<Unit> = _exportedSuccessfully
+    private val _dataSavedSuccessfully: MutableLiveData<Unit> = MutableLiveData<Unit>()
+    val dataSavedSuccessfully: LiveData<Unit> = _dataSavedSuccessfully
     private val _classificationResult: MutableLiveData<SealedResult<ClassificationModel>> =
         MutableLiveData<SealedResult<ClassificationModel>>()
     val classificationResult: LiveData<SealedResult<ClassificationModel>> = _classificationResult
@@ -40,6 +42,14 @@ class ImageVisorViewModel @Inject constructor(
         _classificationResult.postValue(SealedResult.ResultSuccess<ClassificationModel>(model))
     }
 
+    fun processButtonPressed() {
+        loading.postValue(true)
+        viewModelScope.launch {
+            val result = classificationProvider.getClassificationFromInference()
+            _classificationResult.postValue(SealedResult.ResultSuccess<ClassificationModel>(result))
+            loading.postValue(false)
+        }
+    }
     fun getUriFromResult(): Uri? =
         (_classificationResult.value as? SealedResult.ResultSuccess<ClassificationModel>)?.data?.uri
 
@@ -52,11 +62,8 @@ class ImageVisorViewModel @Inject constructor(
                 if (uri != null) {
                     delay(1000)
                     val processedImage = ClassificationModel.Builder(uri).build()
-                    _classificationResult.postValue(
-                        SealedResult.ResultSuccess<ClassificationModel>(
-                            processedImage
-                        )
-                    )
+                    _classificationResult.postValue(SealedResult.ResultSuccess<ClassificationModel>(processedImage))
+                    _dataSavedSuccessfully.postValue(Unit)
                 } else {
                     _classificationResult.postValue(SealedResult.ResultError(SealedAppError.ProblemSavingImagesLocally()))
                 }
@@ -82,7 +89,7 @@ class ImageVisorViewModel @Inject constructor(
             delay(1000)
             val result = localStorageProvider.exportBitmapToNewFileInMediaStore(bitmap)
             if (result is SealedResult.ResultSuccess<Uri>) {
-                _exportedSuccessfully.postValue(true)
+                _exportedSuccessfully.postValue(Unit)
             } else if (result is SealedResult.ResultError) {
                 sealedError.postValue(result.error)
             }

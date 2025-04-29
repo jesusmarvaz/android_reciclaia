@@ -498,7 +498,7 @@ Edición del fichero `build.gradle.kts` a nivel de aplicación o módulo:
 
     dependencies {
         implementation(libs.hilt.android)
-        ksp(libs.hilt.compiler)
+        ksp(libs.hilt.copiler)
     }
 ```
 

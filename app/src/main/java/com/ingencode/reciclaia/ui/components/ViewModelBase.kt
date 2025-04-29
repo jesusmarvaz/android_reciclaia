@@ -26,6 +26,7 @@ abstract class ViewModelBase: ViewModel(), ILog {
             is SealedAppError.ConnectivityError -> {}
             is SealedAppError.WrongFormData -> {}
             is SealedAppError.ProblemSavingImagesLocally -> {}
+            is SealedAppError.LocalRepositoryError -> {}
         }
         Log.e(this.nameClass, "manageSealedError: ${sealedError.value?.nameClass}", )
     }

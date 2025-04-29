@@ -60,4 +60,14 @@
     <string name="scan">Procesar</string>
     <string name="exported_successfully">Imagen guardada en galería</string>
     <string name="error_with_the_image_saving">Error guardando la imagen...</string>
+    <string name="data_saved">Datos guardados</string>
+    <string name="title_of_capture">Título de la captura</string>
+    <string name="name_the_capture">Nombra tu captura</string>
+    <string name="title">Título</string>
+    <string name="description">Descripción</string>
+    <string name="process">Procesar</string>
+    <string name="save_data">Guardar datos captura</string>
+    <string name="save_image">Guardar imagen en galería</string>
+    <string name="classification_results">Resultados de la clasificación</string>
+    <string name="preditions">Predicciones (% precisión)</string>
 </resources>

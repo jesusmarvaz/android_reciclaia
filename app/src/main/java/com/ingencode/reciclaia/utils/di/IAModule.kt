@@ -18,3 +18,13 @@ abstract class IAModule {
     @Binds
     abstract fun bindsIAProvider(iaProvider: IAProviderMockImp): IAProviderInterface
 }
+
+/*@Module
+@InstallIn(SingletonComponent::class)
+object IAModuleImplementation {
+
+    @Provides
+    fun provideIAProvider(): IAProviderInterface {
+        return IAProviderMockImp()
+    }
+}*/

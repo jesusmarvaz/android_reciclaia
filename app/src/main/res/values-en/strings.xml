@@ -53,4 +53,14 @@
     <string name="scan">Process</string>
     <string name="exported_successfully">Image saved in gallery</string>
     <string name="error_with_the_image_saving">Error saving image</string>
+    <string name="data_saved">Data saved</string>
+    <string name="title_of_capture">Capture title</string>
+    <string name="name_the_capture">Name your capture</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="process">Process</string>
+    <string name="save_data">Save capture data</string>
+    <string name="save_image">Save pic in gallery</string>
+    <string name="classification_results">Classifications results</string>
+    <string name="preditions">Predicctions (% confidence)</string>
 </resources>

@@ -24,6 +24,10 @@ import com.ingencode.reciclaia.data.remote.dto.ErrorDTO
 import retrofit2.HttpException
 import java.io.Serializable
 import java.security.MessageDigest
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.util.Date
+import java.util.Locale
 import kotlin.math.roundToInt
 
 /**
@@ -256,6 +260,12 @@ fun AppCompatActivity.setFullScreenOff() {
 
 
 */
+
+fun Long.toFormattedStringDate(): String {
+    val pattern = "yyyy/MM/dd HH:mm:ss"
+    val formatter = SimpleDateFormat(pattern, Locale.getDefault())
+    return formatter.format(Date(this))
+}
 
 fun String.sha256(): String {
     return MessageDigest.getInstance("SHA-256")

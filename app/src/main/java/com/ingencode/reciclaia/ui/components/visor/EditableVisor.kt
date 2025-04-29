@@ -33,6 +33,10 @@ class EditableVisor: View {
     private val paint = Paint()
     private var imageRect: RectF? = null
     private var viewRect: RectF? = null
+
+    private var activePointerId = MotionEvent.INVALID_POINTER_ID
+    private var isScaling = false
+
     constructor(context: Context) : super(context) { init() }
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) { init() }
 
@@ -43,7 +47,18 @@ class EditableVisor: View {
     }
 
     private inner class ScaleListener : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {
+            isScaling = true
+            return super.onScaleBegin(detector)
+        }
+
+        override fun onScaleEnd(detector: ScaleGestureDetector) {
+            isScaling = false
+            super.onScaleEnd(detector)
+        }
+
         override fun onScale(detector: ScaleGestureDetector): Boolean {
+            if (!isEnabled) return false
             val scaleFactor = detector.scaleFactor
             matrix.postScale(scaleFactor, scaleFactor, detector.focusX, detector.focusY)
             invalidate()
@@ -51,34 +66,69 @@ class EditableVisor: View {
         }
     }
 
-    private inner class GestureListener : GestureDetector.SimpleOnGestureListener() { // GestureListener
+    private inner class GestureListener : GestureDetector.SimpleOnGestureListener() {
         override fun onDoubleTap(e: MotionEvent): Boolean {
             resetZoom()
             return true
         }
 
         override fun onSingleTapUp(e: MotionEvent): Boolean {
-            performClick()
-            return true
+            return false
         }
     }
 
     private inner class TouchListener : OnTouchListener {
         override fun onTouch(v: View, event: MotionEvent): Boolean {
+            if (!isEnabled) return false
             scaleGestureDetector.onTouchEvent(event)
             gestureDetector.onTouchEvent(event)
+
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     lastTouchX = event.x
                     lastTouchY = event.y
+                    activePointerId = event.getPointerId(0)
                 }
+
+                MotionEvent.ACTION_POINTER_DOWN -> {
+                    if (!isScaling) {
+                        val pointerIndex = event.actionIndex
+                        lastTouchX = event.getX(pointerIndex)
+                        lastTouchY = event.getY(pointerIndex)
+                        activePointerId = event.getPointerId(pointerIndex)
+                    }
+                }
+
                 MotionEvent.ACTION_MOVE -> {
-                    val dx = event.x - lastTouchX
-                    val dy = event.y - lastTouchY
-                    matrix.postTranslate(dx, dy)
-                    lastTouchX = event.x
-                    lastTouchY = event.y
-                    invalidate()
+                    val pointerIndex = event.findPointerIndex(activePointerId)
+                    if (pointerIndex == -1) return true
+
+                    val x = event.getX(pointerIndex)
+                    val y = event.getY(pointerIndex)
+
+                    if (!scaleGestureDetector.isInProgress) {
+                        val dx = x - lastTouchX
+                        val dy = y - lastTouchY
+                        matrix.postTranslate(dx, dy)
+                        invalidate()
+                    }
+
+                    lastTouchX = x
+                    lastTouchY = y
+                }
+
+                MotionEvent.ACTION_POINTER_UP -> {
+                    val pointerIndex = event.actionIndex
+                    val pointerId = event.getPointerId(pointerIndex)
+                    if (pointerId == activePointerId) {
+                        val newPointerIndex = if (pointerIndex == 0) 1 else 0
+                        lastTouchX = event.getX(newPointerIndex)
+                        lastTouchY = event.getY(newPointerIndex)
+                        activePointerId = event.getPointerId(newPointerIndex)
+                    }
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    activePointerId = MotionEvent.INVALID_POINTER_ID
                 }
             }
             performClick()
@@ -87,10 +137,11 @@ class EditableVisor: View {
     }
 
     private fun resetZoom() {
+        if (!isEnabled) return
         imageBitmap?.let { bitmap ->
             val scale: Float = min(width.toFloat() / bitmap.width, height.toFloat() / bitmap.height)
             matrix.reset()
-            matrix.postScale(scale, scale, width / 2f, height / 2f)
+            matrix.postScale(scale, scale)
             val scaledWidth = bitmap.width * scale
             val scaledHeight = bitmap.height * scale
             val dx = (width - scaledWidth) / 2f
@@ -101,6 +152,7 @@ class EditableVisor: View {
     }
 
     fun rotate(degrees: Float) {
+        if (!isEnabled) return
         val centerX = width / 2f
         val centerY = height / 2f
         matrix.postRotate(degrees, centerX, centerY)
@@ -112,19 +164,6 @@ class EditableVisor: View {
             .asBitmap()
             .load(uri)
             .into(object : CustomTarget<Bitmap>() {
-                /*override fun onResourceReady(
-                    resource: Bitmap,
-                    transition: Transition<in Bitmap>?
-                ) {
-                    imageBitmap = resource
-                    imageRect = RectF(0f, 0f, resource.width.toFloat(), resource.height.toFloat())
-                    viewRect = RectF(0f, 0f, width.toFloat(), height.toFloat())
-                    matrix = Matrix() // Reset matrix for the new image
-                    // Calculate initial scale to fit the image within the view.
-                    val scale: Float = min(width.toFloat() / resource.width, height.toFloat() / resource.height)
-                    matrix.postScale(scale, scale, width / 2f, height / 2f)
-                    invalidate()
-                }*/
 
                 override fun onResourceReady(
                     resource: Bitmap,
@@ -133,13 +172,9 @@ class EditableVisor: View {
                     imageBitmap = resource
                     imageRect = RectF(0f, 0f, resource.width.toFloat(), resource.height.toFloat())
                     viewRect = RectF(0f, 0f, width.toFloat(), height.toFloat())
-                    matrix = Matrix() // Reset matrix for the new image
-
-                    // Calculate initial scale to fit the image within the view.
+                    matrix = Matrix()
                     val scale: Float = min(width.toFloat() / resource.width, height.toFloat() / resource.height)
-                    matrix.postScale(scale, scale) // Scale without a pivot point
-
-                    // Calculate translation to center the scaled image.
+                    matrix.postScale(scale, scale)
                     val scaledWidth = resource.width * scale
                     val scaledHeight = resource.height * scale
                     val dx = (width - scaledWidth) / 2f
