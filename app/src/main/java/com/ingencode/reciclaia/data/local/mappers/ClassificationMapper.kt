@@ -1,5 +1,6 @@
 package com.ingencode.reciclaia.data.local.mappers
 
+import android.location.Location
 import androidx.core.net.toUri
 import com.ingencode.reciclaia.data.local.converters.ClassificationConverter
 import com.ingencode.reciclaia.data.local.entities.ClassificationEntity
@@ -10,7 +11,7 @@ Created with ❤ by jesusmarvaz on 2025-04-21.
  */
 
 fun ClassificationModel.toEntity(): ClassificationEntity {
-    return ClassificationEntity(id = this.id,
+    return ClassificationEntity(id = this.getShaID(),
         uri = this.uri.toString(),
         predictions = ClassificationConverter().fromPredictions(this.predictions)?: "",
         modelName = this.model?.modalName,
@@ -31,13 +32,8 @@ fun ClassificationEntity.toModel(): ClassificationModel {
     else
         ClassificationModel.ModelInfo(this.modelName!!, this.modelVersion)
 
-    val builder = ClassificationModel.Builder(
-        this.uri.toUri())
-        .predictions(conv.toPredictions(this.predictions) ?: arrayListOf())
-        .model(modelInfo)
-        .timestamp(this.timestamp)
-        .title(this.title)
-        .comments(this.comments)
-    if (this.latitude != null && this.longitude != null) builder.location(lat = this.latitude!!, long = this.longitude!!, provider = this.provider)
-    return builder.build()
+    val model = ClassificationModel(uri = this.uri.toUri(), predictions = conv.toPredictions(this.predictions) ?: arrayListOf(),
+        model = modelInfo, timestamp = this.timestamp, title = this.title, comments = this.comments,
+        location = Location(this.provider).apply { latitude = this.latitude; longitude = this.longitude })
+    return model
 }

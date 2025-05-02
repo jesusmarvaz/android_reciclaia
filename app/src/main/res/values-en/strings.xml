@@ -40,7 +40,7 @@
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
     <string name="confirm_action">Confirm action</string>
-    <string name="want_saving">Want to save the current image?</string>
+    <string name="want_saving">Want to save the current data?</string>
     <string name="cancelled">Cancelled...</string>
     <string name="want_sharing_to_local_media">Do you want to save the pic in the gallery?</string>
     <string name="saved_successfully">Saved!</string>
@@ -61,6 +61,10 @@
     <string name="process">Process</string>
     <string name="save_data">Save capture data</string>
     <string name="save_image">Save pic in gallery</string>
-    <string name="classification_results">Classifications results</string>
-    <string name="preditions">Predicctions (% confidence)</string>
+    <string name="classification_result">Classification result</string>
+    <string name="preditions">Predicctions</string>
+    <string name="classification_information">Classification information</string>
+    <string name="model_info">Model info</string>
+    <string name="location">Location</string>
+    <string name="datetime">Date and time</string>
 </resources>

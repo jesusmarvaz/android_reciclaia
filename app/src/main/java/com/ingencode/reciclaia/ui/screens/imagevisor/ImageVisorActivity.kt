@@ -1,6 +1,8 @@
 package com.ingencode.reciclaia.ui.screens.imagevisor
 
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
 import android.view.Menu
 import android.view.MenuItem
@@ -8,17 +10,23 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
 import com.ingencode.reciclaia.R
 import com.ingencode.reciclaia.data.remote.api.SealedResult
 import com.ingencode.reciclaia.databinding.ActivityImagevisorBinding
 import com.ingencode.reciclaia.domain.model.ClassificationModel
+import com.ingencode.reciclaia.domain.model.predictionsToText
+import com.ingencode.reciclaia.domain.model.toText
 import com.ingencode.reciclaia.ui.components.ActivityBaseForViewmodel
 import com.ingencode.reciclaia.ui.components.ViewModelBase
 import com.ingencode.reciclaia.ui.components.dialogs.AlertHelper
 import com.ingencode.reciclaia.utils.SealedAppError
+import com.ingencode.reciclaia.utils.getThemeColor
 import com.ingencode.reciclaia.utils.nameClass
+import com.ingencode.reciclaia.utils.toFormattedStringDate
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -35,12 +43,29 @@ class ImageVisorActivity : ActivityBaseForViewmodel() {
         viewModel.setUri(uri)
         binding.apply {
             topAppBar.setNavigationOnClickListener { goBack() }
+            tvPredictionValue.isSelected = true
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val primaryColor = getThemeColor(android.R.attr.colorPrimary)
         menuInflater.inflate(R.menu.visor_menu, menu)
+        val processItem = menu?.findItem(R.id.item_process) ?: return false
+        tintMenuItemIcon(processItem, primaryColor)
+
+        // Tint the "save_data" icon
+        val saveDataItem = menu.findItem(R.id.item_save_data) ?: return false
+        tintMenuItemIcon(saveDataItem, primaryColor)
         return true
+    }
+
+    private fun tintMenuItemIcon(menuItem: MenuItem, color: Int) {
+        val drawable = menuItem.icon
+        if (drawable != null) {
+            val wrappedDrawable = DrawableCompat.wrap(drawable).mutate()
+            DrawableCompat.setTint(wrappedDrawable, color)
+            menuItem.icon = wrappedDrawable
+        }
     }
 
 
@@ -55,7 +80,9 @@ class ImageVisorActivity : ActivityBaseForViewmodel() {
             R.id.item_process -> { viewModel.processButtonPressed(); true}
             R.id.item_save_data -> {
                 bitmap?.let {
-                    askSavingClassificationData(it)
+                    askSavingClassificationData(it, binding.title.text.toString(),
+                        binding.comments.text.toString()
+                    )
                     return true
                 }?: actionError.invoke()
             }
@@ -74,11 +101,32 @@ class ImageVisorActivity : ActivityBaseForViewmodel() {
         return binding
     }
 
+    private fun classificationResultsVisibility(areVisible: Boolean) {
+        val visibility = if(areVisible) View.VISIBLE else View.GONE
+        binding.cvClassificationResults.visibility = visibility
+        binding.cvClassificationInfo.visibility = visibility
+    }
+
     override fun observeVM() {
         with(viewModel) {
             classificationResult.observe(this@ImageVisorActivity) {
-                val uri = getUriFromResult()
+                val uri = getUriFromResult(it)
                 if (it != null && uri != null) binding.composedVisor.apply { setImageUri(uri) }
+                getClassificationFromResult(it)?.let {
+                    classificationResultsVisibility(it.topPrediction != null)
+                    binding.tvPredictionValue.text = it.topPrediction?.toText()
+                    binding.tvModelValue.text = it.model?.toText()
+                    binding.tvPredictionsExtendedValue.text = it.predictionsToText()
+                    binding.title.setText(it.title)
+                    binding.comments.setText(it.comments)
+                    binding.tvDatetimeValue.text = it.timestamp?.toFormattedStringDate()
+                    val colorBackground = viewModel.getClassificationBackgroundColor(this@ImageVisorActivity)
+                    val colorText = viewModel.getClassificationTextColor(this@ImageVisorActivity)
+                    if (colorBackground != null && colorText != null) {
+                        binding.clClassificationResult.backgroundTintList = ColorStateList.valueOf(colorBackground)
+                        binding.tvPredictionValue.setTextColor(colorText)
+                    }
+                }
             }
 
             this.observableSealedError().observe(this@ImageVisorActivity) {
@@ -121,11 +169,11 @@ class ImageVisorActivity : ActivityBaseForViewmodel() {
         }
     }
 
-    fun askSavingClassificationData(bitmap: Bitmap) {
+    fun askSavingClassificationData(bitmap: Bitmap, title: String? = null, comments: String? = null) {
         val title = getString(R.string.confirm_action)
         val message = getString(R.string.want_saving)
         AlertHelper.Dialog.Builder(this, title, message) {
-            viewModel.savedButtonPressed(bitmap)
+            viewModel.savedButtonPressed(bitmap, title, comments)
         }
             .setNegativeText(getString(R.string.cancel))
             .setNegativeAction { Toast.makeText(this, getString(R.string.cancelled), Toast.LENGTH_SHORT).show() }

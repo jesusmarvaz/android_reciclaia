@@ -6,11 +6,12 @@
         android:icon="@drawable/play"
         android:title="@string/process"
         app:showAsAction="always"
-        android:iconTint="@color/purple_200"/>
+        android:iconTint="?attr/colorPrimary"/>
     <item
         android:id="@+id/item_save_data"
         android:icon="@drawable/round_save_24"
         android:title="@string/save_data"
+        android:iconTint="?attr/colorPrimary"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/item_save_pic"

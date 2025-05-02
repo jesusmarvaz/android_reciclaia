@@ -11,4 +11,15 @@
     <color name="background">#d9d9d9</color>
     <color name="transparent">#00000000</color>
     <color name="translucent">#bfeeeeee</color>
+
+    <color name="confidence_25">#7b241c</color>
+    <color name="confidence_25_background">#e6b0aa</color>
+    <color name="confidence_50">#af601a</color>
+    <color name="confidence_50_background">#edbb99</color>
+    <color name="confidence_70">#b7950b</color>
+    <color name="confidence_70_background">#f9e79f</color>
+    <color name="confidence_85">#196f3d</color>
+    <color name="confidence_85_background">#a9dfbf</color>
+    <color name="confidence_100">#00838f</color>
+    <color name="confidence_100_background">#80deea</color>
 </resources>

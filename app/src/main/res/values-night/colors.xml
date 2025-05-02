@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="confidence_25">#e6b0aa</color>
+    <color name="confidence_50">#edbb99</color>
+    <color name="confidence_70">#f9e79f</color>
+    <color name="confidence_85">#a9dfbf</color>
+    <color name="confidence_100">#80deea</color>
+
+    <color name="confidence_25_background">#7b241c</color>
+    <color name="confidence_50_background">#af601a</color>
+    <color name="confidence_70_background">#b7950b</color>
+    <color name="confidence_85_background">#196f3d</color>
+    <color name="confidence_100_background">#00838f</color>
+</resources>

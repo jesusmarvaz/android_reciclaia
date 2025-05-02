@@ -45,7 +45,7 @@
     <string name="ok">Ok</string>
     <string name="cancel">Cancelar</string>
     <string name="confirm_action">Confirmar acción</string>
-    <string name="want_saving">¿Quieres guardar la captura actual en tu lista?</string>
+    <string name="want_saving">¿Quieres guardar los datos actuales?</string>
     <string name="cancelled">Cancelado...</string>
     <string name="back_icon" translatable="false">back_icon</string>
     <string name="saves_image" translatable="false">saves_image</string>
@@ -68,6 +68,11 @@
     <string name="process">Procesar</string>
     <string name="save_data">Guardar datos captura</string>
     <string name="save_image">Guardar imagen en galería</string>
-    <string name="classification_results">Resultados de la clasificación</string>
-    <string name="preditions">Predicciones (% precisión)</string>
+    <string name="classification_result">Resultado de la clasificación</string>
+    <string name="preditions">Predicciones</string>
+    <string name="classification_information">Información de la clasificación</string>
+    <string name="model_info">Info del modelo</string>
+    <string name="location">Ubicación</string>
+    <string name="location_icon" translatable="false">location_icon</string>
+    <string name="datetime">Fecha y hora</string>
 </resources>

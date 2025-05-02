@@ -12,14 +12,14 @@
         android:background="@color/translucent"
         android:visibility="gone"
         tools:visibility="visible"
-        android:elevation="7dp"/>
+        android:elevation="3dp"/>
     <ProgressBar
         android:id="@+id/progressBarBase"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
         tools:visibility="visible"
-        android:elevation="8dp"
+        android:elevation="4dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -1,5 +1,7 @@
 package com.ingencode.reciclaia.data.repositories
 
+import android.location.Location
+import android.net.Uri
 import androidx.core.net.toUri
 import com.ingencode.reciclaia.domain.model.ClassificationModel
 import kotlinx.coroutines.delay
@@ -11,7 +13,7 @@ Created with ❤ by jesusmarvaz on 2025-04-23.
  */
 
 interface IAProviderInterface {
-    suspend fun getClassificationFromInference(): ClassificationModel
+    suspend fun getClassificationFromInference(uri: Uri): ClassificationModel
 }
 
 class IAProviderMockImp @Inject constructor() : IAProviderInterface {
@@ -23,27 +25,22 @@ class IAProviderMockImp @Inject constructor() : IAProviderInterface {
             }
             return tempClassificationList
         }
-        private val classificationList: ArrayList<ClassificationModel> by lazy(::buildClassificationList)
-        private fun buildClassificationList(): ArrayList<ClassificationModel> {
+        private fun buildClassificationList(uri: Uri): ArrayList<ClassificationModel> {
             val tempList: ArrayList<ClassificationModel> = arrayListOf()
             (0 until 100).forEach { tempList.add(
-                ClassificationModel.Builder("uri_mock_${it}".toUri())
-                    .predictions(getPredictionList(Random.nextInt(0,5)))
-                    .title(title = "title_${it}")
-                    .comments(comments = "comments_${it}")
-                    .location(Random.nextDouble(), Random.nextDouble(), "providerRandom:${Random.nextInt(0,1000)}")
-                    .timestamp(System.currentTimeMillis())
-                    .model(ClassificationModel.ModelInfo("mock_model(no model)"))
-                    .build()
+                ClassificationModel(uri = uri, predictions = getPredictionList(Random.nextInt(0,5)),
+                    model = ClassificationModel.ModelInfo("mock_model", "4.5.6"), timestamp = System.currentTimeMillis(),
+                    title = "title_$it", comments = "comments_$it", location = Location("providerRandom:$Random").apply {
+                        latitude = Random.nextDouble(-90.0, 90.0); longitude = Random.nextDouble(-180.0, 180.0) })
             ) }
             return tempList
         }
-        fun classificationMock(): ClassificationModel = buildClassificationList()[Random.nextInt(0, 100)]
+        fun classificationMock(uri: Uri): ClassificationModel = buildClassificationList(uri)[Random.nextInt(0, 100)]
 
     }
-    override suspend fun getClassificationFromInference(): ClassificationModel {
+    override suspend fun getClassificationFromInference(uri: Uri): ClassificationModel {
         delay(2000)
-        return classificationMock()
+        return classificationMock(uri)
     }
 }
 

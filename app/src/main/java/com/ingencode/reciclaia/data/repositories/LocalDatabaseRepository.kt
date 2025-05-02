@@ -17,7 +17,7 @@ interface IClassificationRepository {
     fun getAllProcessedImages(): List<ClassificationModel>
     fun deleteAllProcessedImages(): Int
     fun deleteById(id:Int): Int
-    fun updateProcessedImageById(model: ClassificationModel)
+    fun updateProcessedImage(model: ClassificationModel)
 }
 
 class ClassificationRepositoryImpl @Inject constructor(private val classificationDao: ClassificationDao): IClassificationRepository {
@@ -39,6 +39,6 @@ class ClassificationRepositoryImpl @Inject constructor(private val classificatio
     override fun deleteById(id: Int): Int =
         classificationDao.deleteById(id)
 
-    override fun updateProcessedImageById(model: ClassificationModel) =
+    override fun updateProcessedImage(model: ClassificationModel) =
         classificationDao.update(model.toEntity())
 }

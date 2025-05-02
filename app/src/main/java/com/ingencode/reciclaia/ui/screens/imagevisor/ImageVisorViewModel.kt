@@ -1,10 +1,13 @@
 package com.ingencode.reciclaia.ui.screens.imagevisor
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.ingencode.reciclaia.R
 import com.ingencode.reciclaia.data.remote.api.SealedResult
 import com.ingencode.reciclaia.data.repositories.IAProviderInterface
 import com.ingencode.reciclaia.data.repositories.IClassificationRepository
@@ -14,6 +17,7 @@ import com.ingencode.reciclaia.ui.components.ViewModelBase
 import com.ingencode.reciclaia.utils.SealedAppError
 import com.ingencode.reciclaia.utils.nameClass
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -38,48 +42,90 @@ class ImageVisorViewModel @Inject constructor(
     val classificationResult: LiveData<SealedResult<ClassificationModel>> = _classificationResult
 
     fun setUri(uri: Uri) {
-        val model = ClassificationModel.Builder(uri).build()
-        _classificationResult.postValue(SealedResult.ResultSuccess<ClassificationModel>(model))
+        if(getClassificationFromResult(_classificationResult.value)?.uri == null) {
+            val model = ClassificationModel(uri = uri)
+            _classificationResult.postValue(SealedResult.ResultSuccess<ClassificationModel>(model))
+        }
+    }
+
+    fun getClassificationBackgroundColor(context: Context): Int? {
+        val topPrediction = getClassificationFromResult(_classificationResult.value)?.topPrediction
+        if (topPrediction == null) return null
+        val c = topPrediction.confidence
+        val backgroundColor =  when {
+            (c < 0.25 && c >= 0) -> { R.color.confidence_25_background }
+            (c >= 0.25 && c < 0.5) -> { R.color.confidence_50_background }
+            (c >= 0.5 && c < 0.7) -> { R.color.confidence_70_background }
+            (c >= 0.7 && c < 0.85) -> { R.color.confidence_85_background }
+            (c >= 0.85 && c <= 1 ) -> { R.color.confidence_100_background }
+            else -> null
+        }
+        if (backgroundColor == null) return null
+        return ContextCompat.getColor(context, backgroundColor)
+    }
+
+    fun getClassificationTextColor(context: Context): Int? {
+        val topPrediction = getClassificationFromResult(_classificationResult.value)?.topPrediction
+        if (topPrediction == null) return null
+        val c = topPrediction.confidence
+        val textColor =  when {
+            (c < 0.25 && c >= 0) -> { R.color.confidence_25 }
+            (c >= 0.25 && c < 0.5) -> { R.color.confidence_50 }
+            (c >= 0.5 && c < 0.7) -> { R.color.confidence_70 }
+            (c >= 0.7 && c < 0.85) -> { R.color.confidence_85 }
+            (c >= 0.85 && c <= 1 ) -> { R.color.confidence_100 }
+            else -> null
+        }
+        if (textColor == null) return null
+        return ContextCompat.getColor(context, textColor)
     }
 
     fun processButtonPressed() {
         loading.postValue(true)
         viewModelScope.launch {
-            val result = classificationProvider.getClassificationFromInference()
-            _classificationResult.postValue(SealedResult.ResultSuccess<ClassificationModel>(result))
+            getUriFromResult(_classificationResult.value)?.let {
+                val result = classificationProvider.getClassificationFromInference(it)
+                _classificationResult.postValue(SealedResult.ResultSuccess<ClassificationModel>(result))
+            }
             loading.postValue(false)
         }
     }
-    fun getUriFromResult(): Uri? =
-        (_classificationResult.value as? SealedResult.ResultSuccess<ClassificationModel>)?.data?.uri
 
-    fun savedButtonPressed(bitmap: Bitmap) {
-        val uri: Uri? = getUriFromResult()
+    fun getClassificationFromResult(result: SealedResult<ClassificationModel>?): ClassificationModel? {
+        return (result as? SealedResult.ResultSuccess<ClassificationModel>)?.data
+    }
+
+    fun getUriFromResult(result: SealedResult<ClassificationModel>?): Uri? = getClassificationFromResult(result)?.uri
+
+
+    fun savedButtonPressed(bitmap: Bitmap, title: String? = null, comments: String? = null) {
+        val classification = getClassificationFromResult(_classificationResult.value)
+        val uri: Uri? = classification?.uri
         uri?.let {
             loading.postValue(true)
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 val uri = localStorageProvider.saveCroppedImage(bitmap, it)
                 if (uri != null) {
                     delay(1000)
-                    val processedImage = ClassificationModel.Builder(uri).build()
-                    _classificationResult.postValue(SealedResult.ResultSuccess<ClassificationModel>(processedImage))
+                    if (classification.predictions.isEmpty())
+                    {
+                        val classification = ClassificationModel(uri = uri, title = title, comments = comments)
+                        _classificationResult.postValue(SealedResult.ResultSuccess<ClassificationModel>(classification))
+                    } else {
+                        getClassificationFromResult(_classificationResult.value)?.also {
+                            it.uri = uri
+                            it.title = title
+                            it.comments = comments
+                        }
+                    }
+
+                    localDataBaseProvider.updateProcessedImage(getClassificationFromResult(_classificationResult.value)!!)
                     _dataSavedSuccessfully.postValue(Unit)
                 } else {
                     _classificationResult.postValue(SealedResult.ResultError(SealedAppError.ProblemSavingImagesLocally()))
                 }
                 loading.postValue(false)
             }
-        }
-    }
-
-    fun classifyButtonPressed(bitmap: Bitmap) {
-        viewModelScope.launch {
-            val classification = classificationProvider.getClassificationFromInference()
-            _classificationResult.postValue(
-                SealedResult<ClassificationModel>.ResultSuccess(
-                    classification
-                )
-            )
         }
     }
 

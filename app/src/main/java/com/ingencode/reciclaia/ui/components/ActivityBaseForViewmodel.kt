@@ -24,10 +24,10 @@ abstract class ActivityBaseForViewmodel(): AppCompatActivity(), IViewBase, ILog 
         super.onCreate(savedInstanceState)
         setContentView(getInflatedViewBinding().root)
         initProperties()
-        observeVM()
-        observeViewModelBase()
         val theme = settingsViewModel.getThemeMode()
         applyTheme(theme)
+        observeVM()
+        observeViewModelBase()
     }
 
     override fun theTag(): String = getTheTag()
