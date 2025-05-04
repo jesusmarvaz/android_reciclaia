@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.core.net.toUri
 import com.ingencode.reciclaia.domain.model.ClassificationModel
 import kotlinx.coroutines.delay
+import java.lang.IllegalArgumentException
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -40,7 +41,9 @@ class IAProviderMockImp @Inject constructor() : IAProviderInterface {
     }
     override suspend fun getClassificationFromInference(uri: Uri): ClassificationModel {
         delay(2000)
-        return classificationMock(uri)
+        val classification = classificationMock(uri)
+        if (classification.predictions.isEmpty()) throw IllegalArgumentException("no prediction")
+        return classification
     }
 }
 

@@ -75,4 +75,5 @@
     <string name="location">Ubicación</string>
     <string name="location_icon" translatable="false">location_icon</string>
     <string name="datetime">Fecha y hora</string>
+    <string name="not_classified_yet">¡No hay resultado de clasificación\n pulsa en procesar!</string>
 </resources>

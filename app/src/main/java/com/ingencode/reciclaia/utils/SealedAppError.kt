@@ -23,4 +23,5 @@ sealed class SealedAppError(val message: String? = null) : ISealedError {
     class ConnectivityError() : SealedAppError()
     class ProblemSavingImagesLocally(message: String? = null): SealedAppError(message)
     class LocalRepositoryError(message: String? = null): SealedAppError(message)
+    class InferenceError(message: String? = null): SealedAppError(message)
 }

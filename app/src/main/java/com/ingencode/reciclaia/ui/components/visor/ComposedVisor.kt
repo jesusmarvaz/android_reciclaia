@@ -27,6 +27,10 @@ class ComposedVisor: ConstraintLayout {
     private lateinit var clockWiseButton: ImageButton
     private lateinit var counterClockWiseButton: ImageButton
     var isEditable: Boolean = true
+        set(value) {
+            editableVisor.isEnabled = value
+            field = value
+        }
 
     private fun initialize(attrs: AttributeSet?) {
         val li = LayoutInflater.from(context)
@@ -34,10 +38,10 @@ class ComposedVisor: ConstraintLayout {
         editableVisor = findViewById<EditableVisor>(R.id.editable_visor)
 
         clockWiseButton = findViewById<ImageButton>(R.id.iv_clockwise)
-        clockWiseButton.setOnClickListener { rotate(RotationMode.Clockwise) }
+        clockWiseButton.setOnClickListener { if (isEditable) rotate(RotationMode.Clockwise) }
 
         counterClockWiseButton = findViewById<ImageButton>(R.id.iv_counterclockwise)
-        counterClockWiseButton.setOnClickListener { rotate(RotationMode.Counterclockwise) }
+        counterClockWiseButton.setOnClickListener { if (isEditable) rotate(RotationMode.Counterclockwise) }
 
         if (attrs == null) return
 

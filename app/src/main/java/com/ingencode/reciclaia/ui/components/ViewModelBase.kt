@@ -1,6 +1,7 @@
 package com.ingencode.reciclaia.ui.components
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,6 +28,7 @@ abstract class ViewModelBase: ViewModel(), ILog {
             is SealedAppError.WrongFormData -> {}
             is SealedAppError.ProblemSavingImagesLocally -> {}
             is SealedAppError.LocalRepositoryError -> {}
+            is SealedAppError.InferenceError -> { }
         }
         Log.e(this.nameClass, "manageSealedError: ${sealedError.value?.nameClass}", )
     }

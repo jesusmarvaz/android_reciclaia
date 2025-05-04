@@ -17,13 +17,13 @@ interface ClassificationDao {
     @Insert
     fun insertAll(list: List<ClassificationEntity>)
     @Query("SELECT * FROM ClassificationEntity WHERE id = :id")
-    fun getById(id:Int): ClassificationEntity
+    fun getById(id: String): ClassificationEntity
     @Query("SELECT * FROM ClassificationEntity")
     fun getAll(): List<ClassificationEntity>
     @Query("DELETE FROM ClassificationEntity")
     fun deleteAll(): Int
     @Query("DELETE FROM ClassificationEntity WHERE id =:id")
-    fun deleteById(id:Int): Int
+    fun deleteById(id: String): Int
     @Update
     fun update(processedImage: ClassificationEntity)
 }

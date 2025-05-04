@@ -67,4 +67,5 @@
     <string name="model_info">Model info</string>
     <string name="location">Location</string>
     <string name="datetime">Date and time</string>
+    <string name="not_classified_yet">No classification result\n Click process button!</string>
 </resources>

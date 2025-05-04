@@ -13,10 +13,10 @@ Created with ❤ by jesusmarvaz on 2025-04-20.
 interface IClassificationRepository {
     fun insert(model: ClassificationModel)
     fun insertAll(list: List<ClassificationModel>)
-    fun getClassificationsById(id:Int): ClassificationModel
+    fun getClassificationsById(id:String): ClassificationModel
     fun getAllProcessedImages(): List<ClassificationModel>
     fun deleteAllProcessedImages(): Int
-    fun deleteById(id:Int): Int
+    fun deleteById(id:String): Int
     fun updateProcessedImage(model: ClassificationModel)
 }
 
@@ -27,7 +27,7 @@ class ClassificationRepositoryImpl @Inject constructor(private val classificatio
     override fun insertAll(list: List<ClassificationModel>) =
         classificationDao.insertAll(list.map { it.toEntity() })
 
-    override fun getClassificationsById(id: Int): ClassificationModel =
+    override fun getClassificationsById(id: String): ClassificationModel =
         classificationDao.getById(id).toModel()
 
     override fun getAllProcessedImages(): List<ClassificationModel> =
@@ -36,7 +36,7 @@ class ClassificationRepositoryImpl @Inject constructor(private val classificatio
     override fun deleteAllProcessedImages(): Int =
         classificationDao.deleteAll()
 
-    override fun deleteById(id: Int): Int =
+    override fun deleteById(id: String): Int =
         classificationDao.deleteById(id)
 
     override fun updateProcessedImage(model: ClassificationModel) =
