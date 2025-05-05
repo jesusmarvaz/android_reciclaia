@@ -24,6 +24,7 @@ interface ISettingsRepository {
     fun getIsLocationEnabled(): Boolean
 
     fun getLocationAvailability(): Boolean
+    fun checkCameraPermission(): Boolean
 
     companion object {
         const val dark = "dark"
@@ -91,6 +92,10 @@ class SettingsRepository @Inject constructor(@ApplicationContext val context: Co
             context,
             Manifest.permission.ACCESS_COARSE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun checkCameraPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
     }
 
     //It is not necessary for now use Coroutine Flows

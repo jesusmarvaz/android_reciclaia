@@ -87,7 +87,7 @@ class LocalStorageProvider @Inject constructor(@ApplicationContext private val c
     }
 
     private fun saveBitmapToAppStorage(context: Context, bitmap: Bitmap, fileName: String): Uri? {
-        val directory: File? = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "ReciclaIA")
+        val directory: File? = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "reciclaia")
         if (directory != null) {
             if (!directory.exists()) directory.mkdirs()
             val file = File(directory, fileName)
