@@ -7,14 +7,21 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import androidx.core.content.FileProvider
 import androidx.core.graphics.scale
+import androidx.exifinterface.media.ExifInterface
 import com.ingencode.reciclaia.data.remote.api.SealedResult
 import com.ingencode.reciclaia.utils.SealedAppError
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.io.InputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.UUID
 import javax.inject.Inject
+import kotlin.math.abs
 
 /**
 Created with ❤ by jesusmarvaz on 2025-04-11.
@@ -25,6 +32,67 @@ class LocalStorageProvider @Inject constructor(@ApplicationContext private val c
     companion object {
         const val PREFIX_SAVED_LOCALLY_PROCESSED_IMAGE = "recicla_ia_processed_image_"
         const val PREFIX_EXPORTED_PROCESSED_IMAGE = "recicla_ia_exported_processed_image_"
+    }
+
+    fun getImageLocation(imageUri: Uri): Pair<Double, Double>? {
+        var inputStream: InputStream? = null
+        try {
+            inputStream = context.contentResolver.openInputStream(imageUri) ?: return null
+            val exifInterface = ExifInterface(inputStream)
+            val latLong = exifInterface.latLong ?: return null
+
+            val latitude = latLong[0]
+            val longitude = latLong[1]
+
+            if(abs(latitude) > 90 || abs(longitude) > 180) return null
+
+            return latitude to longitude
+        } catch (e: IOException) {
+            Log.e("getLatLongFromImage", "Error reading EXIF data: ${e.message}")
+            return null
+        } finally {
+            try {
+                inputStream?.close()
+            } catch (e: IOException) {
+                Log.e("getLatLongFromImage", "Error closing stream: ${e.message}")
+            }
+        }
+    }
+
+    fun getUriForCamera(): Uri? {
+        val photoFile: File = createImageFile(context) ?: return null
+        val authority = "${context.packageName}.fileprovider"
+        val uri = FileProvider.getUriForFile(context, authority, photoFile)
+        return uri
+    }
+
+    private fun createImageFile(context: Context): File? {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss",
+            java.util.Locale.getDefault()).format(Date())
+        // Use UUID to avoid the file exists
+        val uniqueId = UUID.randomUUID().toString()
+        val fileName = "camera_temp_file_${timeStamp}_${uniqueId}.jpg"
+
+        val storageDir: File? = context.filesDir.resolve("Pictures") // Use internal files directory
+        // Create the storage directory if it does not exist
+        if (!storageDir?.exists()!!) {
+            val success = storageDir.mkdirs()
+            if (!success) {
+                Log.e("createImageFile", "Failed to create storage directory.")
+                return null
+            }
+        }
+
+        return try {
+            val imageFile = File(storageDir, fileName)
+            // Log file location
+            Log.d("createImageFile", "Temporary image file created at: ${imageFile.absolutePath}")
+            imageFile
+        } catch (ex: IOException) {
+            // Error occurred while creating the File
+            Log.e("createImageFile", "Error creating temporary image file: ${ex.message}")
+            null
+        }
     }
 
     private fun isAppUri(uri: Uri): Boolean {

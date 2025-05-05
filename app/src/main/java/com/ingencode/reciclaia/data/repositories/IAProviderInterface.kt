@@ -1,11 +1,9 @@
 package com.ingencode.reciclaia.data.repositories
 
-import android.location.Location
 import android.net.Uri
-import androidx.core.net.toUri
 import com.ingencode.reciclaia.domain.model.ClassificationModel
+import com.ingencode.reciclaia.domain.model.ClassificationModel.ClassificationData
 import kotlinx.coroutines.delay
-import java.lang.IllegalArgumentException
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -14,7 +12,7 @@ Created with ❤ by jesusmarvaz on 2025-04-23.
  */
 
 interface IAProviderInterface {
-    suspend fun getClassificationFromInference(uri: Uri): ClassificationModel
+    suspend fun getClassificationFromInference(uri: Uri): ClassificationData
 }
 
 class IAProviderMockImp @Inject constructor() : IAProviderInterface {
@@ -26,20 +24,18 @@ class IAProviderMockImp @Inject constructor() : IAProviderInterface {
             }
             return tempClassificationList
         }
-        private fun buildClassificationList(uri: Uri): ArrayList<ClassificationModel> {
-            val tempList: ArrayList<ClassificationModel> = arrayListOf()
+        private fun buildClassificationList(uri: Uri): ArrayList<ClassificationData> {
+            val tempList: ArrayList<ClassificationData> = arrayListOf()
             (0 until 100).forEach { tempList.add(
-                ClassificationModel(uri = uri, predictions = getPredictionList(Random.nextInt(0,5)),
-                    model = ClassificationModel.ModelInfo("mock_model", "4.5.6"), timestamp = System.currentTimeMillis(),
-                    title = "title_$it", comments = "comments_$it", location = Location("providerRandom:$Random").apply {
-                        latitude = Random.nextDouble(-90.0, 90.0); longitude = Random.nextDouble(-180.0, 180.0) })
-            ) }
+                ClassificationData(predictions = getPredictionList(Random.nextInt(0,5)),
+                    model = ClassificationModel.ModelInfo("mock_model", "4.5.6"), timestamp = System.currentTimeMillis())
+            )}
             return tempList
         }
-        fun classificationMock(uri: Uri): ClassificationModel = buildClassificationList(uri)[Random.nextInt(0, 100)]
+        fun classificationMock(uri: Uri): ClassificationData = buildClassificationList(uri)[Random.nextInt(0, 100)]
 
     }
-    override suspend fun getClassificationFromInference(uri: Uri): ClassificationModel {
+    override suspend fun getClassificationFromInference(uri: Uri): ClassificationData {
         delay(2000)
         val classification = classificationMock(uri)
         if (classification.predictions.isEmpty()) throw IllegalArgumentException("no prediction")

@@ -1,10 +1,7 @@
 package com.ingencode.reciclaia.domain.model
 
 import android.content.Context
-import android.location.Location
 import android.net.Uri
-import android.os.Parcel
-import android.os.Parcelable
 import android.util.Log
 import com.ingencode.reciclaia.utils.sha256
 import java.io.Serializable
@@ -49,22 +46,26 @@ Created with ❤ by jesusmarvaz on 2025-04-15.
 
 data class ClassificationModel(
     var uri: Uri,
-    var predictions: ArrayList<ClassificationPrediction> = arrayListOf<ClassificationPrediction>(),
-    var model: ModelInfo? = null,
-    var timestamp: Long? = null,
+    var classificationData: ClassificationData? = null,
     var title: String? = null,
     var comments: String? = null,
-    var location: Location? = null
+    var location: ClassificationModel.Location? = null, //latitude, longitude
 ) : Serializable {
 
     fun getShaID() = uri.toString().sha256()
-    val topPrediction: ClassificationPrediction?
-        get() = predictions.maxByOrNull { it.confidence }
-
-    fun addPrediction(prediction: ClassificationPrediction) = this.predictions.add(prediction)
 
     data class ClassificationPrediction(val label: String, val confidence: Float) : Serializable
+    data class ClassificationData(
+        var predictions: ArrayList<ClassificationPrediction> = arrayListOf<ClassificationPrediction>(),
+        var model: ModelInfo? = null,
+        var timestamp: Long? = null
+    ) : Serializable {
+        val topPrediction: ClassificationPrediction?
+            get() = predictions.maxByOrNull { it.confidence }
+    }
+
     data class ModelInfo(val modalName: String, val modelVersion: String? = null) : Serializable
+    data class Location(val latitude: Double, val longitude: Double) : Serializable
 
 }
 
@@ -77,7 +78,7 @@ fun ClassificationModel.ModelInfo.toText(): String {
     return "$modalName${if (!modelVersion.isNullOrEmpty()) " | version:$modelVersion" else ""}"
 }
 
-fun ClassificationModel.predictionsToText(): String {
+fun ClassificationModel.ClassificationData.predictionsToText(): String {
     if (predictions.isEmpty()) return ""
     var predictionsText = StringBuffer()
     predictions.forEachIndexed { index, prediction ->
@@ -100,7 +101,8 @@ fun ClassificationModel.isAppUri(context: Context): Boolean {
                 context.cacheDir,
                 context.noBackupFilesDir
             )
-            val externalFilesDir = context.getExternalFilesDir(null) // Or a more specific type, if needed
+            val externalFilesDir =
+                context.getExternalFilesDir(null) // Or a more specific type, if needed
 
             if (internalDirs.any { path.startsWith(it?.absolutePath ?: "") }) {
                 Log.d("UriCheck", "Uri points to app's internal storage: $uri")

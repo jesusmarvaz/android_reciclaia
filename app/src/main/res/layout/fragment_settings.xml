@@ -234,7 +234,7 @@
                         android:id="@+id/checkbox_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/enable_location_in_new_captions"
+                        android:text="@string/enable_location_in_captions"
                         android:textSize="11sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_location_inclusion_title" />

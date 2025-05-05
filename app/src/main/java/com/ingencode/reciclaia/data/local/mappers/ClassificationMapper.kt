@@ -1,6 +1,5 @@
 package com.ingencode.reciclaia.data.local.mappers
 
-import android.location.Location
 import androidx.core.net.toUri
 import com.ingencode.reciclaia.data.local.converters.ClassificationConverter
 import com.ingencode.reciclaia.data.local.entities.ClassificationEntity
@@ -13,15 +12,14 @@ Created with ❤ by jesusmarvaz on 2025-04-21.
 fun ClassificationModel.toEntity(): ClassificationEntity {
     return ClassificationEntity(id = this.getShaID(),
         uri = this.uri.toString(),
-        predictions = ClassificationConverter().fromPredictions(this.predictions)?: "",
-        modelName = this.model?.modalName,
-        modelVersion = this.model?.modelVersion,
-        timestamp = this.timestamp,
+        predictions = ClassificationConverter().fromPredictions(this.classificationData?.predictions)?: "",
+        modelName = this.classificationData?.model?.modalName,
+        modelVersion = this.classificationData?.model?.modelVersion,
+        timestamp = this.classificationData?.timestamp,
         title = this.title,
         comments = this.comments,
         latitude = this.location?.latitude,
-        longitude = this.location?.longitude,
-        provider = this.location?.provider
+        longitude = this.location?.longitude
     )
 }
 
@@ -32,8 +30,11 @@ fun ClassificationEntity.toModel(): ClassificationModel {
     else
         ClassificationModel.ModelInfo(this.modelName!!, this.modelVersion)
 
-    val model = ClassificationModel(uri = this.uri.toUri(), predictions = conv.toPredictions(this.predictions) ?: arrayListOf(),
-        model = modelInfo, timestamp = this.timestamp, title = this.title, comments = this.comments,
-        location = Location(this.provider).apply { latitude = this.latitude; longitude = this.longitude })
+    val location = if(this.latitude == null || this.longitude == null) null else ClassificationModel.Location(
+        latitude!!, longitude!!)
+    val classificationData = ClassificationModel.ClassificationData(predictions = conv.toPredictions(this.predictions) ?: arrayListOf(),
+        model = modelInfo, timestamp = this.timestamp)
+    val model = ClassificationModel(uri = this.uri.toUri(), classificationData = classificationData, title = this.title, comments = this.comments,
+        location = location)
     return model
 }

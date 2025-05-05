@@ -1,14 +1,19 @@
 package com.ingencode.reciclaia.ui.screens.imagevisor
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
+import android.net.Uri
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
 import com.ingencode.reciclaia.R
@@ -19,13 +24,12 @@ import com.ingencode.reciclaia.domain.model.toText
 import com.ingencode.reciclaia.ui.components.ActivityBaseForViewmodel
 import com.ingencode.reciclaia.ui.components.ViewModelBase
 import com.ingencode.reciclaia.ui.components.dialogs.AlertHelper
+import com.ingencode.reciclaia.ui.screens.imagevisor.ImageVisorViewModel.Status
 import com.ingencode.reciclaia.utils.SealedAppError
 import com.ingencode.reciclaia.utils.getThemeColor
 import com.ingencode.reciclaia.utils.nameClass
 import com.ingencode.reciclaia.utils.toFormattedStringDate
 import dagger.hilt.android.AndroidEntryPoint
-import androidx.core.view.isVisible
-import com.ingencode.reciclaia.ui.screens.imagevisor.ImageVisorViewModel.Status
 
 @AndroidEntryPoint
 class ImageVisorActivity : ActivityBaseForViewmodel() {
@@ -35,6 +39,10 @@ class ImageVisorActivity : ActivityBaseForViewmodel() {
     private val viewModel: ImageVisorViewModel by viewModels()
     override fun goBack() = finish()
 
+    private val requestLocationPermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+
+    }
+
     override fun getTheTag(): String = this.nameClass
 
     override fun initProperties() {
@@ -43,9 +51,30 @@ class ImageVisorActivity : ActivityBaseForViewmodel() {
         binding.apply {
             topAppBar.setNavigationOnClickListener { goBack() }
             tvPredictionValue.isSelected = true
+            btProcess.setOnClickListener { viewModel.processButtonPressed(binding.composedVisor.getCroppedBitmap()!!) }
+            ivLocationIcon.setOnClickListener { launchLocationPicker() }
         }
     }
 
+    private fun launchLocationPicker() {
+        if(!viewModel.getIsLocationEnabled()) {
+            AlertHelper.BottomAlertDialog
+                .Builder(this, AlertHelper.Type.Error, getString(R.string.permission_denied_check_app_settings))
+                .setDelay(4000)
+                .setAction { launchSettings() }
+                .build().show()
+            return
+        }
+        logDebug("launchLocationPicker")
+        //TODO finish
+    }
+
+    private fun launchSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = Uri.fromParts("package", this@ImageVisorActivity.packageName, null)
+        }
+        startActivity(intent)
+    }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val primaryColor = getThemeColor(android.R.attr.colorPrimary)
         menuInflater.inflate(R.menu.visor_menu, menu)
@@ -69,14 +98,14 @@ class ImageVisorActivity : ActivityBaseForViewmodel() {
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val bitmap = binding.composedVisor.getCroppedBitmap()
+        val bitmap = binding.composedVisor.getCroppedBitmap() ?: return false
         val actionError: ()-> Boolean = {
             AlertHelper.BottomAlertDialog.Builder(this@ImageVisorActivity, AlertHelper.Type.Error, getString(R.string.error_with_the_image_processing))
             false
         }
 
         return when (item.itemId) {
-            R.id.item_process -> { viewModel.processButtonPressed(); true}
+            R.id.item_process -> { viewModel.processButtonPressed(bitmap); true}
             R.id.item_save_data -> {
                 bitmap?.let {
                     askSavingClassificationData(it, binding.title.text.toString(),
@@ -111,13 +140,13 @@ class ImageVisorActivity : ActivityBaseForViewmodel() {
             val uri = viewModel.getUriFromResult(it)
             if (it != null && uri != null) binding.composedVisor.apply { setImageUri(uri) }
             viewModel.getClassificationFromResult(it)?.let {
-                binding.tvPredictionValue.text = it.topPrediction?.toText()
-                binding.tvModelValue.text = it.model?.toText()
-                binding.tvPredictionsExtendedValue.text = it.predictionsToText()
+                binding.tvPredictionValue.text = it.classificationData?.topPrediction?.toText()
+                binding.tvModelValue.text = it.classificationData?.model?.toText()
+                binding.tvPredictionsExtendedValue.text = it.classificationData?.predictionsToText()
                 binding.title.setText(it.title)
-                binding.btProcess.setOnClickListener { viewModel.processButtonPressed() }
                 binding.comments.setText(it.comments)
-                binding.tvDatetimeValue.text = it.timestamp?.toFormattedStringDate()
+                binding.tvDatetimeValue.text = it.classificationData?.timestamp?.toFormattedStringDate()
+                binding.tvLocationValue.text = it.location?.toString() ?: ""
                 val colorBackground = viewModel.getClassificationBackgroundColor(this@ImageVisorActivity)
                 val colorText = viewModel.getClassificationTextColor(this@ImageVisorActivity)
                 if (colorBackground != null && colorText != null) {
@@ -139,19 +168,19 @@ class ImageVisorActivity : ActivityBaseForViewmodel() {
             binding.tvStatus.text = it.name
 
             processMenuItem?.apply {
-                val enabled = it in listOf<Status>(Status.NO_RESULTS, Status.NOT_CLASSIFIED_YET, Status.SAVED_NOT_CLASSIFIED)
+                val enabled = it in setOf<Status>(Status.NO_RESULTS, Status.NOT_CLASSIFIED_YET, Status.SAVED_NOT_CLASSIFIED, Status.CLASSIFIED_NOT_SAVED)
                 isEnabled = enabled
                 isVisible = enabled
             }
             saveDataMenuItem?.apply {
-                val enabled = it in listOf<Status>(Status.CLASSIFIED_NOT_SAVED, Status.SAVED_NOT_CLASSIFIED, Status.CLASSIFIED_SAVED)
+                val enabled = it in setOf<Status>(Status.CLASSIFIED_NOT_SAVED, Status.SAVED_NOT_CLASSIFIED, Status.CLASSIFIED_SAVED)
                 isEnabled = enabled
                 isVisible = enabled
             }
-            binding.title.isEnabled = it in listOf<Status>(Status.CLASSIFIED_NOT_SAVED, Status.CLASSIFIED_SAVED)
-            binding.comments.isEnabled = it in listOf<Status>(Status.CLASSIFIED_NOT_SAVED, Status.CLASSIFIED_SAVED)
-            binding.composedVisor.isEditable = it in listOf<Status>(Status.NOT_CLASSIFIED_YET, Status.NO_RESULTS, Status.SAVED_NOT_CLASSIFIED )
-            classificationResultsVisibility(it in listOf<Status>(Status.CLASSIFIED_SAVED, Status.CLASSIFIED_NOT_SAVED))
+            binding.title.isEnabled = it in setOf<Status>(Status.CLASSIFIED_NOT_SAVED, Status.CLASSIFIED_SAVED)
+            binding.comments.isEnabled = it in setOf<Status>(Status.CLASSIFIED_NOT_SAVED, Status.CLASSIFIED_SAVED)
+            binding.composedVisor.isEditable = it != Status.CLASSIFIED_SAVED
+            classificationResultsVisibility(it in setOf<Status>(Status.CLASSIFIED_SAVED, Status.CLASSIFIED_NOT_SAVED))
 
         }
     }

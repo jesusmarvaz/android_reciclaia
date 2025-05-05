@@ -18,5 +18,4 @@ data class ClassificationEntity(@PrimaryKey val id: String,
                                 var title: String? = null,
                                 var comments: String? = null,
                                 var latitude: Double? = null,
-                                var longitude: Double? = null,
-                                var provider: String? = null)
+                                var longitude: Double? = null)

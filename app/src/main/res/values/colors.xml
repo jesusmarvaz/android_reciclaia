@@ -22,4 +22,14 @@
     <color name="confidence_85_background">#a9dfbf</color>
     <color name="confidence_100">#00838f</color>
     <color name="confidence_100_background">#80deea</color>
+    <color name="organic_container">#61372D</color>
+    <color name="yellow_container">#FDD835</color>
+    <color name="blue_container">#001FB0</color>
+    <color name="green_container">#187A1B</color>
+    <color name="textile_container">#F4511E</color>
+    <color name="sigre_point">#88BA08</color>
+    <color name="rest_container">#6B6B6B</color>
+    <color name="clean_point">#6F35B1</color>
+    <color name="specific_management">#0288E1</color>
+    <color name="hazardous_processing">#850800</color>
 </resources>

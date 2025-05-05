@@ -7,7 +7,6 @@ import androidx.viewbinding.ViewBinding
 import com.ingencode.reciclaia.ui.viewmodels.SettingsViewModel
 import com.ingencode.reciclaia.utils.ILog
 import com.ingencode.reciclaia.utils.applyTheme
-import kotlin.getValue
 
 /**
 Created with ❤ by jesusmarvaz on 2025-04-26.

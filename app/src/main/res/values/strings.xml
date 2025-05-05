@@ -53,7 +53,7 @@
     <string name="saved_successfully">¡Guardado con éxito!</string>
     <string name="error_with_the_image_processing">Ha habido un error procesando la imagen...</string>
     <string name="ai_visor">Visor IA</string>
-    <string name="enable_location_in_new_captions">Incluir localización en nuevas capturas</string>
+    <string name="enable_location_in_captions">Permitir opción de incluir localización en capturas</string>
     <string name="enable_location_in_new_captions_title">Incluir ubicación en capturas</string>
     <string name="request_location_permission">Permiso ubicación</string>
     <string name="permission_denied_check_app_settings">Permiso denegado, habilítalo en los ajustes de la app.</string>
@@ -76,4 +76,15 @@
     <string name="location_icon" translatable="false">location_icon</string>
     <string name="datetime">Fecha y hora</string>
     <string name="not_classified_yet">¡No hay resultado de clasificación\n pulsa en procesar!</string>
+    <string name="no_camera_permission_granted">No has autorizado el uso de la cámara, ve a los ajustes para establecerlo.</string>
+    <string name="organic_container">Contenedor marrón o gris</string>
+    <string name="yellow_container">Contenedor amarillo</string>
+    <string name="blue_container">Contenedor azul</string>
+    <string name="green_container">Contenedor verde</string>
+    <string name="textile_container">Contenedor textil</string>
+    <string name="sigre_point">Punto sigre</string>
+    <string name="rest_container">Contenedor restos</string>
+    <string name="clean_point">Punto limpio</string>
+    <string name="specific_management">Procesado específico</string>
+    <string name="hazardous_processing">Procesado productos peligrosos</string>
 </resources>

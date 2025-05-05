@@ -73,8 +73,9 @@ class FragmentSettings : FragmentBaseForViewmodel() {
     override fun observeVM() {
         settingsViewModel.showLocationPermissionRequestButton.observe(this) {
             it?.let {
-                binding.checkboxLocation.isEnabled = it
-                binding.checkboxLocation.isChecked = if (!it) false else settingsViewModel.getIsLocationEnabled()
+                //location still can be read from metadata
+                //binding.checkboxLocation.isEnabled = it
+                //binding.checkboxLocation.isChecked = if (!it) false else settingsViewModel.getIsLocationEnabled()
                 binding.btStartLocationChecker.visibility = if (it) View.GONE else View.VISIBLE
             }
         }

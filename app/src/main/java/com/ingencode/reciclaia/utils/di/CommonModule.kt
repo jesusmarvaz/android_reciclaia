@@ -4,8 +4,10 @@ import android.content.Context
 import com.ingencode.reciclaia.data.repositories.ClassificationRepositoryImpl
 import com.ingencode.reciclaia.data.repositories.IClassificationRepository
 import com.ingencode.reciclaia.data.repositories.ISettingsRepository
+import com.ingencode.reciclaia.data.repositories.IWasteRepository
 import com.ingencode.reciclaia.data.repositories.LocalStorageProvider
 import com.ingencode.reciclaia.data.repositories.SettingsRepository
+import com.ingencode.reciclaia.data.repositories.WasteRepositoryMock
 import com.ingencode.reciclaia.ui.navigation.BackPressedListener
 import com.ingencode.reciclaia.ui.navigation.IBackPressedListener
 import dagger.Binds
@@ -30,6 +32,10 @@ abstract class CommonModule {
     @Binds
     @Singleton
     abstract fun bindProcessedImageModelRepository(processedImageModel: ClassificationRepositoryImpl): IClassificationRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindWasteRepository(wasteRepository: WasteRepositoryMock): IWasteRepository
 }
 
 @Module
