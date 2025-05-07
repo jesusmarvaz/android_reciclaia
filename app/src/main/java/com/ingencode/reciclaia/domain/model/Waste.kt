@@ -8,7 +8,10 @@ import com.ingencode.reciclaia.R
 Created with ❤ by jesusmarvaz on 2025-05-05.
  */
 
-enum class WasteCategory { ORGANIC, INORGANIC, DANGEROUS, BULKY, CONSTRUCTION, SANITARY, NOT_DEFINED }
+enum class WasteTag(val tag: String) {
+    
+}
+enum class WasteCategory() { ORGANIC, INORGANIC, DANGEROUS, BULKY, CONSTRUCTION, SANITARY, NOT_DEFINED }
 sealed class WasteProcessing (@ColorRes val idColor: Int, @StringRes val nameStringResource: Int) {
     object OrganicRestContainer : WasteProcessing(R.color.organic_container, R.string.organic_container)
     object YellowContainer : WasteProcessing(R.color.yellow_container, R.string.yellow_container)
@@ -23,125 +26,125 @@ sealed class WasteProcessing (@ColorRes val idColor: Int, @StringRes val nameStr
 }
 
 abstract class Waste() {
-    abstract val name: String
+    abstract val tags: Set<String>
     abstract fun getCategory(): WasteCategory
     abstract fun getProcessing(): Set<WasteProcessing>
 }
 
-class UncategorizedWaste(override val name: String) : Waste() {
+class UncategorizedWaste(override val tags: Set<String>) : Waste() {
     override fun getCategory(): WasteCategory = WasteCategory.NOT_DEFINED
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.RestContainer)
 }
 
-class OrganicWaste(override val name: String = "Resíduos orgnánicos"): Waste() {
+class OrganicWaste(override val tags: Set<String> = set"Resíduos orgnánicos"): Waste() {
     override fun getCategory(): WasteCategory = WasteCategory.ORGANIC
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.OrganicRestContainer)
 }
 
-class GenericYellowContainerWaste(override val name: String): Waste() {
+class GenericYellowContainerWaste(override val tags: Set<String>): Waste() {
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.YellowContainer)
     override fun getCategory(): WasteCategory = WasteCategory.INORGANIC
 }
 
-class PlasticBottle(override val name: String = "botellas de plástico") : Waste() {
+class PlasticBottle(override val tags: Set<String> = "botellas de plástico") : Waste() {
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.YellowContainer)
     override fun getCategory(): WasteCategory = WasteCategory.INORGANIC
 }
 
-class MetalCan(override val name: String = "conservas") : Waste() {
+class MetalCan(override val tags: Set<String> = "conservas") : Waste() {
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.YellowContainer)
     override fun getCategory(): WasteCategory = WasteCategory.INORGANIC
 }
-class GenericGreenContainerWaste(override val name: String) : Waste() {
+class GenericGreenContainerWaste(override val tags: Set<String>) : Waste() {
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.GreenContainer)
     override fun getCategory(): WasteCategory = WasteCategory.INORGANIC
 }
 
-class GlassBottle(override val name: String = "botellas de vidrio") : Waste() {
+class GlassBottle(override val tags: Set<String> = "botellas de vidrio") : Waste() {
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.GreenContainer)
     override fun getCategory(): WasteCategory = WasteCategory.INORGANIC
 }
 
-class GenericBlueContainerWaste(override val name: String) : Waste() {
+class GenericBlueContainerWaste(override val tags: Set<String>) : Waste() {
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.BlueContainer)
     override fun getCategory(): WasteCategory = WasteCategory.INORGANIC
 }
 
-class PaperAndCarboard(override val name: String = "papel y cartón") : Waste() {
+class PaperAndCarboard(override val tags: Set<String> = "papel y cartón") : Waste() {
     override fun getCategory(): WasteCategory = WasteCategory.INORGANIC
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.BlueContainer)
 }
 
-class Textile(override val name: String = "textile"): Waste() {
+class Textile(override val tags: Set<String> = "textile"): Waste() {
     override fun getCategory(): WasteCategory = WasteCategory.INORGANIC
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.TextileContainer)
 }
-class GenericCleanPointWaste(override val name: String) : Waste() {
+class GenericCleanPointWaste(override val tags: Set<String>) : Waste() {
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.CleanPoint())
     override fun getCategory(): WasteCategory = WasteCategory.NOT_DEFINED
 }
 
 
-class Batteries(override val name: String = "baterías"): Waste() {
+class Batteries(override val tags: String = "baterías"): Waste() {
     override fun getCategory(): WasteCategory = WasteCategory.DANGEROUS
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.CleanPoint())
 }
 
-class ElectronicsAndSmallAppliances(override val name: String = "Electrónica y electrodomésticos"): Waste() {
+class ElectronicsAndSmallAppliances(override val tags: String = "Electrónica y electrodomésticos"): Waste() {
     override fun getCategory(): WasteCategory = WasteCategory.DANGEROUS
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.CleanPoint())
 }
 
-class GenericSigreWaste(override val name: String) : Waste() {
+class GenericSigreWaste(override val tags: String) : Waste() {
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.SigrePoint)
     override fun getCategory(): WasteCategory = WasteCategory.NOT_DEFINED
 }
 
 
-class ExpiredMedicine(override val name: String = "Expired medicines") : Waste() {
+class ExpiredMedicine(override val tags: String = "Expired medicines") : Waste() {
     override fun getCategory(): WasteCategory = WasteCategory.DANGEROUS
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.SigrePoint)
 }
 
-class UsedOil(override val name: String = "aceites usados") : Waste() {
+class UsedOil(override val tags: String = "aceites usados") : Waste() {
     override fun getCategory(): WasteCategory = WasteCategory.DANGEROUS
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.CleanPoint(),
         WasteProcessing.SpecificManagement("recogida en tiendas", "talleres, o establecimientos autorizados"))
 }
 
-class CleaningAndChemicalProduct(override val name: String = "Productos de limpieza y químicos") : Waste() {
+class CleaningAndChemicalProduct(override val tags: String = "Productos de limpieza y químicos") : Waste() {
     override fun getCategory(): WasteCategory = WasteCategory.DANGEROUS
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.CleanPoint())
 }
 
-class GenericSpecificProcessingWaste(override val name: String) : Waste() {
+class GenericSpecificProcessingWaste(override val tags: String) : Waste() {
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.SpecificManagement())
     override fun getCategory(): WasteCategory = WasteCategory.NOT_DEFINED
 }
 
 
-class OldFurniture(override val name: String = "Muebles viejos") : Waste() {
+class OldFurniture(override val tags: String = "Muebles viejos") : Waste() {
     override fun getCategory(): WasteCategory = WasteCategory.BULKY
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.SpecificManagement("Servicios municipales", "ayuntamientos"),
         WasteProcessing.CleanPoint())
 }
 
-class BigAppliances(override val name: String = "Electrodomésticos grandes") : Waste() {
+class BigAppliances(override val tags: String = "Electrodomésticos grandes") : Waste() {
     override fun getCategory(): WasteCategory = WasteCategory.BULKY
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.SpecificManagement("Servicios municipales", "ayuntamientos"))
 }
 
-class DemolitionWaste(override val name: String = "Residuos de contrucción y demolición") : Waste() {
+class DemolitionWaste(override val tags: String = "Residuos de contrucción y demolición") : Waste() {
     override fun getCategory(): WasteCategory = WasteCategory.CONSTRUCTION
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.SpecificManagement("Gestores autorizados de residuos", "Empresas de construcción"))
 }
 
-class PaintResidue(override val name: String = "Residuos de pintura") : Waste() {
+class PaintResidue(override val tags: String = "Residuos de pintura") : Waste() {
     override fun getCategory(): WasteCategory = WasteCategory.CONSTRUCTION
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.SpecificManagement("Gestores autorizados de residuos", "Empresas de construcción"))
 }
 
-class SanitaryWaste(override val name: String = "Material biomédico y hospitalario"): Waste() {
+class SanitaryWaste(override val tags: String = "Material biomédico y hospitalario"): Waste() {
     override fun getCategory(): WasteCategory = WasteCategory.SANITARY
     override fun getProcessing(): Set<WasteProcessing> = setOf(WasteProcessing.SpecificManagement(),
         WasteProcessing.CleanPoint())
