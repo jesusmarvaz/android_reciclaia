@@ -87,4 +87,6 @@
     <string name="clean_point">Punto limpio</string>
     <string name="specific_management">Procesado específico</string>
     <string name="hazardous_processing">Procesado productos peligrosos</string>
+    <string name="special_recycling">reciclaje especial</string>
+    <string name="municipal_services_special_containers">Servicios municipales, contenedores especiales</string>
 </resources>
