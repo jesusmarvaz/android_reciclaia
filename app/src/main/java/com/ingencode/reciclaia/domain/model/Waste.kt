@@ -49,6 +49,5 @@ sealed class WasteProcessing (@ColorRes val idColor: Int, @StringRes val idStrin
     object Unknown: WasteProcessing(R.color.rest_container, R.string.rest_container)
     data class CleanPoint(val description: String? = null) : WasteProcessing(R.color.clean_point, R.string.clean_point)
     data class SpecificManagement(@StringRes val description: Int? = null, @StringRes val managedBy: Int? = null) : WasteProcessing(R.color.specific_management, R.string.specific_management)
-    data class HazardousProcessing(@StringRes val description: Int? = null, @StringRes val managedBy: Int? = null) : WasteProcessing(R.color.hazardous_processing, R.string.hazardous_processing)
 }
 
