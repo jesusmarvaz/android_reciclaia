@@ -8,12 +8,13 @@ Created with ❤ by jesusmarvaz on 2025-05-05.
  */
 
 interface IWasteRepository {
-
-    fun findMostProbableWasteCategory(search: String): WasteTagCategory
+    fun findCategories(search: String): Set<WasteTagCategory>?
 }
 
-class WasteRepositoryMock @Inject constructor(): IWasteRepository {
-    override fun findMostProbableWasteCategory(search: String): WasteTagCategory {
-        TODO("not implemented yet, ups!")
+class WasteRepository @Inject constructor(): IWasteRepository {
+    override fun findCategories(search: String): Set<WasteTagCategory>? {
+        return WasteTagCategory.entries
+            .filter { tag -> tag.tags.any { it.contains(search, ignoreCase = true) } }
+            .toSet()
     }
 }

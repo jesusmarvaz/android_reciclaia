@@ -1,6 +1,7 @@
 package com.ingencode.reciclaia.domain.model
 
 import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.ingencode.reciclaia.R
 
@@ -19,7 +20,7 @@ Created with ❤ by jesusmarvaz on 2025-05-05.
 - Metal: aluminum soda cans, aluminum food cans, steel food cans, aerosol cans
 - Organic Waste: food waste (fruit peels, vegetable scraps), eggshells, coffee grounds, tea bags
 - Textiles: clothing, shoes*/
-enum class WasteTagCategory(val tagS: Set<String>, val processing: Set<WasteProcessing>) {
+enum class WasteTagCategory(val tags: Set<String>, val processing: Set<WasteProcessing>) {
     ORGANIC(setOf("organic", "food", "food_waste", "coffee_grounds", "eggshells"), setOf(WasteProcessing.OrganicRestContainer)),
     AEROSOLS(setOf("aerosol_cans"), setOf(WasteProcessing.YellowContainer, WasteProcessing.CleanPoint())),
     CLEAN_POINT(setOf("styrofoam_food_containers"), setOf(WasteProcessing.CleanPoint())),
@@ -37,7 +38,7 @@ enum class WasteTagCategory(val tagS: Set<String>, val processing: Set<WasteProc
 }
 
 //enum class WasteCategory() { ORGANIC, INORGANIC, DANGEROUS, BULKY, CONSTRUCTION, SANITARY, NOT_DEFINED }
-sealed class WasteProcessing (@ColorRes val idColor: Int, @StringRes val nameStringResource: Int) {
+sealed class WasteProcessing (@ColorRes val idColor: Int, @StringRes val idString: Int, @DrawableRes val idDrawableRes: Int) {
     object OrganicRestContainer : WasteProcessing(R.color.organic_container, R.string.organic_container)
     object YellowContainer : WasteProcessing(R.color.yellow_container, R.string.yellow_container)
     object BlueContainer : WasteProcessing(R.color.blue_container, R.string.blue_container)
