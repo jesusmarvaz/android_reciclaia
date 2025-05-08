@@ -254,6 +254,8 @@ class ImageVisorActivity : ActivityBaseForViewmodel() {
 
     override fun getViewLifeCycleOwner(): LifecycleOwner = this
     override fun getViewModelBase(): ViewModelBase? = viewModel
-    override fun getPb(): ProgressBar? = binding.shaderAndPb.progressBarBase
-    override fun getShaderLoading(): View? = binding.shaderAndPb.shader
+    //override fun getPb(): ProgressBar? = binding.shaderAndPb.progressBarBase
+    override fun getPb(): ProgressBar? = binding.progressbarHorizontal.progressBarBase
+    //override fun getShaderLoading(): View? = binding.shaderAndPb.shader
+    override fun getShaderLoading(): View? = binding.shader
 }

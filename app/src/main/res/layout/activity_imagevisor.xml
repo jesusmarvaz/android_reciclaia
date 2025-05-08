@@ -506,12 +506,28 @@
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-    <include
+    <!--<include
         android:id="@+id/shader_and_pb"
         layout="@layout/pb_and_shader"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:visibility="gone" />
+        tools:visibility="gone" />-->
+    <View
+        android:id="@+id/shader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:elevation="3dp"/>
+    <include
+        layout="@layout/progress_bar_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/visor_parent"
+        android:elevation="4dp"
+        android:id="@+id/progressbar_horizontal"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
