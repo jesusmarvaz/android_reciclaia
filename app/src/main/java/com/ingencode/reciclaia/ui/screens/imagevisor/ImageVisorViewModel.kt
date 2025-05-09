@@ -14,7 +14,6 @@ import com.ingencode.reciclaia.data.remote.api.SealedResult.ResultSuccess
 import com.ingencode.reciclaia.data.repositories.IAProviderInterface
 import com.ingencode.reciclaia.data.repositories.IClassificationRepository
 import com.ingencode.reciclaia.data.repositories.ISettingsRepository
-import com.ingencode.reciclaia.data.repositories.IWasteRepository
 import com.ingencode.reciclaia.data.repositories.LocalStorageProvider
 import com.ingencode.reciclaia.domain.model.ClassificationModel
 import com.ingencode.reciclaia.ui.components.ViewModelBase
@@ -36,8 +35,7 @@ class ImageVisorViewModel @Inject constructor(
     private val localStorageProvider: LocalStorageProvider,
     private val localDataBaseProvider: IClassificationRepository,
     private val classificationProvider: IAProviderInterface,
-    private val settingsProvider: ISettingsRepository,
-    private val wasteProvider: IWasteRepository
+    private val settingsProvider: ISettingsRepository
 ) : ViewModelBase() {
     private val _exportedSuccessfully: MutableLiveData<Unit> = MutableLiveData<Unit>()
     val exportedSuccessfully: LiveData<Unit> = _exportedSuccessfully

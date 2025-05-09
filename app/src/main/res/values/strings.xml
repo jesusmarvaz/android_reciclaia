@@ -88,4 +88,5 @@
     <string name="specific_management">Procesado específico</string>
     <string name="special_recycling">reciclaje especial</string>
     <string name="municipal_services_special_containers">Servicios municipales, contenedores especiales</string>
+    <string name="no_results">No hay información de reciclaje</string>
 </resources>

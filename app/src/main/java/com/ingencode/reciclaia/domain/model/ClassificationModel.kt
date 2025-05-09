@@ -53,6 +53,11 @@ data class ClassificationModel(
 ) : Serializable {
 
     fun getShaID() = uri.toString().sha256()
+    fun findCategories(): Set<WasteTagCategory>? {
+        return WasteTagCategory.entries
+            .filter { tag -> tag.tags.any { it.contains(classificationData?.topPrediction?.label ?: "", ignoreCase = true) } }
+            .toSet()
+    }
 
     data class ClassificationPrediction(val label: String, val confidence: Float) : Serializable
     data class ClassificationData(

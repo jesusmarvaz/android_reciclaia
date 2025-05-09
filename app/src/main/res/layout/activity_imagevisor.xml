@@ -104,7 +104,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:paddingTop="12dp"
-        tools:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/visor_parent">
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -187,6 +187,7 @@
                             android:marqueeRepeatLimit="marquee_forever" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                     <LinearLayout
+                        android:id="@+id/ll_accuracy"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:baselineAligned="false"
@@ -294,6 +295,28 @@
                                 android:gravity="center_vertical"
                                 />
                         </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/ll_accuracy"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center">
+                        <ImageView
+                            android:id="@+id/iv_bin"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            app:tint="@color/yellow_container"
+                            android:tintMode="multiply"
+                            tools:src="@drawable/bin_recyclable" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_recycle_info"
+                            android:layout_weight="3"
+                            tools:text="@string/yellow_container"/>
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
@@ -518,16 +541,20 @@
         android:id="@+id/shader"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/transparent"
+        android:background="@color/translucent"
         android:visibility="gone"
         tools:visibility="visible"
-        android:elevation="3dp"/>
+        android:elevation="0dp"
+        android:clickable="true"/>
     <include
         layout="@layout/progress_bar_horizontal"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/visor_parent"
-        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/visor_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="1dp"
         android:id="@+id/progressbar_horizontal"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

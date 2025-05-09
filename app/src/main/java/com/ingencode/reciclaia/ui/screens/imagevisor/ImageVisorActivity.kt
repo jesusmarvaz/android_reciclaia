@@ -16,6 +16,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
+import com.bumptech.glide.Glide
 import com.ingencode.reciclaia.R
 import com.ingencode.reciclaia.data.remote.api.SealedResult
 import com.ingencode.reciclaia.databinding.ActivityImagevisorBinding
@@ -28,6 +29,7 @@ import com.ingencode.reciclaia.ui.screens.imagevisor.ImageVisorViewModel.Status
 import com.ingencode.reciclaia.utils.SealedAppError
 import com.ingencode.reciclaia.utils.getThemeColor
 import com.ingencode.reciclaia.utils.nameClass
+import com.ingencode.reciclaia.utils.setTint
 import com.ingencode.reciclaia.utils.toFormattedStringDate
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,7 +42,7 @@ class ImageVisorActivity : ActivityBaseForViewmodel() {
     override fun goBack() = finish()
 
     private val requestLocationPermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-
+        //TODO("not implemented request location permission yet")
     }
 
     override fun getTheTag(): String = this.nameClass
@@ -147,6 +149,10 @@ class ImageVisorActivity : ActivityBaseForViewmodel() {
                 binding.comments.setText(it.comments)
                 binding.tvDatetimeValue.text = it.classificationData?.timestamp?.toFormattedStringDate()
                 binding.tvLocationValue.text = it.location?.toString() ?: ""
+                val processing = it.findCategories()?.first()?.processing?.first()
+                binding.tvRecycleInfo.text = getString(processing?.idString ?: R.string.no_results)
+                Glide.with(this).load(processing?.idDrawableRes).into(binding.ivBin)
+                binding.ivBin.setTint(processing?.idColor ?: R.color.black)
                 val colorBackground = viewModel.getClassificationBackgroundColor(this@ImageVisorActivity)
                 val colorText = viewModel.getClassificationTextColor(this@ImageVisorActivity)
                 if (colorBackground != null && colorText != null) {

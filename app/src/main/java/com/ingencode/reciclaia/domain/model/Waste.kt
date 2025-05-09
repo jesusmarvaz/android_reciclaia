@@ -39,15 +39,15 @@ enum class WasteTagCategory(val tags: Set<String>, val processing: Set<WasteProc
 
 //enum class WasteCategory() { ORGANIC, INORGANIC, DANGEROUS, BULKY, CONSTRUCTION, SANITARY, NOT_DEFINED }
 sealed class WasteProcessing (@ColorRes val idColor: Int, @StringRes val idString: Int, @DrawableRes val idDrawableRes: Int) {
-    object OrganicRestContainer : WasteProcessing(R.color.organic_container, R.string.organic_container, R.drawable.organic_container)
-    object YellowContainer : WasteProcessing(R.color.yellow_container, R.string.yellow_container, R.drawable.yellow_container)
-    object BlueContainer : WasteProcessing(R.color.blue_container, R.string.blue_container, R.drawable.blue_container)
-    object GreenContainer : WasteProcessing(R.color.green_container, R.string.green_container, R.drawable.green_container)
-    object TextileContainer : WasteProcessing(R.color.textile_container, R.string.textile_container, R.drawable.textile_container)
-    object SigrePoint: WasteProcessing(R.color.sigre_point, R.string.sigre_point, R.drawable.sigre_point)
-    object RestContainer: WasteProcessing(R.color.rest_container, R.string.rest_container, R.drawable.rest_container)
-    object Unknown: WasteProcessing(R.color.rest_container, R.string.rest_container, R.drawable.rest_container)
+    object OrganicRestContainer : WasteProcessing(R.color.organic_container, R.string.organic_container, R.drawable.bin_no_recyclable)
+    object YellowContainer : WasteProcessing(R.color.yellow_container, R.string.yellow_container, R.drawable.bin_recyclable)
+    object BlueContainer : WasteProcessing(R.color.blue_container, R.string.blue_container, R.drawable.bin_recyclable)
+    object GreenContainer : WasteProcessing(R.color.green_container, R.string.green_container, R.drawable.bin_recyclable)
+    object TextileContainer : WasteProcessing(R.color.textile_container, R.string.textile_container, R.drawable.bin_recyclable)
+    object SigrePoint: WasteProcessing(R.color.sigre_point, R.string.sigre_point, R.drawable.bin_no_recyclable)
+    object RestContainer: WasteProcessing(R.color.rest_container, R.string.rest_container, R.drawable.bin_no_recyclable)
+    object Unknown: WasteProcessing(R.color.rest_container, R.string.rest_container, R.drawable.bin_no_recyclable)
     data class CleanPoint(val description: String? = null) : WasteProcessing(R.color.clean_point, R.string.clean_point, R.drawable.clean_point)
-    data class SpecificManagement(@StringRes val description: Int? = null, @StringRes val managedBy: Int? = null) : WasteProcessing(R.color.specific_management, R.string.specific_management, R.drawable.specific_management)
+    data class SpecificManagement(@StringRes val description: Int? = null, @StringRes val managedBy: Int? = null) : WasteProcessing(R.color.specific_management, R.string.specific_management, R.drawable.bin_recyclable)
 }
 

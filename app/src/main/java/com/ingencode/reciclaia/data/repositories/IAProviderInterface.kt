@@ -3,6 +3,7 @@ package com.ingencode.reciclaia.data.repositories
 import android.net.Uri
 import com.ingencode.reciclaia.domain.model.ClassificationModel
 import com.ingencode.reciclaia.domain.model.ClassificationModel.ClassificationData
+import com.ingencode.reciclaia.domain.model.WasteTagCategory
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 import kotlin.random.Random
@@ -20,7 +21,10 @@ class IAProviderMockImp @Inject constructor() : IAProviderInterface {
         private fun getPredictionList(size: Int): ArrayList<ClassificationModel.ClassificationPrediction> {
             val tempClassificationList = arrayListOf<ClassificationModel.ClassificationPrediction>()
             (0 until size).forEach {
-                tempClassificationList.add(ClassificationModel.ClassificationPrediction("label random:${Random.nextInt(0,2000)}", Random.nextFloat()))
+                val randomIndex = Random.nextInt(0, WasteTagCategory.entries.size - 1)
+                val labelRandom = WasteTagCategory.entries.filter {
+                    it.ordinal == randomIndex }
+                tempClassificationList.add(ClassificationModel.ClassificationPrediction(labelRandom[0].tags.first(), Random.nextFloat()))
             }
             return tempClassificationList
         }
