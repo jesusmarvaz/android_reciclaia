@@ -102,7 +102,7 @@
                 android:id="@+id/bt_app_view_version"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/view_based_app"
+                android:text="@string/start_app"
                 android:layout_weight="1"
                 android:textSize="12sp"
                 android:backgroundTint="?attr/colorPrimary"
@@ -113,8 +113,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="12sp"
-                android:text="@string/compose_based_app"
-                android:backgroundTint="?attr/colorPrimary"
+                android:text="@string/compose_sample"
+                android:backgroundTint="?attr/colorTertiary"
                 android:tooltipText="Inicia la vista creada con el framework JetPack Compose"
                 android:layout_marginHorizontal="4dp"/>
         </LinearLayout>

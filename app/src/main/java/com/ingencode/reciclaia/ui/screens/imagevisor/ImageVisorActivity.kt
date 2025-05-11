@@ -25,6 +25,8 @@ import com.ingencode.reciclaia.domain.model.toText
 import com.ingencode.reciclaia.ui.components.ActivityBaseForViewmodel
 import com.ingencode.reciclaia.ui.components.ViewModelBase
 import com.ingencode.reciclaia.ui.components.dialogs.AlertHelper
+import com.ingencode.reciclaia.ui.components.dialogs.InfoProcessingBottomSheet
+import com.ingencode.reciclaia.ui.screens.app.FragmentApp
 import com.ingencode.reciclaia.ui.screens.imagevisor.ImageVisorViewModel.Status
 import com.ingencode.reciclaia.utils.SealedAppError
 import com.ingencode.reciclaia.utils.getThemeColor
@@ -32,6 +34,7 @@ import com.ingencode.reciclaia.utils.nameClass
 import com.ingencode.reciclaia.utils.setTint
 import com.ingencode.reciclaia.utils.toFormattedStringDate
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ImageVisorActivity : ActivityBaseForViewmodel() {
@@ -40,6 +43,9 @@ class ImageVisorActivity : ActivityBaseForViewmodel() {
     private var saveDataMenuItem: MenuItem? = null
     private val viewModel: ImageVisorViewModel by viewModels()
     override fun goBack() = finish()
+
+    @Inject
+    lateinit var infoProcessingBottomSheet: InfoProcessingBottomSheet
 
     private val requestLocationPermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
         //TODO("not implemented request location permission yet")
@@ -142,7 +148,8 @@ class ImageVisorActivity : ActivityBaseForViewmodel() {
             val uri = viewModel.getUriFromResult(it)
             if (it != null && uri != null) binding.composedVisor.apply { setImageUri(uri) }
             viewModel.getClassificationFromResult(it)?.let {
-                binding.tvPredictionValue.text = it.classificationData?.topPrediction?.toText()
+                //binding.tvPredictionValue.text = it.classificationData?.topPrediction?.toText()
+                binding.tvPredictionValue.text = it.getClassificationAndProcessing(this)
                 binding.tvModelValue.text = it.classificationData?.model?.toText()
                 binding.tvPredictionsExtendedValue.text = it.classificationData?.predictionsToText()
                 binding.title.setText(it.title)
@@ -150,9 +157,10 @@ class ImageVisorActivity : ActivityBaseForViewmodel() {
                 binding.tvDatetimeValue.text = it.classificationData?.timestamp?.toFormattedStringDate()
                 binding.tvLocationValue.text = it.location?.toString() ?: ""
                 val processing = it.findCategories()?.first()?.processing?.first()
-                binding.tvRecycleInfo.text = getString(processing?.idString ?: R.string.no_results)
-                Glide.with(this).load(processing?.idDrawableRes).into(binding.ivBin)
-                binding.ivBin.setTint(processing?.idColor ?: R.color.black)
+                processing?.let { p-> binding.ivBin.setOnClickListener { infoProcessingBottomSheet.launchInfoProcessing(p, this@ImageVisorActivity) } }
+                binding.tvRecycleInfo.text = getString(processing?.idStringTitle ?: R.string.no_results)
+                Glide.with(this).load(processing?.idDrawableSrc).into(binding.ivBin)
+                //binding.ivBin.setTint(processing?.idColor ?: R.color.black)
                 val colorBackground = viewModel.getClassificationBackgroundColor(this@ImageVisorActivity)
                 val colorText = viewModel.getClassificationTextColor(this@ImageVisorActivity)
                 if (colorBackground != null && colorText != null) {
@@ -171,7 +179,7 @@ class ImageVisorActivity : ActivityBaseForViewmodel() {
 
     private fun observeStatus() {
         viewModel.status.observe(this@ImageVisorActivity) {
-            binding.tvStatus.text = it.name
+            binding.tvStatus.text = getString(it.idString)
 
             processMenuItem?.apply {
                 val enabled = it in setOf<Status>(Status.NO_RESULTS, Status.NOT_CLASSIFIED_YET, Status.SAVED_NOT_CLASSIFIED, Status.CLASSIFIED_NOT_SAVED)
@@ -223,9 +231,19 @@ class ImageVisorActivity : ActivityBaseForViewmodel() {
                 val message = getString(R.string.data_saved)
                 val type = AlertHelper.Type.Success
                 val builder = AlertHelper.BottomAlertDialog.Builder(this@ImageVisorActivity, type, message)
-                builder.build().show()
+                builder
+                    .setAction { navigateToHistory() }
+                    .build().show()
             }
         }
+    }
+
+    private fun navigateToHistory() {
+        val resultIntent = Intent().apply {
+            putExtra(FragmentApp.NAVIGATION_DESTINATION_TAG, R.id.navigation_history)
+        }
+        setResult(RESULT_OK, resultIntent)
+        goBack()
     }
 
     override fun observeVM() {
@@ -237,9 +255,9 @@ class ImageVisorActivity : ActivityBaseForViewmodel() {
     }
 
     fun askSavingClassificationData(bitmap: Bitmap, title: String? = null, comments: String? = null) {
-        val title = getString(R.string.confirm_action)
+        val titleAction = getString(R.string.confirm_action)
         val message = getString(R.string.want_saving)
-        AlertHelper.Dialog.Builder(this, title, message) {
+        AlertHelper.Dialog.Builder(this, titleAction, message) {
             viewModel.savedButtonPressed(bitmap, title, comments)
         }
             .setNegativeText(getString(R.string.cancel))
@@ -257,6 +275,7 @@ class ImageVisorActivity : ActivityBaseForViewmodel() {
             .setNegativeAction { Toast.makeText(this, getString(R.string.cancelled), Toast.LENGTH_SHORT).show() }
             .build().show()
     }
+
 
     override fun getViewLifeCycleOwner(): LifecycleOwner = this
     override fun getViewModelBase(): ViewModelBase? = viewModel

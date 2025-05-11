@@ -1080,33 +1080,20 @@ El gráfico de navegación `app_navigation.xml`:
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/app_navigation"
+    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/app_navigation"
     app:startDestination="@id/navigation_home">
-    <fragment
-        android:id="@+id/navigation_home"
+    <fragment android:id="@+id/navigation_home"
         android:name="com.ingencode.reciclaia.ui.screens.app.home.FragmentHome"
-        android:label="@string/home"
-        tools:layout="@layout/fragment_home"
-        />
-    <fragment
-        android:id="@+id/navigation_history"
+        android:label="@string/home" tools:layout="@layout/fragment_home" />
+    <fragment android:id="@+id/navigation_history"
         android:name="com.ingencode.reciclaia.ui.screens.app.history.FragmentHistory"
-        android:label="@string/history"
-        tools:layout="@layout/fragment_history"
-        />
-    <fragment
-        android:id="@+id/navigation_profile"
-        android:name="com.ingencode.reciclaia.ui.screens.app.profile.FragmentProfile"
-        android:label="@string/profile"
-        tools:layout="@layout/fragment_profile"
-        />
-    <fragment
-        android:id="@+id/navigation_options"
+        android:label="@string/history" tools:layout="@layout/fragment_history" />
+    <fragment android:id="@+id/navigation_profile"
+        android:name="com.ingencode.reciclaia.ui.screens.app.learn.FragmentProfile"
+        android:label="@string/profile" tools:layout="@layout/fragment_profile" />
+    <fragment android:id="@+id/navigation_options"
         android:name="com.ingencode.reciclaia.ui.screens.app.settings.FragmentSettings"
-        android:label="@string/settings"
-        tools:layout="@layout/fragment_settings"
-        />
+        android:label="@string/settings" tools:layout="@layout/fragment_settings" />
 </navigation>
 ```
 **Uso de la librería de iconos extendida de Material**

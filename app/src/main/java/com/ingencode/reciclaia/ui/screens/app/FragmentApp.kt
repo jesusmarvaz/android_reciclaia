@@ -9,6 +9,11 @@ import android.provider.Settings
 import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.IdRes
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.viewbinding.ViewBinding
@@ -19,9 +24,12 @@ import com.ingencode.reciclaia.data.repositories.LocalStorageProvider
 import com.ingencode.reciclaia.databinding.FragmentAppBinding
 import com.ingencode.reciclaia.ui.components.FragmentBase
 import com.ingencode.reciclaia.ui.components.dialogs.AlertHelper
+import com.ingencode.reciclaia.ui.screens.app.home.IImageSelector
 import com.ingencode.reciclaia.ui.screens.imagevisor.ImageVisorActivity
+import com.ingencode.reciclaia.ui.viewmodels.ImageLauncherViewModel
 import com.ingencode.reciclaia.utils.nameClass
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -29,19 +37,21 @@ Created with ❤ by Jesús Martín (jesusmarvaz@gmail.com) on 2025-02-12.
  */
 
 @AndroidEntryPoint
-class FragmentApp : FragmentBase() {
+class FragmentApp : FragmentBase(), IImageSelector {
+    companion object {
+        const val NAVIGATION_DESTINATION_TAG = "navigation_destination_tag"
+    }
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
     private lateinit var cameraLauncher: ActivityResultLauncher<Uri>
     private var photoUri: Uri? = null
     private lateinit var binding: FragmentAppBinding
     override fun goBack() = requireActivity().finish()
     override fun getFragmentTag(): String = this.nameClass
-
-    @Inject
-    lateinit var settingsRepository: ISettingsRepository
-
-    @Inject
-    lateinit var localStorageProvider: LocalStorageProvider
+    private lateinit var imageVisorActivityResultLauncher: ActivityResultLauncher<Intent>
+    @Inject lateinit var settingsRepository: ISettingsRepository
+    @Inject lateinit var localStorageProvider: LocalStorageProvider
+    private lateinit var navHostFragment: NavHostFragment
+    private val sharedViewModel: ImageLauncherViewModel by activityViewModels()
 
     private val requestCameraPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
@@ -60,17 +70,52 @@ class FragmentApp : FragmentBase() {
             }
         }
 
+    private fun navigate(@IdRes id: Int) {
+        binding.bnvApp.selectedItemId = id
+    }
+    /*class MyActivity : ComponentActivity() {
+    private val myBroadcastReceiver = MyBroadcastReceiver()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // ...
+        ContextCompat.registerReceiver(this, myBroadcastReceiver, filter, receiverFlags)
+        setContent { MyApp() }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // When you forget to unregister your receiver here, you're causing a leak!
+        this.unregisterReceiver(myBroadcastReceiver)
+    }
+}*/
+
+
+
     override fun initProperties() {
-        val navHostFragment =
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                sharedViewModel.launchImageSelectorEvent.collect {
+                    launchImageSelector()
+                }
+            }
+        }
+        navHostFragment =
             childFragmentManager.findFragmentById(R.id.appNavFragment) as NavHostFragment
         binding.bnvApp.setupWithNavController(navHostFragment.navController)
         binding.favAdd.setOnClickListener {
             launchImageSelector()
         }
 
+        imageVisorActivityResultLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                result.data?.getIntExtra(NAVIGATION_DESTINATION_TAG, -1)?.let { navigate(it) }
+            }
+        }
+
         imagePickerLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
+            ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK && result.data != null) {
                 val imageUri = result.data?.data
                 imageUri?.let { uri ->
@@ -97,7 +142,7 @@ class FragmentApp : FragmentBase() {
         return binding
     }
 
-    private fun launchImageSelector() {
+    override fun launchImageSelector() {
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogStyle)
         val view = layoutInflater.inflate(R.layout.image_source_selector_layout, null)
         bottomSheetDialog.setContentView(view)
@@ -114,7 +159,7 @@ class FragmentApp : FragmentBase() {
         logDebug("openCamera clicked, uri: ${uri?.toString()}")
         val intent = Intent(requireContext(), ImageVisorActivity::class.java)
         intent.putExtra("uri", uri)
-        startActivity(intent)
+        imageVisorActivityResultLauncher.launch(intent)
     }
 
     private fun pickFromCamera() {

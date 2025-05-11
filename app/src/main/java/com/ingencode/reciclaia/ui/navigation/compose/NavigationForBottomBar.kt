@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.ingencode.reciclaia.ui.screens.app.history.HistoryScreen
 import com.ingencode.reciclaia.ui.screens.app.home.HomeScreen
-import com.ingencode.reciclaia.ui.screens.app.profile.ProfileScreen
+import com.ingencode.reciclaia.ui.screens.app.learn.LearnScreen
 import com.ingencode.reciclaia.ui.screens.app.settings.SettingsScreen
 
 /**
@@ -24,8 +24,8 @@ fun NavigationForBottomBar(
         composable(EnumScreensForBottomBar.HistoryScreen.name) {
             HistoryScreen()
         }
-        composable(EnumScreensForBottomBar.ProfileScreen.name) {
-            ProfileScreen()
+        composable(EnumScreensForBottomBar.LearnScreen.name) {
+            LearnScreen()
         }
         composable(EnumScreensForBottomBar.SettingsScreen.name) {
             SettingsScreen()

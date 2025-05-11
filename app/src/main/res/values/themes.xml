@@ -10,6 +10,9 @@
         <item name="fontFamily">@font/comfortaa_regular</item>
         <item name="colorControlNormal">?attr/colorPrimary</item>
     </style>
+    <style name="TextView.Monospace" parent="Widget.AppCompat.TextView">
+        <item name="fontFamily">@font/ubuntumono_regular</item>
+    </style>
     <style name="BottomSheetDialogStyle" parent="ThemeOverlay.Material3.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/ModalBottomSheetDialog</item>
     </style>

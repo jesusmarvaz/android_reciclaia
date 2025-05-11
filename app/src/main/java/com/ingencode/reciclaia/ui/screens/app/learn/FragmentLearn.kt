@@ -1,11 +1,11 @@
-package com.ingencode.reciclaia.ui.screens.app.profile
+package com.ingencode.reciclaia.ui.screens.app.learn
 
 import android.view.View
 import android.widget.ProgressBar
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
 import com.ingencode.reciclaia.R
-import com.ingencode.reciclaia.databinding.FragmentProfileBinding
+import com.ingencode.reciclaia.databinding.FragmentLearnBinding
 import com.ingencode.reciclaia.ui.components.FragmentBaseForViewmodel
 import com.ingencode.reciclaia.ui.components.ViewModelBase
 import com.ingencode.reciclaia.utils.nameClass
@@ -14,8 +14,8 @@ import com.ingencode.reciclaia.utils.nameClass
 Created with ❤ by jesusmarvaz on 2025-02-19.
  */
 
-class FragmentProfile : FragmentBaseForViewmodel() {
-    private lateinit var binding: FragmentProfileBinding
+class FragmentLearn : FragmentBaseForViewmodel() {
+    private lateinit var binding: FragmentLearnBinding
     override fun getViewLifeCycleOwner(): LifecycleOwner = viewLifecycleOwner
     override fun goBack() = requireActivity().finish()
     override fun getFragmentTag(): String = this.nameClass
@@ -46,7 +46,7 @@ class FragmentProfile : FragmentBaseForViewmodel() {
     }
 
     override fun getInflatedViewBinding(): ViewBinding {
-        binding = FragmentProfileBinding.inflate(layoutInflater)
+        binding = FragmentLearnBinding.inflate(layoutInflater)
         return binding
     }
 }

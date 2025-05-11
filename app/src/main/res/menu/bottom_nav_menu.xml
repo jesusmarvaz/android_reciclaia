@@ -9,9 +9,9 @@
         android:icon="@drawable/rounded_history_material"
         android:title="@string/history" />
     <item
-        android:id="@+id/navigation_profile"
-        android:icon="@drawable/rounded_person_material"
-        android:title="@string/profile" />
+        android:id="@+id/navigation_learn"
+        android:icon="@drawable/round_news_dynamic_feed"
+        android:title="@string/learn" />
     <item
         android:id="@+id/navigation_options"
         android:icon="@drawable/rounded_settings_material"

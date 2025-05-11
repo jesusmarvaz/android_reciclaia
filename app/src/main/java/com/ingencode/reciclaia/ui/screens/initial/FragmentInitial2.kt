@@ -41,10 +41,10 @@ class FragmentInitial2 : FragmentBaseForViewmodel() {
             goBack()
         }
         binding.buttonTest.setOnClickListener {
-            viewModel.getTest()
+            viewModel.getTest(requireContext())
         }
         binding.buttonTestDb.setOnClickListener {
-            viewModel.getTestDb()
+            viewModel.getTestDb(requireContext())
         }
 
         viewModel.observableText.observe(viewLifecycleOwner) {

@@ -1,5 +1,7 @@
 package com.ingencode.reciclaia.ui.screens.initial
 
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -23,7 +25,7 @@ class FragmentInitialViewModel @Inject constructor(private val testApiProvider: 
     private val dbTestLiveData: MutableLiveData<List<TestResponseDb>> = MutableLiveData<List<TestResponseDb>>()
     val observableDbTestData: LiveData<List<TestResponseDb>> = dbTestLiveData
 
-    fun getTest() {
+    fun getTest(c: Context) {
         viewModelScope.launch {
             try {
                 val response = testApiProvider.getTest()
@@ -33,11 +35,13 @@ class FragmentInitialViewModel @Inject constructor(private val testApiProvider: 
             } catch (e: Exception) {
                 logError(e.stackTrace.toString())
                 e.printStackTrace()
+                val error = "Ups! Ha habido algún error"
+                textLiveData.postValue(error)
             }
         }
     }
 
-    fun getTestDb() {
+    fun getTestDb(c: Context) {
         viewModelScope.launch {
             try {
                 val response = testApiProvider.getTestDb()
@@ -47,6 +51,8 @@ class FragmentInitialViewModel @Inject constructor(private val testApiProvider: 
             } catch (e: Exception) {
                 logError(e.stackTrace.toString())
                 e.printStackTrace()
+                val error = "Ups! Ha habido algún error"
+                textLiveData.postValue(error)
             }
         }
     }

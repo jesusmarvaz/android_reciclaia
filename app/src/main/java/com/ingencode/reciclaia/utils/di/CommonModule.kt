@@ -6,9 +6,9 @@ import com.ingencode.reciclaia.data.repositories.IClassificationRepository
 import com.ingencode.reciclaia.data.repositories.ISettingsRepository
 import com.ingencode.reciclaia.data.repositories.LocalStorageProvider
 import com.ingencode.reciclaia.data.repositories.SettingsRepository
+import com.ingencode.reciclaia.ui.components.dialogs.InfoProcessingBottomSheet
 import com.ingencode.reciclaia.ui.navigation.BackPressedListener
 import com.ingencode.reciclaia.ui.navigation.IBackPressedListener
-import com.ingencode.reciclaia.ui.screens.app.history.ClassificationListAdapter
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -55,7 +55,13 @@ object CommonModuleImplementation {
 
     @Provides
     @Singleton
+    fun provideInfoProcessingBottomSheet(): InfoProcessingBottomSheet {
+        return InfoProcessingBottomSheet()
+    }
+
+    /*@Provides
+    @Singleton
     fun provideClassificationListAdapter(@ApplicationContext context: Context): ClassificationListAdapter {
         return ClassificationListAdapter(context)
-    }
+    }*/
 }

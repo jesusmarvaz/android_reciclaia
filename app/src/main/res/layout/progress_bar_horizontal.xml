@@ -17,5 +17,5 @@
         android:layout_gravity="center"
         android:indeterminateOnly="true"
         style="?android:attr/progressBarStyleHorizontal"
-        android:indeterminateTint="?attr/colorSecondary"/>
+        android:indeterminateTint="?attr/colorPrimary"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

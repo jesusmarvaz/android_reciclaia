@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="translucent">#22ffffff</color>
+
     <color name="confidence_25">#e6b0aa</color>
     <color name="confidence_50">#edbb99</color>
     <color name="confidence_70">#f9e79f</color>
@@ -11,4 +13,22 @@
     <color name="confidence_70_background">#b7950b</color>
     <color name="confidence_85_background">#196f3d</color>
     <color name="confidence_100_background">#00838f</color>
+
+    <color name="organic_container">#BC6858</color>
+    <color name="yellow_container">#FDD835</color>
+    <color name="blue_container">#5374F8</color>
+    <color name="green_container">#6DF074</color>
+    <color name="textile_container">#F89D81</color>
+    <color name="sigre_point">#CDF26F</color>
+    <color name="rest_container">#B3B3B3</color>
+    <color name="clean_point">#AA7EE4</color>
+    <color name="specific_management">#6EB7EB</color>
+
+    <color name="gold">#E7D46C</color>
+    <color name="silver">#D0D0D0</color>
+    <color name="copper">#DEA470</color>
+
+    <color name="gold_background">#837201</color>
+    <color name="silver_background">#8C8B8B</color>
+    <color name="copper_background">#9E5F24</color>
 </resources>

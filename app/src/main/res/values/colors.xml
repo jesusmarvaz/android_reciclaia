@@ -10,7 +10,7 @@
     <!--My colors-->
     <color name="background">#d9d9d9</color>
     <color name="transparent">#00000000</color>
-    <color name="translucent">#bfeeeeee</color>
+    <color name="translucent">#22ffffff</color>
 
     <color name="confidence_25">#7b241c</color>
     <color name="confidence_25_background">#e6b0aa</color>
@@ -23,7 +23,7 @@
     <color name="confidence_100">#00838f</color>
     <color name="confidence_100_background">#80deea</color>
     <color name="organic_container">#61372D</color>
-    <color name="yellow_container">#FDD835</color>
+    <color name="yellow_container">#B39200</color>
     <color name="blue_container">#001FB0</color>
     <color name="green_container">#187A1B</color>
     <color name="textile_container">#F4511E</color>
@@ -31,4 +31,12 @@
     <color name="rest_container">#6B6B6B</color>
     <color name="clean_point">#6F35B1</color>
     <color name="specific_management">#0288E1</color>
+
+    <color name="gold">#FFD400</color>
+    <color name="silver">#8C8B8B</color>
+    <color name="copper">#9E5F24</color>
+
+    <color name="gold_background">#FFF4C6</color>
+    <color name="silver_background">#D0D0D0</color>
+    <color name="copper_background">#DEA470</color>
 </resources>

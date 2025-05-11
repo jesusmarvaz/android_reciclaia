@@ -20,7 +20,7 @@ Created with ❤ by jesusmarvaz on 2025-05-05.
 - Metal: aluminum soda cans, aluminum food cans, steel food cans, aerosol cans
 - Organic Waste: food waste (fruit peels, vegetable scraps), eggshells, coffee grounds, tea bags
 - Textiles: clothing, shoes*/
-enum class Tag(val tag: String, @StringRes idStringName: Int) {
+enum class Tag(val tag: String, @StringRes val idStringName: Int) {
     ORGANIC("organic", R.string.organic), FOOD("food", R.string.food), FOOD_WASTE("food_waste", R.string.food_waste),
     COFFEE_GROUNDS("coffee_grounds", R.string.coffee_grounds), EGGSHELLS("eggshells", R.string.eggshells),
     AEROSOL_CANS("aerosol_cans", R.string.aerosol_cans), STYROFOAM_FOOD_CONTAINERS("styrofoam_food_containers", R.string.styrofoam_food_containers),
@@ -59,15 +59,16 @@ enum class WasteTagCategory(val tags: Set<Tag>, val processing: Set<WasteProcess
 }
 
 //enum class WasteCategory() { ORGANIC, INORGANIC, DANGEROUS, BULKY, CONSTRUCTION, SANITARY, NOT_DEFINED }
-sealed class WasteProcessing (@ColorRes val idColor: Int, @StringRes val idString: Int, @DrawableRes val idDrawableRes: Int) {
-    object OrganicRestContainer : WasteProcessing(R.color.organic_container, R.string.organic_container, R.drawable.bin_no_recyclable)
-    object YellowContainer : WasteProcessing(R.color.yellow_container, R.string.yellow_container, R.drawable.bin_recyclable)
-    object BlueContainer : WasteProcessing(R.color.blue_container, R.string.blue_container, R.drawable.bin_recyclable)
-    object GreenContainer : WasteProcessing(R.color.green_container, R.string.green_container, R.drawable.bin_recyclable)
-    object TextileContainer : WasteProcessing(R.color.textile_container, R.string.textile_container, R.drawable.bin_recyclable)
-    object SigrePoint: WasteProcessing(R.color.sigre_point, R.string.sigre_point, R.drawable.bin_no_recyclable)
-    object RestContainer: WasteProcessing(R.color.rest_container, R.string.rest_container, R.drawable.bin_no_recyclable)
-    data class CleanPoint(val description: String? = null) : WasteProcessing(R.color.clean_point, R.string.clean_point, R.drawable.clean_point)
-    data class SpecificManagement(@StringRes val description: Int? = null, @StringRes val managedBy: Int? = null) : WasteProcessing(R.color.specific_management, R.string.specific_management, R.drawable.bin_recyclable)
+sealed class WasteProcessing (@ColorRes val idColor: Int, @StringRes val idStringTitle: Int,
+                              @StringRes val idStringDescription: Int, @DrawableRes val idDrawableSrc: Int) {
+    object OrganicRestContainer : WasteProcessing(R.color.organic_container, R.string.organic_container, R.string.organic_container_description, R.drawable.img_contenedor_marron)
+    object YellowContainer : WasteProcessing(R.color.yellow_container, R.string.yellow_container, R.string.yellow_container_description, R.drawable.img_amarillo_contenedor)
+    object BlueContainer : WasteProcessing(R.color.blue_container, R.string.blue_container, R.string.blue_container_description, R.drawable.img_contenedor_azul)
+    object GreenContainer : WasteProcessing(R.color.green_container, R.string.green_container, R.string.green_container_description, R.drawable.img_contendor_verde)
+    object TextileContainer : WasteProcessing(R.color.textile_container, R.string.textile_container, R.string.textile_container_description, R.drawable.textil)
+    object SigrePoint: WasteProcessing(R.color.sigre_point, R.string.sigre_point, R.string.sigre_point_description, R.drawable.sigre)
+    object RestContainer: WasteProcessing(R.color.rest_container, R.string.rest_container, R.string.rest_container_description, R.drawable.img_contenedor_gris)
+    data class CleanPoint(val description: String? = null) : WasteProcessing(R.color.clean_point, R.string.clean_point, R.string.clean_point_description, R.drawable.img_punto_limpio)
+    data class SpecificManagement(@StringRes val description: Int? = null, @StringRes val managedBy: Int? = null) : WasteProcessing(R.color.specific_management, R.string.specific_management, R.string.specific_management_description, R.drawable.especiales)
 }
 

@@ -13,7 +13,7 @@ class ClassificationConverter {
     @TypeConverter
     fun toPredictions(predictionsString: String?): ArrayList<ClassificationModel.ClassificationPrediction>? {
         if (predictionsString == null) return null
-        val type = object : TypeToken<ClassificationModel.ClassificationPrediction>(){}.type
+        val type = object : TypeToken<ArrayList<ClassificationModel.ClassificationPrediction>>(){}.type
         return Gson().fromJson(predictionsString, type)
     }
 

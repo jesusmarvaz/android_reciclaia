@@ -3,7 +3,10 @@ package com.ingencode.reciclaia.domain.model
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.toLowerCase
 import com.ingencode.reciclaia.utils.sha256
+import com.ingencode.reciclaia.R
 import java.io.Serializable
 
 /**
@@ -59,6 +62,15 @@ data class ClassificationModel(
             .toSet()
     }
 
+    fun getClassificationAndProcessing(context: Context): String? {
+        val tag = findCategories()?.first()?.tags?.first()?.idStringName ?: return null
+        val processingId = findCategories()?.first()?.processing?.first()?.idStringTitle ?: return null
+        val confidence = this.classificationData?.topPrediction?.confidence ?: return null
+        val text = context.getString(R.string.pattern_prediction_and_processing).format(context.getString(tag), confidence, context.getString(processingId).toLowerCase(
+            Locale.current))
+        return text
+    }
+
     data class ClassificationPrediction(val label: String, val confidence: Float) : Serializable
     data class ClassificationData(
         var predictions: ArrayList<ClassificationPrediction> = arrayListOf<ClassificationPrediction>(),
@@ -67,6 +79,58 @@ data class ClassificationModel(
     ) : Serializable {
         val topPrediction: ClassificationPrediction?
             get() = predictions.maxByOrNull { it.confidence }
+        fun textColor(): Int? {
+            val c = topPrediction?.confidence ?: return null
+            return when {
+                (c < 0.25 && c >= 0) -> {
+                    R.color.confidence_25
+                }
+
+                (c >= 0.25 && c < 0.5) -> {
+                    R.color.confidence_50
+                }
+
+                (c >= 0.5 && c < 0.7) -> {
+                    R.color.confidence_70
+                }
+
+                (c >= 0.7 && c < 0.85) -> {
+                    R.color.confidence_85
+                }
+
+                (c >= 0.85 && c <= 1) -> {
+                    R.color.confidence_100
+                }
+
+                else -> null
+            }
+        }
+        fun backgroundColor(): Int? {
+            val c = topPrediction?.confidence ?: return null
+            return when {
+                (c < 0.25 && c >= 0) -> {
+                    R.color.confidence_25_background
+                }
+
+                (c >= 0.25 && c < 0.5) -> {
+                    R.color.confidence_50_background
+                }
+
+                (c >= 0.5 && c < 0.7) -> {
+                    R.color.confidence_70_background
+                }
+
+                (c >= 0.7 && c < 0.85) -> {
+                    R.color.confidence_85_background
+                }
+
+                (c >= 0.85 && c <= 1) -> {
+                    R.color.confidence_100_background
+                }
+
+                else -> null
+            }
+        }
     }
 
     data class ModelInfo(val modalName: String, val modelVersion: String? = null) : Serializable

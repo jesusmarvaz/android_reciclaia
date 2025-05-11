@@ -82,4 +82,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx) // optional - Kotlin Extensions and Coroutines support for Room
     ksp(libs.room.compiler)
+    implementation(libs.androidx.swiperefreshlayout)
+    implementation(libs.lottie.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
 }
