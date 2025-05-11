@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -225,5 +226,6 @@ class ImageVisorViewModel @Inject constructor(
 
     override fun theTag(): String = nameClass
 
-    enum class Status { NOT_CLASSIFIED_YET, NO_RESULTS, CLASSIFIED_NOT_SAVED, CLASSIFIED_SAVED, SAVED_NOT_CLASSIFIED }
+    enum class Status(@StringRes val idString: Int) { NOT_CLASSIFIED_YET(R.string.enum_not_classified_yet), NO_RESULTS(R.string.enum_no_results),
+        CLASSIFIED_NOT_SAVED(R.string.enum_classified_not_saved), CLASSIFIED_SAVED(R.string.enum_classified_saved), SAVED_NOT_CLASSIFIED(R.string.enum_saved_not_classified) }
 }

@@ -2,13 +2,16 @@ package com.ingencode.reciclaia.ui.screens.app.home
 
 import android.view.View
 import android.widget.ProgressBar
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
 import com.ingencode.reciclaia.R
 import com.ingencode.reciclaia.databinding.FragmentHomeBinding
 import com.ingencode.reciclaia.ui.components.FragmentBaseForViewmodel
 import com.ingencode.reciclaia.ui.components.ViewModelBase
+import com.ingencode.reciclaia.ui.screens.app.history.HistoryViewmodel
 import com.ingencode.reciclaia.utils.nameClass
+import kotlin.getValue
 
 /**
 Created with ❤ by jesusmarvaz on 2025-02-19.

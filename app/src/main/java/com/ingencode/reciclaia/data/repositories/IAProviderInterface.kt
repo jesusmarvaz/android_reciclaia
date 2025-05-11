@@ -24,7 +24,7 @@ class IAProviderMockImp @Inject constructor() : IAProviderInterface {
                 val randomIndex = Random.nextInt(0, WasteTagCategory.entries.size - 1)
                 val labelRandom = WasteTagCategory.entries.filter {
                     it.ordinal == randomIndex }
-                tempClassificationList.add(ClassificationModel.ClassificationPrediction(labelRandom[0].tags.first(), Random.nextFloat()))
+                tempClassificationList.add(ClassificationModel.ClassificationPrediction(labelRandom[0].tags.first().tag, Random.nextFloat()))
             }
             return tempClassificationList
         }

@@ -49,13 +49,13 @@ data class ClassificationModel(
     var classificationData: ClassificationData? = null,
     var title: String? = null,
     var comments: String? = null,
-    var location: ClassificationModel.Location? = null, //latitude, longitude
+    var location: Location? = null, //latitude, longitude
 ) : Serializable {
 
     fun getShaID() = uri.toString().sha256()
     fun findCategories(): Set<WasteTagCategory>? {
         return WasteTagCategory.entries
-            .filter { tag -> tag.tags.any { it.contains(classificationData?.topPrediction?.label ?: "", ignoreCase = true) } }
+            .filter { tag -> tag.tags.any { it.tag.contains(classificationData?.topPrediction?.label ?: "", ignoreCase = true) } }
             .toSet()
     }
 

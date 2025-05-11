@@ -8,6 +8,7 @@ import com.ingencode.reciclaia.data.repositories.LocalStorageProvider
 import com.ingencode.reciclaia.data.repositories.SettingsRepository
 import com.ingencode.reciclaia.ui.navigation.BackPressedListener
 import com.ingencode.reciclaia.ui.navigation.IBackPressedListener
+import com.ingencode.reciclaia.ui.screens.app.history.ClassificationListAdapter
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -50,5 +51,11 @@ object CommonModuleImplementation {
     @Singleton
     fun provideBackPressedListener(): IBackPressedListener {
         return BackPressedListener
+    }
+
+    @Provides
+    @Singleton
+    fun provideClassificationListAdapter(@ApplicationContext context: Context): ClassificationListAdapter {
+        return ClassificationListAdapter(context)
     }
 }

@@ -1,5 +1,5 @@
 [versions]
-agp = "8.9.1"
+agp = "8.10.0"
 appcompat = "1.7.0"
 glide = "4.13.0"
 materialIconsExtended = "1.7.8"

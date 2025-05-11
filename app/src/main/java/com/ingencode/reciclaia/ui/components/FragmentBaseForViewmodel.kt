@@ -17,7 +17,7 @@ abstract class FragmentBaseForViewmodel: FragmentBase(), IViewBase {
         //super.onViewCreated(view, savedInstanceState)
         // (activity as AppCompatActivity).setLightStatusBar()
         initProperties()
-        observeVM()
         observeViewModelBase()
+        observeVM()
     }
 }

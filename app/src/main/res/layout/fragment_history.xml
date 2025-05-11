@@ -1,20 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSurface">
 
     <include
         android:id="@+id/title"
-        layout="@layout/screen_title"/>
+        layout="@layout/screen_title" />
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/ll_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        android:alpha="0.8"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title">
+
+        <ImageView
+            android:id="@+id/delete"
+            android:layout_width="@dimen/icon_padding10dp"
+            android:layout_height="@dimen/icon_padding10dp"
+            android:background="@drawable/rounded_all_corners"
+            android:backgroundTint="?attr/colorSurfaceVariant"
+            android:contentDescription="@string/image_for_processing"
+            android:padding="10dp"
+            android:src="@drawable/round_delete_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            app:tint="?attr/colorPrimary" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:alpha="0.8"
+        android:background="@drawable/rounded_all_corners"
+        android:backgroundTint="?attr/colorSurfaceVariant"
+        android:gravity="center"
+        android:minWidth="@dimen/icon_padding10dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title">
+
+        <ImageView
+            android:id="@+id/iv_filter"
+            android:layout_width="@dimen/icon_padding10dp"
+            android:layout_height="@dimen/icon_padding10dp"
+            android:contentDescription="@string/filter"
+            android:padding="10dp"
+            android:src="@drawable/filter"
+            app:tint="?attr/colorPrimary" />
+
+        <ImageView
+            android:id="@+id/iv_sort"
+            android:layout_width="@dimen/icon_padding10dp"
+            android:layout_height="@dimen/icon_padding10dp"
+            android:contentDescription="@string/sort"
+            android:padding="10dp"
+            android:src="@drawable/sort"
+            app:tint="?attr/colorPrimary" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/shader"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Pantalla Historial"
-        android:gravity="center"
-        style="@style/TextAppearance.AppCompat.Title"
-        android:textColor="?attr/colorTertiary"
-        />
+        android:background="@color/translucent"
+        android:clickable="true"
+        android:elevation="0dp"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
+    <include
+        android:id="@+id/pb_horizontal"
+        layout="@layout/progress_bar_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_items"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingStart="8dp"
+        android:paddingTop="64dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
 </androidx.constraintlayout.widget.ConstraintLayout>
