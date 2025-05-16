@@ -65,13 +65,17 @@ class ClassificationsHomeAdapter @Inject constructor(private val context: Contex
     }
     class ModelItemViewHolder(itemView: View, val context: Context): RecyclerView.ViewHolder(itemView) {
         val tag: TextView = itemView.findViewById(R.id.tv_tag)
-        val image: ImageView = itemView.findViewById(R.id.tv_tag_confidence)
+        val image: ImageView = itemView.findViewById(R.id.iv_capture)
+        val confidence: TextView = itemView.findViewById(R.id.tv_tag_confidence)
+
         fun bind(item: HomeClassificationModel) {
             itemView.setOnClickListener {
                 val intent = Intent(context, ImageVisorActivity::class.java).apply { putExtra("id", item.uri.toString().sha256()) }
                 context.startActivity(intent)
             }
             tag.text = item.tag
+            tag.isSelected = true
+            confidence.text = "%d%%".format((item.confidence * 100).toInt())
             Glide.with(context).load(item.uri).into(image)
         }
     }

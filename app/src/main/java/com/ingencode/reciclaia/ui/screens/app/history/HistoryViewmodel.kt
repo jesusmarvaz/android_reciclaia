@@ -58,7 +58,7 @@ class HistoryViewmodel @Inject constructor(private val databaseProvider: IClassi
         viewModelScope.launch(Dispatchers.Background) {
             loading.postValue(true)
             val list = arrayListOf<ClassificationModel>()
-            delay(1000)
+            //delay(1000)
             databaseProvider.getAllProcessedImages()?.let {
                 list.addAll(it)
                 list.addAll(orderClassifications(it, _radioId.value, _descendingChecked.value == true))
@@ -92,7 +92,7 @@ class HistoryViewmodel @Inject constructor(private val databaseProvider: IClassi
     fun deleteAll() {
         viewModelScope.launch(Dispatchers.Background) {
             loading.postValue(true)
-            delay(1000)
+            delay(200)
             databaseProvider.deleteAllProcessedImages().let {
                 viewModelScope.launch(Dispatchers.Main.immediate) { _deletedNItems.value = it }
                 _justDeleted.postValue(Unit)

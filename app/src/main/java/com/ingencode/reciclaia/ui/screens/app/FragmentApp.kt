@@ -73,24 +73,6 @@ class FragmentApp : FragmentBase(), IImageSelector {
     private fun navigate(@IdRes id: Int) {
         binding.bnvApp.selectedItemId = id
     }
-    /*class MyActivity : ComponentActivity() {
-    private val myBroadcastReceiver = MyBroadcastReceiver()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // ...
-        ContextCompat.registerReceiver(this, myBroadcastReceiver, filter, receiverFlags)
-        setContent { MyApp() }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        // When you forget to unregister your receiver here, you're causing a leak!
-        this.unregisterReceiver(myBroadcastReceiver)
-    }
-}*/
-
-
 
     override fun initProperties() {
         viewLifecycleOwner.lifecycleScope.launch {

@@ -8,13 +8,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
 Created with ❤ by jesusmarvaz on 2025-05-16.
  */
 
 @HiltViewModel
-class ImageLauncherViewModel : ViewModel(), IImageSelector {
+class ImageLauncherViewModel @Inject constructor(): ViewModel(), IImageSelector {
     private val _launchImageSelectorEvent = MutableSharedFlow<Unit>() // Usar SharedFlow para eventos
     val launchImageSelectorEvent = _launchImageSelectorEvent.asSharedFlow()
 

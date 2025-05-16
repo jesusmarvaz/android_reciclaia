@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     app:layout_constraintDimensionRatio="0.6"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/transparent">
+    android:background="@color/transparent"
+    android:layout_marginHorizontal="16dp">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:alpha="1"
-                android:id="@+id/tv_tag"
+                android:id="@+id/tv_add"
                 app:layout_constraintTop_toTopOf="parent"
                 android:paddingVertical="2dp"
                 android:background="?attr/colorSurface"

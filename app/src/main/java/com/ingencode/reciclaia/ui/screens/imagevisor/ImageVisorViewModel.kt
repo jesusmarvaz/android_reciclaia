@@ -151,7 +151,7 @@ class ImageVisorViewModel @Inject constructor(
             viewModelScope.launch(Dispatchers.IO) {
                 val uri = localStorageProvider.saveCroppedImage(bitmap, it)
                 if (uri != null) {
-                    delay(1000)
+                    delay(200)
                     val classification = getClassificationFromResult(_classificationResult.value)?.also {
                         it.uri = uri
                         it.title = title
@@ -175,7 +175,7 @@ class ImageVisorViewModel @Inject constructor(
     fun shareToLocalMediaFolderButtonPressed(bitmap: Bitmap) {
         loading.postValue(true)
         viewModelScope.launch {
-            delay(1000)
+            delay(200)
             val result = localStorageProvider.exportBitmapToNewFileInMediaStore(bitmap)
             if (result is SealedResult.ResultSuccess<Uri>) {
                 _exportedSuccessfully.postValue(Unit)

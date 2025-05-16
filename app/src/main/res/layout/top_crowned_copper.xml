@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     app:layout_constraintDimensionRatio="0.6"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/transparent">
+    android:background="@color/transparent"
+    android:id="@+id/constraint_layout_copper">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="0dp"

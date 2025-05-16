@@ -13,37 +13,43 @@ import com.ingencode.reciclaia.domain.model.HomeClassificationModel
 import com.ingencode.reciclaia.domain.model.HomeTop3
 import com.ingencode.reciclaia.ui.components.FragmentBaseForViewmodel
 import com.ingencode.reciclaia.ui.components.ViewModelBase
-import com.ingencode.reciclaia.ui.screens.app.history.HistoryViewmodel
 import com.ingencode.reciclaia.ui.screens.app.home.adapters.ClassificationsHomeAdapter
 import com.ingencode.reciclaia.ui.viewmodels.ImageLauncherViewModel
 import com.ingencode.reciclaia.utils.nameClass
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.getValue
 
 /**
 Created with ❤ by jesusmarvaz on 2025-02-19.
  */
 
+@AndroidEntryPoint
 class FragmentHome : FragmentBaseForViewmodel() {
-    override fun getPb(): ProgressBar? = null
+    override fun getPb(): ProgressBar? = binding.pbHorizontal.progressBarBase
     override fun getShaderLoading(): View? = null
     override fun getViewLifeCycleOwner(): LifecycleOwner = viewLifecycleOwner
     override fun goBack() = requireActivity().finish()
     override fun getFragmentTag(): String = this.nameClass
     override fun getViewModelBase(): ViewModelBase? = viewmodel
 
+    override fun onResume() {
+        super.onResume()
+        viewmodel.getClassifications()
+    }
+
     private lateinit var binding: FragmentHomeBinding
     private lateinit var classificationsHomeAdapter: ClassificationsHomeAdapter
     private val viewmodel: HomeViewmodel by viewModels()
     private val sharedViewmodel: ImageLauncherViewModel by activityViewModels()
-    private lateinit var linearLayoutManager:  LinearLayoutManager
+    private lateinit var linearLayoutManager: LinearLayoutManager
 
     override fun observeVM() {
         viewmodel.homeModel.observe(viewLifecycleOwner) { model ->
             if (model != null) {
                 if (model.total == 0) setEmpty()
                 else {
-                    binding.mySscrollView.visibility = View.VISIBLE
-                    binding.noCaptionsYetLayout.visibility = View.GONE
+                    binding.myScrollView.visibility = View.VISIBLE
+                    binding.noCaptionsLayout.visibility = View.GONE
                     configureRV(model.listLast10)
                     setTotalCaptions(model.total)
                     setAverageConfidence(model.averageConfidence)
@@ -55,16 +61,18 @@ class FragmentHome : FragmentBaseForViewmodel() {
 
     private fun setEmpty() {
         binding.myScrollView.visibility = View.GONE
-        binding.noCaptionsYetLayout.visibility = View.VISIBLE
+        binding.noCaptionsLayout.visibility = View.VISIBLE
     }
 
 
     override fun initProperties() {
-        linearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        linearLayoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         classificationsHomeAdapter = ClassificationsHomeAdapter(requireContext(), sharedViewmodel)
         configureRV(arrayListOf())
         binding.title.tvScreenTitle.text = getString(R.string.home)
         observeVM()
+        viewmodel.getClassifications()
     }
 
     override fun getInflatedViewBinding(): ViewBinding {
@@ -86,10 +94,11 @@ class FragmentHome : FragmentBaseForViewmodel() {
         binding.tvConfidenceValue.text = "%d%%".format((averageConfidence * 100).toInt())
     }
 
-    private fun setTop3(top3: Array<HomeTop3?>) {
-        val top1 = top3[0]
-        val top2 = top3[1]
-        val top3 = top3[2]
+    private fun setTop3(top3list: Array<HomeTop3?>) {
+        val top1 = top3list[0]
+        val top2 = top3list[1]
+        val top3 = top3list[2]
+
         if (top1 == null && top2 == null && top3 == null) {
             binding.tvTop3Categories.visibility = View.GONE
             binding.llTop3.visibility = View.GONE
@@ -97,17 +106,18 @@ class FragmentHome : FragmentBaseForViewmodel() {
         }
         binding.tvTop3Categories.visibility = View.VISIBLE
         binding.llTop3.visibility = View.VISIBLE
+
         top1?.let {
-            binding.top3Gold.tvTagAmount1.text = getString(it.wasteTag.idStringName)
-            binding.top3Gold.tvTagTop1.text = it.amount
+            binding.top3Gold.tvTagAmount1.text = it.amount
+            binding.top3Gold.tvTagTop1.text = getString(it.wasteTag.idStringName)
         }
         top2?.let {
-            binding.top3Silver.tvTagAmount2.text = getString(it.wasteTag.idStringName)
-            binding.top3Silver.tvTagTop2.text = it.amount
+            binding.top3Silver.tvTagAmount2.text = it.amount
+            binding.top3Silver.tvTagTop2.text = getString(it.wasteTag.idStringName)
         }
         top3?.let {
-            binding.top3Copper.tvTagAmount3.text = getString(it.wasteTag.idStringName)
-            binding.top3Copper.tvTagTop3.text = it.amount
+            binding.top3Copper.tvTagAmount3.text = it.amount
+            binding.top3Copper.tvTagTop3.text = getString(it.wasteTag.idStringName)
         }
     }
 }
