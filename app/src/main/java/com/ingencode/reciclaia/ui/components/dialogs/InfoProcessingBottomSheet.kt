@@ -1,6 +1,5 @@
 package com.ingencode.reciclaia.ui.components.dialogs
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide

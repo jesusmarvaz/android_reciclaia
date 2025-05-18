@@ -17,7 +17,6 @@ import com.ingencode.reciclaia.ui.screens.app.home.adapters.ClassificationsHomeA
 import com.ingencode.reciclaia.ui.viewmodels.ImageLauncherViewModel
 import com.ingencode.reciclaia.utils.nameClass
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.getValue
 
 /**
 Created with ❤ by jesusmarvaz on 2025-02-19.
@@ -44,17 +43,16 @@ class FragmentHome : FragmentBaseForViewmodel() {
     private lateinit var linearLayoutManager: LinearLayoutManager
 
     override fun observeVM() {
-        viewmodel.homeModel.observe(viewLifecycleOwner) { model ->
-            if (model != null) {
-                if (model.total == 0) setEmpty()
-                else {
-                    binding.myScrollView.visibility = View.VISIBLE
-                    binding.noCaptionsLayout.visibility = View.GONE
-                    configureRV(model.listLast10)
-                    setTotalCaptions(model.total)
-                    setAverageConfidence(model.averageConfidence)
-                    setTop3(model.fixedArrayTop3)
-                }
+        viewmodel.homeModel.observe(viewLifecycleOwner) {
+            model ->
+            if (model == null) setEmpty()
+            else {
+                binding.myScrollView.visibility = View.VISIBLE
+                binding.noCaptionsLayout.visibility = View.GONE
+                configureRV(model.listLast10)
+                setTotalCaptions(model.total)
+                setAverageConfidence(model.averageConfidence)
+                setTop3(model.fixedArrayTop3)
             }
         }
     }
@@ -91,7 +89,9 @@ class FragmentHome : FragmentBaseForViewmodel() {
     }
 
     private fun setAverageConfidence(averageConfidence: Float) {
-        binding.tvConfidenceValue.text = "%d%%".format((averageConfidence * 100).toInt())
+        val confidence = (averageConfidence * 100).toInt()
+        binding.tvConfidenceValue.text = "%d%%".format(confidence)
+        binding.pbCircularConfidence.progress = confidence
     }
 
     private fun setTop3(top3list: Array<HomeTop3?>) {
@@ -107,6 +107,9 @@ class FragmentHome : FragmentBaseForViewmodel() {
         binding.tvTop3Categories.visibility = View.VISIBLE
         binding.llTop3.visibility = View.VISIBLE
 
+        binding.top3Gold.tvTagTop1.isSelected = true
+        binding.top3Silver.tvTagTop2.isSelected = true
+        binding.top3Copper.tvTagTop3.isSelected = true
         top1?.let {
             binding.top3Gold.tvTagAmount1.text = it.amount
             binding.top3Gold.tvTagTop1.text = getString(it.wasteTag.idStringName)

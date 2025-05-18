@@ -12,7 +12,6 @@ import com.bumptech.glide.Glide
 import com.ingencode.reciclaia.R
 import com.ingencode.reciclaia.domain.model.HomeClassificationModel
 import com.ingencode.reciclaia.ui.screens.app.home.IImageSelector
-import com.ingencode.reciclaia.ui.screens.app.home.ICaptureClickListener
 import com.ingencode.reciclaia.ui.screens.imagevisor.ImageVisorActivity
 import com.ingencode.reciclaia.utils.sha256
 import javax.inject.Inject

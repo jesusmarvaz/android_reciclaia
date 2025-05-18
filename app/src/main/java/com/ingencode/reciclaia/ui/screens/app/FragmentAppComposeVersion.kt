@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
@@ -27,7 +26,6 @@ import com.ingencode.reciclaia.databinding.FragmentAppComposeBinding
 import com.ingencode.reciclaia.ui.components.FragmentBase
 import com.ingencode.reciclaia.ui.navigation.compose.MyBottomNavigationBar
 import com.ingencode.reciclaia.ui.navigation.compose.NavigationForBottomBar
-import com.ingencode.reciclaia.ui.screens.tutorial.Tutorial
 import com.ingencode.reciclaia.ui.theme.MyComposeWrapper
 import com.ingencode.reciclaia.ui.viewmodels.SettingsViewModel
 import com.ingencode.reciclaia.utils.nameClass

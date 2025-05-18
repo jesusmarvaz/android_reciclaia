@@ -2,24 +2,20 @@ package com.ingencode.reciclaia.ui.screens.app.history
 
 import android.view.View
 import android.widget.CheckBox
-import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.RadioGroup
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.semantics.text
-import androidx.core.content.ContextCompat
-import androidx.core.text.HtmlCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.ingencode.reciclaia.R
 import com.ingencode.reciclaia.databinding.FragmentHistoryBinding
-import com.ingencode.reciclaia.databinding.WasteProcessingInfoLayoutBinding
 import com.ingencode.reciclaia.domain.model.ClassificationModel
 import com.ingencode.reciclaia.domain.model.WasteProcessing
 import com.ingencode.reciclaia.ui.components.FragmentBaseForViewmodel
@@ -28,6 +24,7 @@ import com.ingencode.reciclaia.ui.components.dialogs.AlertHelper
 import com.ingencode.reciclaia.ui.components.dialogs.InfoProcessingBottomSheet
 import com.ingencode.reciclaia.utils.nameClass
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -60,10 +57,13 @@ class FragmentHistory() : FragmentBaseForViewmodel(), IProcessingInfoListener {
                 }
             }
             classificationsOrdered.observe(this@FragmentHistory) { configureRV(it) }
-            justDeleted.observe(this@FragmentHistory) {
-                if (it != null) {
-                    launchDeletedOk(viewmodel.deletedNItems.value ?: -1)
-                    getClassifications()
+
+            viewLifecycleOwner.lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewmodel.justDeletedEmit.collect {
+                        launchDeletedOk(viewmodel.deletedNItems.value ?: -1)
+                        getClassifications()
+                    }
                 }
             }
             observableLoading().observe(this@FragmentHistory) {

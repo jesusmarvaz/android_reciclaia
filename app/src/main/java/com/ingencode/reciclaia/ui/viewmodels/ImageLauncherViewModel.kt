@@ -2,7 +2,6 @@ package com.ingencode.reciclaia.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ingencode.reciclaia.ui.components.ViewModelBase
 import com.ingencode.reciclaia.ui.screens.app.home.IImageSelector
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow

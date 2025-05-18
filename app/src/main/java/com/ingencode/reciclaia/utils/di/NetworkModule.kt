@@ -38,6 +38,11 @@ class NetworkModule {
     @Singleton
     fun provideTest(retrofit: Retrofit): Apis.TestApi = retrofit.create(Apis.TestApi::class.java)
 
+    @Provides
+    @Singleton
+    fun provideWasteInfoApi(retrofit: Retrofit): Apis.WasteInfoApi
+    = retrofit.create(Apis.WasteInfoApi::class.java)
+
     private fun buildOkHttpClient(): OkHttpClient {
         val logging = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
         val okHttpClient = OkHttpClient.Builder().addInterceptor(logging).build()

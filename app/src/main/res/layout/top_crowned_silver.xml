@@ -18,7 +18,6 @@
         android:src="@drawable/rounded_crown_24"
         app:layout_constraintDimensionRatio="1.8"
         android:scaleType="fitXY"
-        android:rotation="9"
         android:elevation="2dp"
         app:tint="@color/silver"
         />
@@ -58,7 +57,7 @@
                 android:backgroundTint="@color/silver_background"
                 android:paddingHorizontal="4dp"
                 tools:text="aerosol de metal y prástico"
-                android:maxLines="2"
+                android:singleLine="true"
                 style="@style/TextView.Monospace"
                 android:ellipsize="marquee"
                 android:scrollHorizontally="true"

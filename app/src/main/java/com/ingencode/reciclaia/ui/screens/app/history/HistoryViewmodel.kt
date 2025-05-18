@@ -13,6 +13,8 @@ import com.ingencode.reciclaia.utils.nameClass
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,6 +25,8 @@ Created with ❤ by Jesús Martín (jesusmarvaz@gmail.com) on 2025-05-10.
 @HiltViewModel
 class HistoryViewmodel @Inject constructor(private val databaseProvider: IClassificationRepository): ViewModelBase() {
     override fun theTag(): String = this.nameClass
+    private val _justDeletedEmit = MutableSharedFlow<Unit>() // Usar SharedFlow para eventos
+    val justDeletedEmit = _justDeletedEmit.asSharedFlow()
 
     private var classificationsRaw = listOf<ClassificationModel>()
         set(value) {
@@ -36,9 +40,6 @@ class HistoryViewmodel @Inject constructor(private val databaseProvider: IClassi
 
     private val _deletedNItems = MutableLiveData<Int>()
     val deletedNItems: LiveData<Int> = _deletedNItems
-
-    private val _justDeleted = MutableLiveData<Unit>()
-    val justDeleted: LiveData<Unit> = _justDeleted
 
     private val _radioId = MutableLiveData<Int>(null)
     val radioId = _radioId as LiveData<Int>
@@ -95,7 +96,7 @@ class HistoryViewmodel @Inject constructor(private val databaseProvider: IClassi
             delay(200)
             databaseProvider.deleteAllProcessedImages().let {
                 viewModelScope.launch(Dispatchers.Main.immediate) { _deletedNItems.value = it }
-                _justDeleted.postValue(Unit)
+                _justDeletedEmit.emit(Unit)
             }
             loading.postValue(false)
         }

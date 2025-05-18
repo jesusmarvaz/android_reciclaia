@@ -9,14 +9,12 @@ import com.ingencode.reciclaia.domain.model.HomeClassificationModel
 import com.ingencode.reciclaia.domain.model.HomeModel
 import com.ingencode.reciclaia.domain.model.HomeTop3
 import com.ingencode.reciclaia.domain.model.Tag
-import com.ingencode.reciclaia.domain.model.WasteTagCategory
 import com.ingencode.reciclaia.ui.components.ViewModelBase
 import com.ingencode.reciclaia.utils.BackgroundDispatcher.Background
 import com.ingencode.reciclaia.utils.nameClass
 import com.ingencode.reciclaia.utils.sha256
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,16 +36,15 @@ class HistoryViewmodel @Inject constructor(private val databaseProvider: IClassi
 class HomeViewmodel @Inject constructor(private val databaseProvider: IClassificationRepository): ViewModelBase() {
     override fun theTag(): String = this.nameClass
 
-    private val _homeModel = MutableLiveData<HomeModel>()
-    val homeModel: LiveData<HomeModel> = _homeModel
+    private val _homeModel = MutableLiveData<HomeModel?>()
+    val homeModel: LiveData<HomeModel?> = _homeModel
 
     fun getClassifications() {
         viewModelScope.launch(Dispatchers.Background) {
             loading.postValue(true)
             //delay(1000)
             databaseProvider.getAllProcessedImages()?.let {
-                val mapped = mapToHomeModel(it)
-                mapped?.let { _homeModel.postValue(it) }
+                _homeModel.postValue(mapToHomeModel(it))
                 loading.postValue(false)
             }
         }

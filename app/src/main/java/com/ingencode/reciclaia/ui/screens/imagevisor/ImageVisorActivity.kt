@@ -31,7 +31,6 @@ import com.ingencode.reciclaia.ui.screens.imagevisor.ImageVisorViewModel.Status
 import com.ingencode.reciclaia.utils.SealedAppError
 import com.ingencode.reciclaia.utils.getThemeColor
 import com.ingencode.reciclaia.utils.nameClass
-import com.ingencode.reciclaia.utils.setTint
 import com.ingencode.reciclaia.utils.toFormattedStringDate
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

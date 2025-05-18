@@ -2,18 +2,16 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?attr/colorSurface">
     <include
         android:id="@+id/title"
         layout="@layout/screen_title"/>
-
-    <TextView
+    <include
+        layout="@layout/progress_bar_horizontal"
+        android:id="@+id/pb"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Pantalla Perfil"
-        android:gravity="center"
-        style="@style/TextAppearance.AppCompat.Title"
-        android:textColor="?attr/colorTertiary"
-        />
+        app:layout_constraintTop_toBottomOf="@id/title"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

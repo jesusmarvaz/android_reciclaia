@@ -1,6 +1,5 @@
 package com.ingencode.reciclaia.ui.screens.app.history
 
-import androidx.annotation.IdRes
 import com.ingencode.reciclaia.domain.model.WasteProcessing
 
 /**
