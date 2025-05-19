@@ -45,6 +45,7 @@ class FragmentLearn : FragmentBaseForViewmodel(), ILog {
                         is SealedAppError -> {"App error: ${it.message}"}
                         is SealedApiError -> {"Server error${it.message}"}
                     }
+                binding.cvError.visibility = View.VISIBLE
             }
         }
         viewmodel.learnModel.observe(this) {
@@ -64,6 +65,8 @@ class FragmentLearn : FragmentBaseForViewmodel(), ILog {
     }
 
     private fun configureRVs(list: List<LearnModelBundle>) {
+        binding.rvLearn.visibility = View.VISIBLE
+        binding.cvError.visibility = View.GONE
         learnAdapter = LearnAdapter(ArrayList(list))
         binding.rvLearn.layoutManager = linearLayoutManager
         binding.rvLearn.adapter = learnAdapter

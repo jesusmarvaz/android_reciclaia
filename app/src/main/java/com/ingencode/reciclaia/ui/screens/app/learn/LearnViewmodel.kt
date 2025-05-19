@@ -20,6 +20,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -36,6 +37,7 @@ class LearnViewmodel @Inject constructor(@ApplicationContext val c: Context, pri
 
     fun getLearnData() {
         viewModelScope.launch {
+            delay(500)
             loading.postValue(true)
             val deferredJobWasteTypes = async(Dispatchers.Background) { getWasteTypes() }
             val deferredJobProcessingTypes = async(Dispatchers.Background) { getProcessingTypes() }
