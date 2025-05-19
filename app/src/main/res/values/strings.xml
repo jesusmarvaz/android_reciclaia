@@ -77,66 +77,65 @@
     <string name="datetime">Fecha y hora</string>
     <string name="not_classified_yet">¡No hay resultado de clasificación\n pulsa en procesar!</string>
     <string name="no_camera_permission_granted">No has autorizado el uso de la cámara, ve a los ajustes para establecerlo.</string>
-    <string name="organic_container" translatable="false">Contenedor marrón o gris</string>
-    <string name="yellow_container" translatable="false">Contenedor amarillo</string>
-    <string name="blue_container" translatable="false">Contenedor azul</string>
-    <string name="green_container" translatable="false">Contenedor verde</string>
-    <string name="textile_container" translatable="false">Contenedor textil</string>
-    <string name="sigre_point" translatable="false">Punto sigre</string>
-    <string name="rest_container" translatable="false">Contenedor restos</string>
-    <string name="clean_point" translatable="false">Punto limpio</string>
-    <string name="specific_management" translatable="false">Procesado específico</string>
-    <string name="special_recycling" translatable="false">reciclaje especial</string>
-    <string name="municipal_services_special_containers" translatable="false">Servicios municipales, contenedores especiales</string>
-    <string name="no_results" translatable="false">No hay información de reciclaje</string>
-    <string name="organic" translatable="false">Orgánico</string>
-    <string name="food" translatable="false">Comida</string>
-    <string name="food_waste" translatable="false">Restos de comida</string>
-    <string name="coffee_grounds" translatable="false">Posos de café</string>
-    <string name="eggshells" translatable="false">Cáscaras de huevo</string>
-    <string name="aerosol_cans" translatable="false">Latas de aerosol</string>
-    <string name="styrofoam_food_containers" translatable="false">Envases de comida de poliestireno</string>
-    <string name="disposable_plastic_cutlery" translatable="false">Cubertería de plástico desechable</string>
-    <string name="tea_bags" translatable="false">Bolsa de té</string>
-    <string name="aluminium_food_cans" translatable="false">Envases de aluminio</string>
-    <string name="aluminium_soda_cans" translatable="false">Refrescos de aluminio</string>
-    <string name="plastic_soda_bottles" translatable="false">Botellas de plástico</string>
-    <string name="can" translatable="false">Lata</string>
-    <string name="plastic_cup_lids" translatable="false">Tapas de vasos de plástico</string>
-    <string name="plastic_detergent_bottles" translatable="false">Botellas de detergente de plástico</string>
-    <string name="plastic_food_containers" translatable="false">Envases de plástico</string>
-    <string name="plastic_shopping_bags" translatable="false">Bolsas de plástico</string>
-    <string name="plastic_straws" translatable="false">Pajitas de plástico</string>
-    <string name="plastic_trash_bags" translatable="false">Bolsas de basura (plástico)</string>
-    <string name="plastic_water_bottles" translatable="false">Botellas de agua de plástico</string>
-    <string name="steel_food_cans" translatable="false">Latas de comida de acero</string>
-    <string name="paper" translatable="false">Papel</string>
-    <string name="cardboard" translatable="false">Cartón</string>
-    <string name="cardboard_boxes" translatable="false">Caja de cartón</string>
-    <string name="cardboard_packaging" translatable="false">Embalaje de cartón</string>
-    <string name="magazines" translatable="false">Revistas</string>
-    <string name="newspaper" translatable="false">Periódico</string>
-    <string name="office_paper" translatable="false">Papel de oficina</string>
-    <string name="paper_cups" translatable="false">Vasos de papel</string>
-    <string name="glass" translatable="false">Vidrio</string>
-    <string name="glass_beverage_bottles" translatable="false">Botellas de vidrio de bebidas</string>
-    <string name="glass_cosmetics_containers" translatable="false">Envases de cosméticos de vidrio</string>
-    <string name="glass_food_jars" translatable="false">Frascos de vidrio para alimentos</string>
-    <string name="oil" translatable="false">Aceite</string>
-    <string name="electronics" translatable="false">Dispositivo electrónico</string>
-    <string name="textil" translatable="false">Textil</string>
-    <string name="clothing" translatable="false">Ropa</string>
-    <string name="shoes" translatable="false">Zapatos</string>
-    <string name="medicine" translatable="false">Medicamento</string>
-    <string name="miscellaneous" translatable="false">Diverso</string>
-    <string name="enum_not_classified_yet" translatable="false">Sin clasificar aún</string>
-    <string name="enum_no_results" translatable="false">Sin resultados</string>
-    <string name="enum_classified_not_saved" translatable="false">Clasificado no guardado</string>
-    <string name="enum_classified_saved" translatable="false">Clasificado y guardado</string>
-    <string name="enum_saved_not_classified" translatable="false">Guardado pero no clasificado</string>
-    <string name="image_for_processing" translatable="false">Imagen para indicar el tipo de procesado</string>
-    <string name="filter" translatable="false">Filtro</string>
-    <string name="sort" translatable="false">sort</string>
+    <string name="organic_container" translatable="true">Contenedor marrón o gris</string>
+    <string name="yellow_container" translatable="true">Contenedor amarillo</string>
+    <string name="blue_container" translatable="true">Contenedor verde</string>
+    <string name="textile_container" translatable="true">Contenedor textil</string>
+    <string name="sigre_point" translatable="true">Punto sigre</string>
+    <string name="rest_container" translatable="true">Contenedor restos</string>
+    <string name="clean_point" translatable="true">Punto limpio</string>
+    <string name="specific_management" translatable="true">Procesado específico</string>
+    <string name="special_recycling" translatable="true">reciclaje especial</string>
+    <string name="municipal_services_special_containers" translatable="true">Servicios municipales, contenedores especiales</string>
+    <string name="no_results" translatable="true">No hay información de reciclaje</string>
+    <string name="organic" translatable="true">Orgánico</string>
+    <string name="food" translatable="true">Comida</string>
+    <string name="food_waste" translatable="true">Restos de comida</string>
+    <string name="coffee_grounds" translatable="true">Posos de café</string>
+    <string name="eggshells" translatable="true">Cáscaras de huevo</string>
+    <string name="aerosol_cans" translatable="true">Latas de aerosol</string>
+    <string name="styrofoam_food_containers" translatable="true">Envases de comida de poliestireno</string>
+    <string name="disposable_plastic_cutlery" translatable="true">Cubertería de plástico desechable</string>
+    <string name="tea_bags" translatable="true">Bolsa de té</string>
+    <string name="aluminium_food_cans" translatable="true">Envases de aluminio</string>
+    <string name="aluminium_soda_cans" translatable="true">Refrescos de aluminio</string>
+    <string name="plastic_soda_bottles" translatable="true">Botellas de plástico</string>
+    <string name="can" translatable="true">Lata</string>
+    <string name="plastic_cup_lids" translatable="true">Tapas de vasos de plástico</string>
+    <string name="plastic_detergent_bottles" translatable="true">Botellas de detergente de plástico</string>
+    <string name="plastic_food_containers" translatable="true">Envases de plástico</string>
+    <string name="plastic_shopping_bags" translatable="true">Bolsas de plástico</string>
+    <string name="plastic_straws" translatable="true">Pajitas de plástico</string>
+    <string name="plastic_trash_bags" translatable="true">Bolsas de basura (plástico)</string>
+    <string name="plastic_water_bottles" translatable="true">Botellas de agua de plástico</string>
+    <string name="steel_food_cans" translatable="true">Latas de comida de acero</string>
+    <string name="paper" translatable="true">Papel</string>
+    <string name="cardboard" translatable="true">Cartón</string>
+    <string name="cardboard_boxes" translatable="true">Caja de cartón</string>
+    <string name="cardboard_packaging" translatable="true">Embalaje de cartón</string>
+    <string name="magazines" translatable="true">Revistas</string>
+    <string name="newspaper" translatable="true">Periódico</string>
+    <string name="office_paper" translatable="true">Papel de oficina</string>
+    <string name="paper_cups" translatable="true">Vasos de papel</string>
+    <string name="glass" translatable="true">Vidrio</string>
+    <string name="glass_beverage_bottles" translatable="true">Botellas de vidrio de bebidas</string>
+    <string name="glass_cosmetics_containers" translatable="true">Envases de cosméticos de vidrio</string>
+    <string name="glass_food_jars" translatable="true">Frascos de vidrio para alimentos</string>
+    <string name="oil" translatable="true">Aceite</string>
+    <string name="electronics" translatable="true">Dispositivo electrónico</string>
+    <string name="textil" translatable="true">Textil</string>
+    <string name="clothing" translatable="true">Ropa</string>
+    <string name="shoes" translatable="true">Zapatos</string>
+    <string name="medicine" translatable="true">Medicamento</string>
+    <string name="miscellaneous" translatable="true">Diverso</string>
+    <string name="enum_not_classified_yet" translatable="true">Sin clasificar aún</string>
+    <string name="enum_no_results" translatable="true">Sin resultados</string>
+    <string name="enum_classified_not_saved" translatable="true">Clasificado no guardado</string>
+    <string name="enum_classified_saved" translatable="true">Clasificado y guardado</string>
+    <string name="enum_saved_not_classified" translatable="true">Guardado pero no clasificado</string>
+    <string name="image_for_processing" translatable="true">Imagen para indicar el tipo de procesado</string>
+    <string name="filter" translatable="true">Filtro</string>
+    <string name="sort" translatable="true">sort</string>
     <string name="want_delete_all">¿Deseas borrar TODOS los elementos?</string>
     <string name="pattern_deleted_n_items">%s items borrados</string>
     <string name="no_results_yet">No hay capturas aún, pulsa en el botón \"+\" de la barra inferior para añadir tu primera captura.</string>
@@ -174,4 +173,6 @@
     <string name="average_confidence_in_captures">Confianza media en capturas</string>
     <string name="top3_categories">Top 3 de categorías</string>
     <string name="add">Añadir</string>
+    <string name="refresh">Reintentar</string>
+    <string name="green_container">Contenedor verde</string>
 </resources>

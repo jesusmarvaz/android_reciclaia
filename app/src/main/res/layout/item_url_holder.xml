@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginVertical="12dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="?attr/colorSurface">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        android:id="@+id/cv_item_wastetype"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:cardCornerRadius="8dp"
+        app:cardBackgroundColor="?attr/colorSecondary"
+        app:cardElevation="0dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="12dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_title_url_item"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="8dp"
+                tools:text="Título"
+                style="@style/TextView.Monospace"
+                android:textColor="?attr/colorSurfaceVariant"
+                android:layout_marginHorizontal="8dp"
+                android:padding="8dp"
+                android:maxLines="2"
+                android:elevation="2dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/tv_description_url_type"
+                app:layout_constraintTop_toBottomOf="@id/tv_title_url_item"
+                android:background="@drawable/rounded_all_corners_6"
+                android:layout_marginHorizontal="12dp"
+                android:padding="8dp"
+                android:elevation="0dp"
+                tools:text="Ejemplo"
+                android:textSize="11sp"
+                android:textColor="?attr/colorSurfaceVariant"
+                android:backgroundTint="?attr/colorPrimary"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,11 +6,11 @@ Created with ❤ by Jesús Martín (jesusmarvaz@gmail.com) on 2025-05-18.
 
 data class ProcessingType(
     val imageUri: String,
-    val title: TitleModel,
+    val processingName: ProcessingNameModel,
     val description: String
 )
 
-data class TitleModel(
+data class ProcessingNameModel(
     val name: String,
     val url: String
 )

@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.ingencode.reciclaia.data.remote.api.Apis
 import com.ingencode.reciclaia.data.remote.mappers.mapToModel
-import com.ingencode.reciclaia.domain.model.LearnModel
+import com.ingencode.reciclaia.domain.model.LearnModelBundle
 import com.ingencode.reciclaia.domain.model.ProcessingType
 import com.ingencode.reciclaia.domain.model.UrlModel
 import com.ingencode.reciclaia.domain.model.WasteType
@@ -28,9 +28,11 @@ Created with ❤ by Jesús Martín (jesusmarvaz@gmail.com) on 2025-05-18.
  */
 @HiltViewModel
 class LearnViewmodel @Inject constructor(@ApplicationContext val c: Context, private val apiProvider: Apis.WasteInfoApi) : ViewModelBase() {
+    private val titles: List<String> = arrayListOf("Tipos de residuos", "Tipos de procesado", "Enlaces para ampliar información")
+
     override fun theTag(): String = this.nameClass
-    private val _learnModel = MutableLiveData<LearnModel?>()
-    val learnModel: LiveData<LearnModel?> = _learnModel
+    private val _learnModel = MutableLiveData<List<LearnModelBundle>>()
+    val learnModel: LiveData<List<LearnModelBundle>> = _learnModel
 
     fun getLearnData() {
         viewModelScope.launch {
@@ -62,11 +64,16 @@ class LearnViewmodel @Inject constructor(@ApplicationContext val c: Context, pri
                 loading.postValue(false)
                 return@launch
             }
-            _learnModel.postValue(LearnModel(
-                wasteTypes = listWasteTypesResult!!,
-                processingTypes = listProcessingTypesResult!!,
-                urls = listUrlsResult!!
-            ))
+            val list = arrayListOf<LearnModelBundle>()
+
+            list.add(LearnModelBundle.TitleItem(titles[0]))
+            list.addAll(listWasteTypesResult!!.map { LearnModelBundle.WasteItem(it) })
+            list.add(LearnModelBundle.TitleItem(titles[1]))
+            list.addAll(listProcessingTypesResult!!.map { LearnModelBundle.ProcessingItem(it)} )
+            list.add(LearnModelBundle.TitleItem(titles[2]))
+            list.addAll((listUrlsResult!!.map { LearnModelBundle.UrlItem(it)}))
+
+            _learnModel.postValue(list)
             loading.postValue(false)
         }
     }

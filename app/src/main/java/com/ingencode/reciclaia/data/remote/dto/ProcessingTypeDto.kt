@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 Created with ❤ by Jesús Martín (jesusmarvaz@gmail.com) on 2025-05-18.
  */
 
-data class TitleDTO(
+data class ProcessingNameDTO(
     @SerializedName("name")
     val name: String,
 
@@ -19,7 +19,7 @@ data class ProcessingTypeDTO(
     val imageUri: String,
 
     @SerializedName("title")
-    val title: TitleDTO,
+    val title: ProcessingNameDTO,
 
     @SerializedName("description")
     val description: String
