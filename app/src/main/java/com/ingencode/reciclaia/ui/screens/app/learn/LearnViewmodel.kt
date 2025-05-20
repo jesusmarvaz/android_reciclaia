@@ -62,7 +62,6 @@ class LearnViewmodel @Inject constructor(@ApplicationContext val c: Context, pri
 
             val lists = listOf(listUrlsResult, listProcessingTypesResult, listWasteTypesResult)
             if (lists.any { it == null} ){
-                sealedError.postValue(SealedApiError.ServerError(null, null))
                 loading.postValue(false)
                 return@launch
             }

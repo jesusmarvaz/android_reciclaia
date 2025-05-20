@@ -41,7 +41,7 @@ class FragmentLearn : FragmentBaseForViewmodel(), ILog {
             if (it != null) {
                 binding.tvError.text =
                     when (it) {
-                        is SealedAppError.ConnectivityError -> {"Error de conexión: Comprueba tu conexión a internet: ${it.message}"; return@observe}
+                        is SealedAppError.ConnectivityError -> {"Error de conexión: Comprueba tu conexión a internet: ${it.message}"}
                         is SealedAppError -> {"App error: ${it.message}"}
                         is SealedApiError -> {"Server error${it.message}"}
                     }

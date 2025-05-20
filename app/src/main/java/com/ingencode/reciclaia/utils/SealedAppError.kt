@@ -18,10 +18,10 @@ sealed class SealedApiError (override val cause: Throwable? = null, val statusCo
 }
 
 sealed class SealedAppError(val message: String? = null) : ISealedError {
-    class DefaultError(message: String? = null): SealedAppError(message)
-    class WrongFormData(): SealedAppError()
-    class ConnectivityError() : SealedAppError()
-    class ProblemSavingImagesLocally(message: String? = null): SealedAppError(message)
-    class LocalRepositoryError(message: String? = null): SealedAppError(message)
-    class InferenceError(message: String? = null): SealedAppError(message)
+    class DefaultError(message: String? = null): SealedAppError(message ?: "DefaultError")
+    class WrongFormData(): SealedAppError("WrongFormData")
+    class ConnectivityError() : SealedAppError("Connectivity Error")
+    class ProblemSavingImagesLocally(message: String? = null): SealedAppError(message ?: "ProblemSavingImagesLocally")
+    class LocalRepositoryError(message: String? = null): SealedAppError(message ?: "LocalRepositoryError")
+    class InferenceError(message: String? = null): SealedAppError(message ?: "InferenceError")
 }
