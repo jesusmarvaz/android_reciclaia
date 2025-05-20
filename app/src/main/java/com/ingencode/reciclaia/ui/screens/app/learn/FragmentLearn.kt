@@ -46,6 +46,7 @@ class FragmentLearn : FragmentBaseForViewmodel(), ILog {
                         is SealedApiError -> {"Server error${it.message}"}
                     }
                 binding.cvError.visibility = View.VISIBLE
+                binding.rvLearn.visibility = View.GONE
             }
         }
         viewmodel.learnModel.observe(this) {
@@ -56,6 +57,7 @@ class FragmentLearn : FragmentBaseForViewmodel(), ILog {
     override fun initProperties() {
         linearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.title.tvScreenTitle.text = getString(R.string.learn)
+        binding.btRefresh.setOnClickListener { viewmodel.getLearnData() }
         viewmodel.getLearnData()
     }
 
