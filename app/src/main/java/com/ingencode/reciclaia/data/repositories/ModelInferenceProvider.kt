@@ -14,7 +14,7 @@ import javax.inject.Inject
 Created with ❤ by jesusmarvaz on 2025-05-20.
  */
 
-/*class ModelInferenceProvider @Inject constructor(@ApplicationContext context: Context) : IAProviderInterface {
+class ModelInferenceProvider @Inject constructor(@ApplicationContext context: Context) : IAProviderInterface {
     private var tfLite: Interpreter
     init {
         tfLite = Interpreter(loadModelFile())
@@ -26,4 +26,4 @@ Created with ❤ by jesusmarvaz on 2025-05-20.
     override suspend fun getClassificationFromInference(uri: Uri): ClassificationModel.ClassificationData {
         TODO("Not yet implemented")
     }
-}*/
+}
