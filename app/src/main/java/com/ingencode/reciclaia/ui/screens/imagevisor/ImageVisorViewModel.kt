@@ -122,13 +122,15 @@ class ImageVisorViewModel @Inject constructor(
                     model.uri = it
                     _classificationResult.postValue(ResultSuccess<ClassificationModel>(model))
                     _status.postValue(Status.CLASSIFIED_NOT_SAVED)
-                } catch (_: IllegalArgumentException) {
+                } catch (e: IllegalArgumentException) {
                     _status.postValue(Status.NO_RESULTS)
-                    sealedError.postValue(SealedAppError.InferenceError("Error infiriendo el modelo"))
-                } catch (_: Exception)
+                    sealedError.postValue(SealedAppError.InferenceError("Error infiriendo el modelo: ${e.message}"))
+                    e.printStackTrace()
+                } catch (e: Exception)
                 {
                     _status.postValue(Status.NO_RESULTS)
                     sealedError.postValue(SealedAppError.DefaultError("error infiriendo el modelo"))
+                    e.printStackTrace()
                 }
             }
             loading.postValue(false)

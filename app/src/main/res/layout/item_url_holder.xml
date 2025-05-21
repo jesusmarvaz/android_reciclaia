@@ -48,7 +48,7 @@
                 android:padding="8dp"
                 android:elevation="0dp"
                 tools:text="Ejemplo"
-                android:textSize="12sp"
+                android:textSize="13sp"
                 android:textColor="?attr/colorSurfaceVariant"
                 android:backgroundTint="?attr/colorPrimary"/>
         </androidx.constraintlayout.widget.ConstraintLayout>

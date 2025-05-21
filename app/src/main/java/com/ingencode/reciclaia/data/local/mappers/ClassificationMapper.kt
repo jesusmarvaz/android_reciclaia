@@ -13,7 +13,7 @@ fun ClassificationModel.toEntity(): ClassificationEntity {
     return ClassificationEntity(id = this.getShaID(),
         uri = this.uri.toString(),
         predictions = ClassificationConverter().fromPredictions(this.classificationData?.predictions)?: "",
-        modelName = this.classificationData?.model?.modalName,
+        modelName = this.classificationData?.model?.modelName,
         modelVersion = this.classificationData?.model?.modelVersion,
         timestamp = this.classificationData?.timestamp,
         title = this.title,

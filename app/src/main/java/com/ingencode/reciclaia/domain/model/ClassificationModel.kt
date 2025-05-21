@@ -133,7 +133,7 @@ data class ClassificationModel(
         }
     }
 
-    data class ModelInfo(val modalName: String, val modelVersion: String? = null) : Serializable
+    data class ModelInfo(val modelName: String, val modelVersion: String? = null) : Serializable
     data class Location(val latitude: Double, val longitude: Double) : Serializable
 
 }
@@ -144,7 +144,7 @@ fun ClassificationModel.ClassificationPrediction.toText(): String {
 }
 
 fun ClassificationModel.ModelInfo.toText(): String {
-    return "$modalName${if (!modelVersion.isNullOrEmpty()) " | version:$modelVersion" else ""}"
+    return "$modelName${if (!modelVersion.isNullOrEmpty()) " | version:$modelVersion" else ""}"
 }
 
 fun ClassificationModel.ClassificationData.predictionsToText(): String {

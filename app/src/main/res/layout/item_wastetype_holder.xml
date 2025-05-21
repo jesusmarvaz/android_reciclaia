@@ -46,7 +46,7 @@
                 android:padding="8dp"
                 android:elevation="4dp"
                 tools:text="@tools:sample/lorem/random"
-                android:textSize="12sp"
+                android:textSize="13sp"
                 android:layout_marginBottom="12dp"
                 android:backgroundTint="?attr/colorSurface"/>
         </androidx.constraintlayout.widget.ConstraintLayout>

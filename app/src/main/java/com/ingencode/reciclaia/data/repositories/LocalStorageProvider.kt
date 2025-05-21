@@ -127,7 +127,7 @@ class LocalStorageProvider @Inject constructor(@ApplicationContext private val c
     fun saveCroppedImage(bitmap: Bitmap, uri: Uri): Uri? {
         return try {
             val croppedBitmap = bitmap
-            val resizedBitmap = croppedBitmap.scale(512, 512)
+            val resizedBitmap = croppedBitmap.scale(256, 256)
             if (isAppUri(uri)) {
                 Log.d("ComposedVisor", "Overwriting app-stored image: $uri")
                 saveBitmapToUri(resizedBitmap, uri) // Overwrite if it's an app Uri
