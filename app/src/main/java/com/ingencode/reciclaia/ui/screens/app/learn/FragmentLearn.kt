@@ -2,7 +2,6 @@ package com.ingencode.reciclaia.ui.screens.app.learn
 
 import android.view.View
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager

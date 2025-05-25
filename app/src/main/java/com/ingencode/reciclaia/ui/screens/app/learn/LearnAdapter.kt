@@ -2,19 +2,17 @@ package com.ingencode.reciclaia.ui.screens.app.learn
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.LayoutRes
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.ingencode.reciclaia.domain.model.LearnModelBundle
-import javax.inject.Inject
 import com.ingencode.reciclaia.R
-import androidx.core.net.toUri
+import com.ingencode.reciclaia.domain.model.LearnModelBundle
 
 /**
 Created with ❤ by Jesús Martín (jesusmarvaz@gmail.com) on 2025-05-19.

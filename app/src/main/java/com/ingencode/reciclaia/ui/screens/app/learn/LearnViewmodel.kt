@@ -12,7 +12,6 @@ import com.ingencode.reciclaia.domain.model.UrlModel
 import com.ingencode.reciclaia.domain.model.WasteType
 import com.ingencode.reciclaia.ui.components.ViewModelBase
 import com.ingencode.reciclaia.utils.BackgroundDispatcher.Background
-import com.ingencode.reciclaia.utils.SealedApiError
 import com.ingencode.reciclaia.utils.SealedAppError
 import com.ingencode.reciclaia.utils.isAnyNetworkActive
 import com.ingencode.reciclaia.utils.nameClass

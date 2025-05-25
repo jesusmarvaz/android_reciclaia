@@ -1,7 +1,6 @@
 package com.ingencode.reciclaia.utils.di
 
 import com.ingencode.reciclaia.data.repositories.IAProviderInterface
-import com.ingencode.reciclaia.data.repositories.IAProviderMockImp
 import com.ingencode.reciclaia.data.repositories.ModelInferenceProvider
 import dagger.Binds
 import dagger.Module
