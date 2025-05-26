@@ -28,7 +28,7 @@ Created with ❤ by jesusmarvaz on 2025-05-20.
 class ModelInferenceProvider @Inject constructor(@ApplicationContext val context: Context)
     : IAProviderInterface, ILog {
     override fun theTag(): String = this.nameClass
-    private val model: ClassificationModel.ModelInfo = ClassificationModel.ModelInfo("reciclaia_model_old.tflite", "1.0")
+    private val model: ClassificationModel.ModelInfo = ClassificationModel.ModelInfo("reciclaia_model.tflite", "1.0")
     @Throws(IOException::class)
     private fun loadModel(): Interpreter {
         val fileDescriptor: AssetFileDescriptor = context.assets.openFd(model.modelName)
