@@ -79,7 +79,7 @@
     <string name="no_camera_permission_granted">No has autorizado el uso de la cámara, ve a los ajustes para establecerlo.</string>
     <string name="organic_container" translatable="true">Contenedor marrón o gris</string>
     <string name="yellow_container" translatable="true">Contenedor amarillo</string>
-    <string name="blue_container" translatable="true">Contenedor verde</string>
+    <string name="blue_container" translatable="true">Contenedor azul</string>
     <string name="textile_container" translatable="true">Contenedor textil</string>
     <string name="sigre_point" translatable="true">Punto sigre</string>
     <string name="rest_container" translatable="true">Contenedor restos</string>
