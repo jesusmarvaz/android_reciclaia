@@ -11,15 +11,6 @@ object Routes {
     const val WEB_TERMS = "${BASE_URL_WEB}terms"
     const val WEB_PRIVACY = "${BASE_URL_WEB}privacy"
     const val IMAGES_PATH = BASE_URL_WEB
-
-    object PathParams {
-        const val ID = "id"
-    }
-
-    object Headers {
-        const val TOKEN_HEADER = "authorization"
-    }
-
     object ApisEndpoints {
         object TestApi {
             const val TEST = "test"
