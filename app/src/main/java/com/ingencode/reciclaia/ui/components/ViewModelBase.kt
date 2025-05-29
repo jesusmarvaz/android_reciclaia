@@ -29,15 +29,21 @@ abstract class ViewModelBase: ViewModel(), ILog {
             is SealedAppError.LocalRepositoryError -> {}
             is SealedAppError.InferenceError -> { }
         }
-        Log.e(this.nameClass, "manageSealedError: ${sealedError.value?.nameClass}", )
+        //método de ILog: Evita tener que incluir la etiqueta
+        logError("manageSealedError: ${sealedError.value?.nameClass}")
+        //Log.e(this.nameClass, "manageSealedError: ${sealedError.value?.nameClass}", )
     }
 
     private fun manageSealedApiError() {
-        Log.e(this.nameClass, "manageSealedApiError: ${sealedError.value?.nameClass}", )
+        //método de ILog: Evita tener que incluir la etiqueta
+        logError("manageSealedApiError: ${sealedError.value?.nameClass}")
+        //Log.e(this.nameClass, "manageSealedApiError: ${sealedError.value?.nameClass}", )
     }
 
     open fun onError() {
-        Log.d(this.nameClass, "error: ${sealedError.nameClass}")
+        //método de ILog: Evita tener que incluir la etiqueta
+        logDebug("error: ${sealedError.nameClass}")
+        //Log.d(this.nameClass, "error: ${sealedError.nameClass}")
         val error = sealedError.value ?: return
         when (error) {
             is SealedAppError -> manageSealedError()
