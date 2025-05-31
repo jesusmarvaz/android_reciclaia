@@ -117,7 +117,7 @@ class ModelInferenceProvider @Inject constructor(@ApplicationContext val context
     }
 
     override suspend fun getClassificationFromInference(uri: Uri): ClassificationModel.ClassificationData {
-        val inferred = inferImage(uri)
+        val inferred: Pair<Int, Float> = inferImage(uri)
         val topPrediction = ClassificationModel.ClassificationPrediction(Tag.entries.sortedBy { it.tag }
             .map { it.tag }[inferred.first], confidence = inferred.second)
         return ClassificationModel.ClassificationData(arrayListOf(topPrediction), model = model, timestamp = System.currentTimeMillis())

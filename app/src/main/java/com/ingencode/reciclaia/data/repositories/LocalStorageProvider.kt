@@ -58,12 +58,57 @@ class LocalStorageProvider @Inject constructor(@ApplicationContext private val c
             }
         }
     }
-
     fun getUriForCamera(): Uri? {
         val photoFile: File = createImageFile(context) ?: return null
         val authority = "${context.packageName}.fileprovider"
         val uri = FileProvider.getUriForFile(context, authority, photoFile)
         return uri
+    }
+    fun exportBitmapToNewFileInMediaStore(bitmap: Bitmap): SealedResult<Uri> {
+        //val croppedBitmap = bitmap
+        //val resizedBitmap = croppedBitmap.scale(512, 512)
+        val fileName = "${PREFIX_EXPORTED_PROCESSED_IMAGE}${System.currentTimeMillis()}.jpg"
+        val values = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+            put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+            put(MediaStore.Images.Media.IS_PENDING, 1)
+        }
+
+        val resolver = context.contentResolver
+        val imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+            ?: return SealedResult.ResultError(SealedAppError.ProblemSavingImagesLocally("Error inserting MediaStore values"))
+        try {
+            imageUri.let {
+                resolver.openOutputStream(it)?.use { outputStream ->
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                }
+                values.put(MediaStore.Images.Media.IS_PENDING, 0)
+                resolver.update(it, values, null, null)
+                return SealedResult.ResultSuccess<Uri>(imageUri)
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            imageUri.let { resolver.delete(it, null, null) } // Clean up failed insert
+            return SealedResult.ResultError(SealedAppError.ProblemSavingImagesLocally(e.message))
+        }
+    }
+    fun saveCroppedImage(bitmap: Bitmap, uri: Uri): Uri? {
+        return try {
+            val croppedBitmap = bitmap
+            if (isAppUri(uri)) {
+                Log.d("ComposedVisor", "Overwriting app-stored image: $uri")
+                saveBitmapToUri(croppedBitmap, uri) // Overwrite if it's an app Uri
+            } else {
+                val resizedBitmap = croppedBitmap.scale(256, 256)
+                val newFileName = "${PREFIX_SAVED_LOCALLY_PROCESSED_IMAGE}${System.currentTimeMillis()}.jpg"
+                Log.d("ComposedVisor", "Saving new processed image: $newFileName")
+                saveBitmapToAppStorage(context, resizedBitmap, newFileName) // Save to a new file
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 
     private fun createImageFile(context: Context): File? {
@@ -94,7 +139,6 @@ class LocalStorageProvider @Inject constructor(@ApplicationContext private val c
             null
         }
     }
-
     private fun isAppUri(uri: Uri): Boolean {
         //return inputUri.authority == APP_FILE_PROVIDER_AUTHORITY
         if (uri.scheme == "file") {
@@ -123,25 +167,6 @@ class LocalStorageProvider @Inject constructor(@ApplicationContext private val c
         Log.d("UriCheck", "Uri is NOT from app's private storage: $uri")
         return false // It's not from your app's storage
     }
-
-    fun saveCroppedImage(bitmap: Bitmap, uri: Uri): Uri? {
-        return try {
-            val croppedBitmap = bitmap
-            val resizedBitmap = croppedBitmap.scale(256, 256)
-            if (isAppUri(uri)) {
-                Log.d("ComposedVisor", "Overwriting app-stored image: $uri")
-                saveBitmapToUri(resizedBitmap, uri) // Overwrite if it's an app Uri
-            } else {
-                val newFileName = "${PREFIX_SAVED_LOCALLY_PROCESSED_IMAGE}${System.currentTimeMillis()}.jpg"
-                Log.d("ComposedVisor", "Saving new processed image: $newFileName")
-                saveBitmapToAppStorage(context, resizedBitmap, newFileName) // Save to a new file
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-    }
-
     private fun saveBitmapToUri(bitmap: Bitmap, uri: Uri): Uri? {
         return try {
             context.contentResolver.openOutputStream(uri)?.use { outputStream ->
@@ -153,7 +178,6 @@ class LocalStorageProvider @Inject constructor(@ApplicationContext private val c
             null
         }
     }
-
     private fun saveBitmapToAppStorage(context: Context, bitmap: Bitmap, fileName: String): Uri? {
         val directory: File? = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "reciclaia")
         if (directory != null) {
@@ -173,7 +197,6 @@ class LocalStorageProvider @Inject constructor(@ApplicationContext private val c
             return saveBitmapToNewFileInAppFilesDir(context, bitmap, fileName) // Fallback to internal storage
         }
     }
-
     private fun saveBitmapToNewFileInAppFilesDir(context: Context, bitmap: Bitmap, fileName: String): Uri? {
         val file = File(context.filesDir, fileName)
         return try {
@@ -184,37 +207,6 @@ class LocalStorageProvider @Inject constructor(@ApplicationContext private val c
         } catch (e: IOException) {
             e.printStackTrace()
             null
-        }
-    }
-
-    //In case store to public Directory of pics
-    fun exportBitmapToNewFileInMediaStore(bitmap: Bitmap): SealedResult<Uri> {
-        //val croppedBitmap = bitmap
-        //val resizedBitmap = croppedBitmap.scale(512, 512)
-        val fileName = "${PREFIX_EXPORTED_PROCESSED_IMAGE}${System.currentTimeMillis()}.jpg"
-        val values = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
-            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-            put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
-            put(MediaStore.Images.Media.IS_PENDING, 1)
-        }
-
-        val resolver = context.contentResolver
-        val imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-            ?: return SealedResult.ResultError(SealedAppError.ProblemSavingImagesLocally("Error inserting MediaStore values"))
-        try {
-            imageUri.let {
-                resolver.openOutputStream(it)?.use { outputStream ->
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-                }
-                values.put(MediaStore.Images.Media.IS_PENDING, 0)
-                resolver.update(it, values, null, null)
-                return SealedResult.ResultSuccess<Uri>(imageUri)
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-            imageUri.let { resolver.delete(it, null, null) } // Clean up failed insert
-            return SealedResult.ResultError(SealedAppError.ProblemSavingImagesLocally(e.message))
         }
     }
 }

@@ -49,14 +49,17 @@ class ImageVisorViewModel @Inject constructor(
     private val _status: MutableLiveData<Status> =
         MutableLiveData<Status>(Status.NOT_CLASSIFIED_YET)
     val status: LiveData<Status> = _status
-
-    fun manageIntent(intent: Intent) {
-        intent.getParcelableExtra("uri", Uri::class.java)?.let {
-            setImageFromUri(it)
-        } ?: intent.getStringExtra("id")?.let {
+    private fun handleInternalNavigation(intent: Intent) {
+        val uriFromExtra = intent.getParcelableExtra("uri", Uri::class.java)
+        val idFromExtra = intent.getStringExtra("id")
+        if (uriFromExtra != null) {
+            setImageFromUri(uriFromExtra)
+            return
+        }
+        if (idFromExtra != null) {
             viewModelScope.launch(Dispatchers.Background) {
                 try {
-                    val classification = localDataBaseProvider.getClassificationsById(it)
+                    val classification = localDataBaseProvider.getClassificationsById(idFromExtra)
                     if (classification == null) {
                         sealedError.postValue(SealedAppError.LocalRepositoryError("No se han encontrado datos en la base de datos local"))
                         return@launch
@@ -64,8 +67,11 @@ class ImageVisorViewModel @Inject constructor(
                     val dataRecovered = ResultSuccess(classification)
                     launch(Dispatchers.Main.immediate) {
                         _classificationResult.value = dataRecovered
-                        val result = _classificationResult.value as ResultSuccess<ClassificationModel>
-                        if (result.data.classificationData?.topPrediction == null) _status.postValue(Status.SAVED_NOT_CLASSIFIED)
+                        val result =
+                            _classificationResult.value as ResultSuccess<ClassificationModel>
+                        if (result.data.classificationData?.topPrediction == null) _status.postValue(
+                            Status.SAVED_NOT_CLASSIFIED
+                        )
                         else _status.postValue(Status.CLASSIFIED_SAVED)
                     }
                     _classificationResult.postValue(dataRecovered)
@@ -75,8 +81,28 @@ class ImageVisorViewModel @Inject constructor(
                     e.printStackTrace()
                 }
             }
+            return
         }
-        ?: return
+    }
+
+    private fun handleSharedContent(intent: Intent) {
+        val receivedUri =
+            intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM, Uri::class.java) // Usa esta clave
+
+        if (receivedUri != null) {
+            // ¡Aquí tienes la Uri compartida!
+            setImageFromUri(receivedUri)
+        }
+    }
+
+    fun manageIntent(intent: Intent) {
+        val action = intent.action
+        val type = intent.type
+        if (Intent.ACTION_SEND == action && type != null) {
+            handleSharedContent(intent)
+        } else {
+            handleInternalNavigation(intent)
+        }
     }
 
     fun getIsLocationEnabled(): Boolean {
@@ -89,7 +115,10 @@ class ImageVisorViewModel @Inject constructor(
             viewModelScope.launch(Dispatchers.Background) {
                 val location = localStorageProvider.getImageLocation(uri)
                 location?.let {
-                    model.location = ClassificationModel.Location(latitude = location.first, longitude = location.second)
+                    model.location = ClassificationModel.Location(
+                        latitude = location.first,
+                        longitude = location.second
+                    )
                 }
                 _classificationResult.postValue(ResultSuccess<ClassificationModel>(model))
                 _status.postValue(Status.NOT_CLASSIFIED_YET)
@@ -98,13 +127,15 @@ class ImageVisorViewModel @Inject constructor(
     }
 
     fun getClassificationBackgroundColor(context: Context): Int? {
-        val color = getClassificationFromResult(_classificationResult.value)?.classificationData?.backgroundColor()
+        val color =
+            getClassificationFromResult(_classificationResult.value)?.classificationData?.backgroundColor()
         if (color == null) return null
         return ContextCompat.getColor(context, color)
     }
 
     fun getClassificationTextColor(context: Context): Int? {
-        val color = getClassificationFromResult(_classificationResult.value)?.classificationData?.textColor()
+        val color =
+            getClassificationFromResult(_classificationResult.value)?.classificationData?.textColor()
         if (color == null) return null
         return ContextCompat.getColor(context, color)
     }
@@ -126,8 +157,7 @@ class ImageVisorViewModel @Inject constructor(
                     _status.postValue(Status.NO_RESULTS)
                     sealedError.postValue(SealedAppError.InferenceError("Error infiriendo el modelo: ${e.message}"))
                     e.printStackTrace()
-                } catch (e: Exception)
-                {
+                } catch (e: Exception) {
                     _status.postValue(Status.NO_RESULTS)
                     sealedError.postValue(SealedAppError.DefaultError("error infiriendo el modelo"))
                     e.printStackTrace()
@@ -145,7 +175,12 @@ class ImageVisorViewModel @Inject constructor(
         getClassificationFromResult(result)?.uri
 
 
-    fun savedButtonPressed(bitmap: Bitmap, title: String? = null, comments: String? = null, location: ClassificationModel.Location? = null) {
+    fun savedButtonPressed(
+        bitmap: Bitmap,
+        title: String? = null,
+        comments: String? = null,
+        location: ClassificationModel.Location? = null
+    ) {
         val classification = getClassificationFromResult(_classificationResult.value)
         val uri: Uri? = classification?.uri
         uri?.let {
@@ -163,8 +198,8 @@ class ImageVisorViewModel @Inject constructor(
 
                     localDataBaseProvider.updateProcessedImage(classification)
                     _dataSavedSuccessfully.postValue(Unit)
-                    if(_status.value == Status.CLASSIFIED_SAVED || _status.value == Status.CLASSIFIED_NOT_SAVED)
-                    _status.postValue(Status.CLASSIFIED_SAVED)
+                    if (_status.value == Status.CLASSIFIED_SAVED || _status.value == Status.CLASSIFIED_NOT_SAVED)
+                        _status.postValue(Status.CLASSIFIED_SAVED)
                     else _status.postValue(Status.SAVED_NOT_CLASSIFIED)
                 } else {
                     _classificationResult.postValue(SealedResult.ResultError(SealedAppError.ProblemSavingImagesLocally()))
@@ -190,6 +225,10 @@ class ImageVisorViewModel @Inject constructor(
 
     override fun theTag(): String = nameClass
 
-    enum class Status(@StringRes val idString: Int) { NOT_CLASSIFIED_YET(R.string.enum_not_classified_yet), NO_RESULTS(R.string.enum_no_results),
-        CLASSIFIED_NOT_SAVED(R.string.enum_classified_not_saved), CLASSIFIED_SAVED(R.string.enum_classified_saved), SAVED_NOT_CLASSIFIED(R.string.enum_saved_not_classified) }
+    enum class Status(@StringRes val idString: Int) {
+        NOT_CLASSIFIED_YET(R.string.enum_not_classified_yet), NO_RESULTS(R.string.enum_no_results),
+        CLASSIFIED_NOT_SAVED(R.string.enum_classified_not_saved), CLASSIFIED_SAVED(R.string.enum_classified_saved), SAVED_NOT_CLASSIFIED(
+            R.string.enum_saved_not_classified
+        )
+    }
 }

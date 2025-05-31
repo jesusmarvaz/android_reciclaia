@@ -31,7 +31,6 @@ interface ISettingsRepository {
         const val light = "light"
         const val system = "system"
     }
-
 }
 
 class SettingsRepository @Inject constructor(@ApplicationContext val context: Context): ISettingsRepository {

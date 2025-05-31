@@ -3,6 +3,7 @@ package com.ingencode.reciclaia.domain.model
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toLowerCase
 import com.ingencode.reciclaia.R
@@ -62,8 +63,15 @@ data class ClassificationModel(
             .toSet()
     }
 
+    fun getTag(): Tag? {
+        val label = classificationData?.topPrediction?.label
+        if (label == null) return null
+        return Tag.entries.first { it.tag == label }
+    }
+
     fun getClassificationAndProcessing(context: Context): String? {
-        val tag = findCategories()?.first()?.tags?.first()?.idStringName ?: return null
+        //val tag = findCategories()?.first()?.tags?.first()?.idStringName ?: return null
+        val tag = getTag()?.idStringName ?: return null
         val processingId = findCategories()?.first()?.processing?.first()?.idStringTitle ?: return null
         val confidence = this.classificationData?.topPrediction?.confidence ?: return null
         val text = context.getString(R.string.pattern_prediction_and_processing).format(context.getString(tag), confidence, context.getString(processingId).toLowerCase(

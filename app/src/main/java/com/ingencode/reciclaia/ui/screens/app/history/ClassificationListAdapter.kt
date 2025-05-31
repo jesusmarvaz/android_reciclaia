@@ -119,9 +119,9 @@ class ClassificationListAdapter @Inject constructor(
             }
 
             tagMapped.isSelected = true
-            category?.tags?.first()?.idStringName?.let {
+            item?.getTag()?.idStringName?.let {
                 val percent = ((data?.topPrediction?.confidence ?: 0f) * 100).toInt()
-                val tagAndAccuracyText = "${category.tags.first().tag} | %d%%".format(percent)
+                val tagAndAccuracyText = "${item.getTag()?.tag} | %d%%".format(percent)
                 val name = c.getString(it)
                 tagMapped.text = "%s - %s".format(name, tagAndAccuracyText)
             }
