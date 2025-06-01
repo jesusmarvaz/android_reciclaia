@@ -70,7 +70,7 @@ class HomeViewmodel @Inject constructor(private val databaseProvider: IClassific
         val tags = arrayListOf<Tag>()
         Tag.entries.forEach { tag ->
             listClassificationModel.forEach { model ->
-                if (model.findCategories()?.first()?.tags?.first()?.equals(tag) == true) {
+                if (model.getTag()?.equals(tag) == true) {
                     tags.add(tag)
                 }
             }
