@@ -1930,16 +1930,3 @@ Al usar Room debemos crear abstracciones y varias capas de separación de datos.
 * Entity: hace referencia a la tabla
 * Model: hace referencia al modelo de datos que nuestra aplicación usa
 * DAO: es el objeto que media entre la base de datos y la entidad, alberga los métodos necesarios para modificar, crear, leer y eliminar (CRUD) de manera segura
-
-El
-
-
-___
-
-## TO-DO
-
-* Configurar MenuFactory si fuera necesario más adelanta
-* Notificaciones (canales y permisos)
-* Animaciones
-* Sonidos
-* Permisos: ubicación, internet, cámara, almacenamiento, notificaciones
