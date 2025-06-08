@@ -15,6 +15,7 @@ import com.ingencode.reciclaia.utils.nameClass
 import com.ingencode.reciclaia.utils.sha256
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -42,7 +43,7 @@ class HomeViewmodel @Inject constructor(private val databaseProvider: IClassific
     fun getClassifications() {
         viewModelScope.launch(Dispatchers.Background) {
             loading.postValue(true)
-            //delay(1000)
+            delay(1500)
             databaseProvider.getAllProcessedImages()?.let {
                 _homeModel.postValue(mapToHomeModel(it))
                 loading.postValue(false)

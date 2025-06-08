@@ -36,7 +36,7 @@ class LearnViewmodel @Inject constructor(@ApplicationContext val c: Context, pri
 
     fun getLearnData() {
         viewModelScope.launch {
-            delay(500)
+            delay(1500)
             loading.postValue(true)
             val deferredJobWasteTypes = async(Dispatchers.Background) { getWasteTypes() }
             val deferredJobProcessingTypes = async(Dispatchers.Background) { getProcessingTypes() }

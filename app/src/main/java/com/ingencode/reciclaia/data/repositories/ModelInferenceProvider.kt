@@ -11,6 +11,7 @@ import com.ingencode.reciclaia.domain.model.Tag
 import com.ingencode.reciclaia.utils.ILog
 import com.ingencode.reciclaia.utils.nameClass
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.delay
 import org.tensorflow.lite.Interpreter
 import java.io.FileInputStream
 import java.io.IOException
@@ -117,6 +118,7 @@ class ModelInferenceProvider @Inject constructor(@ApplicationContext val context
     }
 
     override suspend fun getClassificationFromInference(uri: Uri): ClassificationModel.ClassificationData {
+        delay(1500)
         val inferred: Pair<Int, Float> = inferImage(uri)
         val topPrediction = ClassificationModel.ClassificationPrediction(Tag.entries.sortedBy { it.tag }
             .map { it.tag }[inferred.first], confidence = inferred.second)

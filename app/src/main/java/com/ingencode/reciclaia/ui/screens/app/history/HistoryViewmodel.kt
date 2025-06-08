@@ -93,7 +93,7 @@ class HistoryViewmodel @Inject constructor(private val databaseProvider: IClassi
     fun deleteAll() {
         viewModelScope.launch(Dispatchers.Background) {
             loading.postValue(true)
-            delay(200)
+            delay(1500)
             databaseProvider.deleteAllProcessedImages().let {
                 viewModelScope.launch(Dispatchers.Main.immediate) { _deletedNItems.value = it }
                 _justDeletedEmit.emit(Unit)
